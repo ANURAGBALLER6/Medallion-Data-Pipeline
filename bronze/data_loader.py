@@ -9,6 +9,7 @@ from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from pathlib import Path
 import sys
+from datetime import datetime
 
 # Add parent directory to path for config import
 sys.path.append(str(Path(__file__).parent.parent))
@@ -46,29 +47,27 @@ def get_sheets_service():
         return None
 
 
-def fetch_data(sheet_range: str):
-    """Fetch data from Google Sheets for the given range."""
+def fetch_data(range_name):
     try:
         service = get_sheets_service()
-        if not service:
-            return []
-
         result = service.spreadsheets().values().get(
             spreadsheetId=GOOGLE_SHEETS_CONFIG['spreadsheet_id'],
-            range=sheet_range
+            range=range_name
         ).execute()
-
-        rows = result.get("values", [])
-        if len(rows) <= 1:
-            logger.warning(f"⚠️ No data found in {sheet_range}")
-            return []
-
-        logger.info(f"✓ Loaded {len(rows)-1} rows from {sheet_range}")
-        return rows[1:]  # skip header row
-
+        values = result.get('values', [])[1:]  # skip header
+        logger.info(f"✓ Loaded {len(values)} rows from {range_name}")
+        return values
     except Exception as e:
-        logger.error(f"❌ Error fetching data from {sheet_range}: {e}")
+        logger.error(f"❌ Error fetching data from {range_name}: {e}")
         return []
+
+
+def parse_date(value):
+    """Convert Google Sheet date string M/D/YYYY to ISO format YYYY-MM-DD."""
+    try:
+        return datetime.strptime(value, "%m/%d/%Y").date()
+    except Exception:
+        return None
 
 
 def load_data(table, rows, conn):
@@ -105,8 +104,23 @@ def load_data(table, rows, conn):
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (trip_id) DO NOTHING
         """
-        data = [(r[0], r[2], r[1], r[3], r[5], r[6], r[7], r[8],
-                 r[9], r[10], r[15], r[16]) for r in rows]
+        data = [
+            (
+                r[0],
+                r[2],
+                r[1],
+                r[3],
+                parse_date(r[5]),
+                parse_date(r[6]),
+                r[7],
+                r[8],
+                float(r[9]) if r[9] else None,
+                float(r[10]) if r[10] else None,
+                float(r[15]) if r[15] else None,
+                r[16],
+            )
+            for r in rows
+        ]
 
     elif table == "payments":
         query = """
