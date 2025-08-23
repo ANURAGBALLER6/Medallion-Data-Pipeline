@@ -1,0 +1,48 @@
+2025-08-23 23:12:08,936 - INFO - 🚀 Setting up Medallion Database - Bronze Layer
+2025-08-23 23:12:08,937 - INFO - ============================================================
+2025-08-23 23:12:08,937 - INFO - 1. Creating database...
+2025-08-23 23:12:08,960 - INFO - ✓ Database 'medallion_architecture' already exists
+2025-08-23 23:12:08,960 - INFO - 2. Creating bronze schema and tables...
+2025-08-23 23:12:08,977 - INFO - ✓ Bronze schema created/verified
+2025-08-23 23:12:08,981 - INFO - ✓ Table 'bronze.drivers' created/verified
+2025-08-23 23:12:08,983 - INFO - ✓ Table 'bronze.vehicles' created/verified
+2025-08-23 23:12:08,984 - INFO - ✓ Table 'bronze.riders' created/verified
+2025-08-23 23:12:08,986 - INFO - ✓ Table 'bronze.trips' created/verified
+2025-08-23 23:12:08,988 - INFO - ✓ Table 'bronze.payments' created/verified
+2025-08-23 23:12:08,992 - INFO - 
+🎉 Bronze Layer Database Setup Completed Successfully!
+2025-08-23 23:12:08,992 - INFO - ============================================================
+2025-08-23 23:12:08,993 - INFO - Next step: Run bronze/data_loader.py to load data
+2025-08-23 23:12:08,993 - INFO - Database: localhost:5432/medallion_architecture
+2025-08-23 23:12:31,063 - INFO - 🚀 Setting up Medallion Database - Bronze Layer
+2025-08-23 23:12:31,063 - INFO - ============================================================
+2025-08-23 23:12:31,063 - INFO - 1. Creating database...
+2025-08-23 23:12:31,079 - INFO - ✓ Database 'medallion_architecture' already exists
+2025-08-23 23:12:31,079 - INFO - 2. Creating bronze schema and tables...
+2025-08-23 23:12:31,092 - INFO - ✓ Bronze schema created/verified
+2025-08-23 23:12:31,092 - INFO - ✓ Table 'bronze.drivers' created/verified
+2025-08-23 23:12:31,092 - INFO - ✓ Table 'bronze.vehicles' created/verified
+2025-08-23 23:12:31,093 - INFO - ✓ Table 'bronze.riders' created/verified
+2025-08-23 23:12:31,093 - INFO - ✓ Table 'bronze.trips' created/verified
+2025-08-23 23:12:31,093 - INFO - ✓ Table 'bronze.payments' created/verified
+2025-08-23 23:12:31,093 - INFO - 
+🎉 Bronze Layer Database Setup Completed Successfully!
+2025-08-23 23:12:31,094 - INFO - ============================================================
+2025-08-23 23:12:31,094 - INFO - Next step: Run bronze/data_loader.py to load data
+2025-08-23 23:12:31,094 - INFO - Database: localhost:5432/medallion_architecture
+2025-08-23 23:12:51,202 - INFO - 🚀 Setting up Medallion Database - Bronze Layer
+2025-08-23 23:12:51,202 - INFO - ============================================================
+2025-08-23 23:12:51,203 - INFO - 1. Creating database...
+2025-08-23 23:12:51,221 - INFO - ✓ Database 'medallion_architecture' already exists
+2025-08-23 23:12:51,221 - INFO - 2. Creating bronze schema and tables...
+2025-08-23 23:12:51,237 - INFO - ✓ Bronze schema created/verified
+2025-08-23 23:12:51,238 - INFO - ✓ Table 'bronze.drivers' created/verified
+2025-08-23 23:12:51,238 - INFO - ✓ Table 'bronze.vehicles' created/verified
+2025-08-23 23:12:51,238 - INFO - ✓ Table 'bronze.riders' created/verified
+2025-08-23 23:12:51,239 - INFO - ✓ Table 'bronze.trips' created/verified
+2025-08-23 23:12:51,239 - INFO - ✓ Table 'bronze.payments' created/verified
+2025-08-23 23:12:51,239 - INFO - 
+🎉 Bronze Layer Database Setup Completed Successfully!
+2025-08-23 23:12:51,239 - INFO - ============================================================
+2025-08-23 23:12:51,239 - INFO - Next step: Run bronze/data_loader.py to load data
+2025-08-23 23:12:51,239 - INFO - Database: localhost:5432/medallion_architecture

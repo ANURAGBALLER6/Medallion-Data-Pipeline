@@ -1,0 +1,188 @@
+2025-08-23 23:08:01,269 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:08:01,269 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:08:01,269 - INFO - 📥 Loading drivers data...
+2025-08-23 23:08:01,318 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:08:01,330 - INFO - Google Sheets service created successfully
+2025-08-23 23:08:08,776 - INFO - Fetched 50,000 rows from drivers!A:I
+2025-08-23 23:08:08,798 - ERROR - Error loading drivers: 'phone'
+2025-08-23 23:08:08,820 - INFO - 📥 Loading vehicles data...
+2025-08-23 23:08:08,873 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:08:08,875 - INFO - Google Sheets service created successfully
+2025-08-23 23:08:14,795 - INFO - Fetched 50,000 rows from vehicles!A:J
+2025-08-23 23:08:14,816 - ERROR - Error loading vehicles: invalid literal for int() with base 10: 'D000001'
+2025-08-23 23:08:14,836 - INFO - 📥 Loading riders data...
+2025-08-23 23:08:14,886 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:08:14,888 - INFO - Google Sheets service created successfully
+2025-08-23 23:08:21,828 - INFO - Fetched 75,000 rows from riders!A:H
+2025-08-23 23:08:21,853 - ERROR - Error loading riders: 'phone'
+2025-08-23 23:08:21,878 - INFO - 📥 Loading trips data...
+2025-08-23 23:08:21,929 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:08:21,932 - INFO - Google Sheets service created successfully
+2025-08-23 23:08:31,052 - INFO - Fetched 75,000 rows from trips!A:R
+2025-08-23 23:08:31,081 - ERROR - Error loading trips: invalid literal for int() with base 10: 'D013390'
+2025-08-23 23:08:31,148 - INFO - 📥 Loading payments data...
+2025-08-23 23:08:31,204 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:08:31,207 - INFO - Google Sheets service created successfully
+2025-08-23 23:08:38,311 - INFO - Fetched 75,000 rows from payments!A:H
+2025-08-23 23:08:38,336 - ERROR - Error loading payments: invalid literal for int() with base 10: 'T0070812'
+2025-08-23 23:08:38,362 - INFO - 
+📊 BRONZE LAYER SUMMARY
+2025-08-23 23:08:38,362 - INFO - drivers    : ❌
+2025-08-23 23:08:38,363 - INFO - vehicles   : ❌
+2025-08-23 23:08:38,363 - INFO - riders     : ❌
+2025-08-23 23:08:38,363 - INFO - trips      : ❌
+2025-08-23 23:08:38,363 - INFO - payments   : ❌
+2025-08-23 23:08:38,377 - INFO - 
+🔍 Record Counts:
+2025-08-23 23:08:38,378 - INFO - drivers   : 0
+2025-08-23 23:08:38,379 - INFO - vehicles  : 0
+2025-08-23 23:08:38,380 - INFO - riders    : 0
+2025-08-23 23:08:38,381 - INFO - trips     : 0
+2025-08-23 23:08:38,381 - INFO - payments  : 0
+2025-08-23 23:08:38,382 - ERROR - ⚠️ Bronze load completed with errors
+2025-08-23 23:13:11,766 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:13:11,766 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:13:11,767 - INFO - 📥 Loading drivers data...
+2025-08-23 23:13:11,814 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:13:11,818 - INFO - Google Sheets service created successfully
+2025-08-23 23:13:18,763 - INFO - Fetched 50,000 rows from drivers!A:I
+2025-08-23 23:13:18,785 - ERROR - Error loading drivers: 'phone'
+2025-08-23 23:13:18,805 - INFO - 📥 Loading vehicles data...
+2025-08-23 23:13:18,858 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:13:18,860 - INFO - Google Sheets service created successfully
+2025-08-23 23:13:24,755 - INFO - Fetched 50,000 rows from vehicles!A:J
+2025-08-23 23:13:24,774 - ERROR - Error loading vehicles: invalid literal for int() with base 10: 'D000001'
+2025-08-23 23:13:24,793 - INFO - 📥 Loading riders data...
+2025-08-23 23:13:24,843 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:13:24,845 - INFO - Google Sheets service created successfully
+2025-08-23 23:13:31,680 - INFO - Fetched 75,000 rows from riders!A:H
+2025-08-23 23:13:31,702 - ERROR - Error loading riders: 'phone'
+2025-08-23 23:13:31,729 - INFO - 📥 Loading trips data...
+2025-08-23 23:13:31,784 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:13:31,786 - INFO - Google Sheets service created successfully
+2025-08-23 23:13:40,869 - INFO - Fetched 75,000 rows from trips!A:R
+2025-08-23 23:13:40,905 - ERROR - Error loading trips: invalid literal for int() with base 10: 'D013390'
+2025-08-23 23:13:40,968 - INFO - 📥 Loading payments data...
+2025-08-23 23:13:41,021 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:13:41,023 - INFO - Google Sheets service created successfully
+2025-08-23 23:13:47,635 - INFO - Fetched 75,000 rows from payments!A:H
+2025-08-23 23:13:47,660 - ERROR - Error loading payments: invalid literal for int() with base 10: 'T0070812'
+2025-08-23 23:13:47,685 - INFO - 
+📊 BRONZE LAYER SUMMARY
+2025-08-23 23:13:47,685 - INFO - drivers    : ❌
+2025-08-23 23:13:47,685 - INFO - vehicles   : ❌
+2025-08-23 23:13:47,685 - INFO - riders     : ❌
+2025-08-23 23:13:47,685 - INFO - trips      : ❌
+2025-08-23 23:13:47,685 - INFO - payments   : ❌
+2025-08-23 23:13:47,699 - INFO - 
+🔍 Record Counts:
+2025-08-23 23:13:47,700 - INFO - drivers   : 0
+2025-08-23 23:13:47,701 - INFO - vehicles  : 0
+2025-08-23 23:13:47,701 - INFO - riders    : 0
+2025-08-23 23:13:47,702 - INFO - trips     : 0
+2025-08-23 23:13:47,703 - INFO - payments  : 0
+2025-08-23 23:13:47,703 - ERROR - ⚠️ Bronze load completed with errors
+2025-08-23 23:29:18,552 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:29:18,552 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:29:18,621 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:19,200 - ERROR - ❌ Error fetching data from drivers!A:I: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:19,200 - WARNING - ⚠️ No drivers data loaded
+2025-08-23 23:29:19,259 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:19,697 - ERROR - ❌ Error fetching data from vehicles!A:J: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:19,698 - WARNING - ⚠️ No vehicles data loaded
+2025-08-23 23:29:19,769 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:20,213 - ERROR - ❌ Error fetching data from riders!A:H: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:20,213 - WARNING - ⚠️ No riders data loaded
+2025-08-23 23:29:20,267 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:20,682 - ERROR - ❌ Error fetching data from trips!A:R: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:20,683 - WARNING - ⚠️ No trips data loaded
+2025-08-23 23:29:20,740 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:21,148 - ERROR - ❌ Error fetching data from payments!A:H: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:21,148 - WARNING - ⚠️ No payments data loaded
+2025-08-23 23:29:21,149 - INFO - 🎉 Bronze load completed
+2025-08-23 23:29:23,218 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:29:23,219 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:29:23,313 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:23,923 - ERROR - ❌ Error fetching data from drivers!A:I: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:23,923 - WARNING - ⚠️ No drivers data loaded
+2025-08-23 23:29:23,971 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:24,445 - ERROR - ❌ Error fetching data from vehicles!A:J: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:24,446 - WARNING - ⚠️ No vehicles data loaded
+2025-08-23 23:29:24,573 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:24,994 - ERROR - ❌ Error fetching data from riders!A:H: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:24,995 - WARNING - ⚠️ No riders data loaded
+2025-08-23 23:29:25,043 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:25,547 - ERROR - ❌ Error fetching data from trips!A:R: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:25,547 - WARNING - ⚠️ No trips data loaded
+2025-08-23 23:29:25,594 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:25,986 - ERROR - ❌ Error fetching data from payments!A:H: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:25,986 - WARNING - ⚠️ No payments data loaded
+2025-08-23 23:29:25,987 - INFO - 🎉 Bronze load completed
+2025-08-23 23:29:33,498 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:29:33,498 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:29:33,564 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:34,199 - ERROR - ❌ Error fetching data from drivers!A:I: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:34,199 - WARNING - ⚠️ No drivers data loaded
+2025-08-23 23:29:34,248 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:34,720 - ERROR - ❌ Error fetching data from vehicles!A:J: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:34,720 - WARNING - ⚠️ No vehicles data loaded
+2025-08-23 23:29:34,788 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:35,315 - ERROR - ❌ Error fetching data from riders!A:H: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:35,315 - WARNING - ⚠️ No riders data loaded
+2025-08-23 23:29:35,373 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:35,876 - ERROR - ❌ Error fetching data from trips!A:R: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:35,877 - WARNING - ⚠️ No trips data loaded
+2025-08-23 23:29:35,924 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:29:36,314 - ERROR - ❌ Error fetching data from payments!A:H: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1007)
+2025-08-23 23:29:36,315 - WARNING - ⚠️ No payments data loaded
+2025-08-23 23:29:36,316 - INFO - 🎉 Bronze load completed
+2025-08-23 23:32:28,728 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:32:28,728 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:32:28,797 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:32:28,801 - INFO - Google Sheets service created successfully
+2025-08-23 23:32:28,801 - ERROR - ❌ Error fetching data from drivers!A:I: 'Resource' object has no attribute 'get'
+2025-08-23 23:32:28,801 - WARNING - ⚠️ No drivers data loaded
+2025-08-23 23:32:28,846 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:32:28,849 - INFO - Google Sheets service created successfully
+2025-08-23 23:32:28,849 - ERROR - ❌ Error fetching data from vehicles!A:J: 'Resource' object has no attribute 'get'
+2025-08-23 23:32:28,849 - WARNING - ⚠️ No vehicles data loaded
+2025-08-23 23:32:28,898 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:32:28,901 - INFO - Google Sheets service created successfully
+2025-08-23 23:32:28,901 - ERROR - ❌ Error fetching data from riders!A:H: 'Resource' object has no attribute 'get'
+2025-08-23 23:32:28,901 - WARNING - ⚠️ No riders data loaded
+2025-08-23 23:32:28,948 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:32:28,951 - INFO - Google Sheets service created successfully
+2025-08-23 23:32:28,951 - ERROR - ❌ Error fetching data from trips!A:R: 'Resource' object has no attribute 'get'
+2025-08-23 23:32:28,951 - WARNING - ⚠️ No trips data loaded
+2025-08-23 23:32:29,001 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:32:29,003 - INFO - Google Sheets service created successfully
+2025-08-23 23:32:29,004 - ERROR - ❌ Error fetching data from payments!A:H: 'Resource' object has no attribute 'get'
+2025-08-23 23:32:29,004 - WARNING - ⚠️ No payments data loaded
+2025-08-23 23:32:29,004 - INFO - 🎉 Bronze load completed
+2025-08-23 23:36:36,836 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:36:36,836 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:36:36,895 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:36:36,899 - INFO - Google Sheets service created successfully
+2025-08-23 23:36:44,053 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-23 23:36:50,104 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-23 23:36:50,152 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:36:50,153 - INFO - Google Sheets service created successfully
+2025-08-23 23:36:55,856 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-23 23:37:01,885 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-23 23:37:01,932 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:37:01,988 - INFO - Google Sheets service created successfully
+2025-08-23 23:37:08,523 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-23 23:37:17,647 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-23 23:37:17,698 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:37:17,699 - INFO - Google Sheets service created successfully
+2025-08-23 23:37:26,145 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-23 23:37:26,223 - ERROR - ❌ Error inserting into trips: date/time field value out of range: "2/28/2020"
+LINE 5: ...ES ('T0000001', 'D013390', 'R0014052', 'V013390', '2/28/2020...
+                                                             ^
+HINT:  Perhaps you need a different "datestyle" setting.
+
+2025-08-23 23:37:26,282 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:37:26,284 - INFO - Google Sheets service created successfully
+2025-08-23 23:37:32,544 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-23 23:37:41,823 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-23 23:37:41,828 - INFO - 🎉 Bronze load completed
