@@ -63,72 +63,158 @@ def fetch_data(range_name):
 
 
 def parse_date(value):
-    """Convert Google Sheet date string M/D/YYYY to ISO format YYYY-MM-DD."""
-    try:
-        return datetime.strptime(value, "%m/%d/%Y").date()
-    except Exception:
+    """Convert sheet date to Python date (YYYY-MM-DD)."""
+    if not value:
         return None
+    for fmt in ("%m/%d/%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(value, fmt).date()
+        except Exception:
+            continue
+    return None
+
+
+def parse_timestamp(value):
+    """Convert sheet datetime to Python datetime."""
+    if not value:
+        return None
+    for fmt in ("%m/%d/%Y %H:%M:%S", "%m/%d/%Y", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(value, fmt)
+        except Exception:
+            continue
+    return None
 
 
 def load_data(table, rows, conn):
     cursor = conn.cursor()
+
     if table == "drivers":
         query = """
-            INSERT INTO bronze.drivers (driver_id, name, email, license_number, rating, city)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO bronze.drivers (
+                driver_id, driver_name, email, dob, signup_date,
+                rating, city, license_number, is_active
+            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
             ON CONFLICT (driver_id) DO NOTHING
-        """
-        data = [(r[0], r[1], r[2], r[7], r[5], r[6]) for r in rows]
-
-    elif table == "vehicles":
-        query = """
-            INSERT INTO bronze.vehicles (vehicle_id, driver_id, make, model, year, plate_number, color)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (vehicle_id) DO NOTHING
-        """
-        data = [(r[0], r[1], r[2], r[3], r[4], r[5], r[7]) for r in rows]
-
-    elif table == "riders":
-        query = """
-            INSERT INTO bronze.riders (rider_id, name, email, city, rating)
-            VALUES (%s, %s, %s, %s, %s)
-            ON CONFLICT (rider_id) DO NOTHING
-        """
-        data = [(r[0], r[1], r[2], r[4], r[5]) for r in rows]
-
-    elif table == "trips":
-        query = """
-            INSERT INTO bronze.trips (trip_id, driver_id, rider_id, vehicle_id,
-                                      start_time, end_time, start_location, end_location,
-                                      distance_km, duration_min, fare_amount, status)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (trip_id) DO NOTHING
         """
         data = [
             (
                 r[0],
-                r[2],
                 r[1],
-                r[3],
-                parse_date(r[5]),
-                parse_date(r[6]),
+                r[2],
+                parse_date(r[3]),
+                parse_date(r[4]),
+                float(r[5]) if r[5] else None,
+                r[6],
+                r[7],
+                r[8].lower() in ("true", "1", "yes") if len(r) > 8 and r[8] else None
+            )
+            for r in rows
+        ]
+
+    elif table == "vehicles":
+        query = """
+            INSERT INTO bronze.vehicles (
+                vehicle_id, driver_id, make, model, year,
+                plate, capacity, color, rider_name, rider_email
+            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            ON CONFLICT (vehicle_id) DO NOTHING
+        """
+        data = [
+            (
+                r[0], r[1], r[2], r[3],
+                int(r[4]) if r[4] else None,
+                r[5],
+                int(r[6]) if r[6] else None,
+                r[7],
+                r[8] if len(r) > 8 else None,
+                r[9] if len(r) > 9 else None
+            )
+            for r in rows
+        ]
+
+    elif table == "riders":
+        query = """
+            INSERT INTO bronze.riders (
+                rider_id, rider_name, email, signup_date,
+                home_city, rider_rating, default_payment_method, is_verified
+            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+            ON CONFLICT (rider_id) DO NOTHING
+        """
+        data = [
+            (
+                r[0], r[1], r[2],
+                parse_date(r[3]),
+                r[4],
+                float(r[5]) if r[5] else None,
+                r[6] if len(r) > 6 else None,
+                r[7].lower() in ("true", "1", "yes") if len(r) > 7 and r[7] else None
+            )
+            for r in rows
+        ]
+
+    elif table == "trips":
+        query = """
+            INSERT INTO bronze.trips (
+                trip_id, rider_id, driver_id, vehicle_id,
+                request_ts, pickup_ts, dropoff_ts,
+                pickup_location, drop_location,
+                distance_km, duration_min, wait_time_minutes,
+                surge_multiplier, base_fare_usd, tax_usd, tip_usd,
+                total_fare_usd, status
+            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            ON CONFLICT (trip_id) DO NOTHING
+        """
+        data = [
+            (
+                r[0],  # trip_id
+                r[1],  # rider_id
+                r[2],  # driver_id
+                r[3],  # vehicle_id
+                parse_timestamp(r[4]),
+                parse_timestamp(r[5]),
+                parse_timestamp(r[6]),
                 r[7],
                 r[8],
                 float(r[9]) if r[9] else None,
                 float(r[10]) if r[10] else None,
+                float(r[11]) if r[11] else None,
+                float(r[12]) if r[12] else None,
+                float(r[13]) if r[13] else None,
+                float(r[14]) if r[14] else None,
                 float(r[15]) if r[15] else None,
-                r[16],
+                float(r[16]) if r[16] else None,
+                r[17] if len(r) > 17 else None
             )
             for r in rows
         ]
 
     elif table == "payments":
         query = """
-            INSERT INTO bronze.payments (payment_id, trip_id, amount, payment_method, status)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO bronze.payments (
+                payment_id, trip_id, payment_date,
+                payment_method, amount_usd, tip_usd,
+                status, auth_code
+            )
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
             ON CONFLICT (payment_id) DO NOTHING
         """
-        data = [(r[0], r[1], r[4], r[3], r[6]) for r in rows]
+        data = [
+            (
+                r[0], r[1],
+                parse_date(r[2]),
+                r[3],
+                float(r[4]) if r[4] else None,
+                float(r[5]) if r[5] else None,
+                r[6],
+                r[7] if len(r) > 7 else None
+            )
+            for r in rows
+        ]
 
     else:
         logger.warning(f"⚠️ Unknown table: {table}")

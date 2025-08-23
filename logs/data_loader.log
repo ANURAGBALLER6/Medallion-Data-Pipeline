@@ -209,3 +209,231 @@ HINT:  Perhaps you need a different "datestyle" setting.
 2025-08-23 23:41:32,402 - INFO - ✓ Loaded 75000 rows from payments!A:H
 2025-08-23 23:41:40,908 - INFO - ✓ Inserted 75000 rows into bronze.payments
 2025-08-23 23:41:40,913 - INFO - 🎉 Bronze load completed
+2025-08-23 23:52:29,739 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:52:29,739 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:52:29,800 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:52:29,804 - INFO - Google Sheets service created successfully
+2025-08-23 23:52:36,000 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-23 23:52:36,698 - ERROR - ❌ Error inserting into drivers: column "driver_name" of relation "drivers" does not exist
+LINE 3:                 driver_id, driver_name, email, dob, signup_d...
+                                   ^
+
+2025-08-23 23:52:36,750 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:52:36,752 - INFO - Google Sheets service created successfully
+2025-08-23 23:52:43,862 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-23 23:52:43,927 - ERROR - ❌ Error inserting into vehicles: column "plate" of relation "vehicles" does not exist
+LINE 4:                 plate, capacity, color, rider_name, rider_em...
+                        ^
+
+2025-08-23 23:52:43,978 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:52:44,036 - INFO - Google Sheets service created successfully
+2025-08-23 23:52:50,878 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-23 23:52:51,540 - ERROR - ❌ Error inserting into riders: column "rider_name" of relation "riders" does not exist
+LINE 3:                 rider_id, rider_name, email, signup_date,
+                                  ^
+
+2025-08-23 23:52:51,594 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:52:51,596 - INFO - Google Sheets service created successfully
+2025-08-23 23:53:01,121 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-23 23:53:03,969 - ERROR - ❌ Error inserting into trips: column "request_ts" of relation "trips" does not exist
+LINE 4:                 request_ts, pickup_ts, dropoff_ts,
+                        ^
+
+2025-08-23 23:53:04,036 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:53:04,038 - INFO - Google Sheets service created successfully
+2025-08-23 23:53:10,948 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-23 23:53:11,629 - ERROR - ❌ Error inserting into payments: column "payment_date" of relation "payments" does not exist
+LINE 3:                 payment_id, trip_id, payment_date,
+                                             ^
+
+2025-08-23 23:53:11,637 - INFO - 🎉 Bronze load completed
+2025-08-23 23:57:23,270 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:57:23,270 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:57:23,333 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:57:23,336 - INFO - Google Sheets service created successfully
+2025-08-23 23:57:29,864 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-23 23:57:30,878 - ERROR - ❌ Error inserting into drivers: column "driver_name" of relation "drivers" does not exist
+LINE 3:                 driver_id, driver_name, email, dob, signup_d...
+                                   ^
+
+2025-08-23 23:57:30,927 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:57:30,929 - INFO - Google Sheets service created successfully
+2025-08-23 23:57:36,806 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-23 23:57:36,874 - ERROR - ❌ Error inserting into vehicles: column "plate" of relation "vehicles" does not exist
+LINE 4:                 plate, capacity, color, rider_name, rider_em...
+                        ^
+
+2025-08-23 23:57:36,925 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:57:36,995 - INFO - Google Sheets service created successfully
+2025-08-23 23:57:43,676 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-23 23:57:44,331 - ERROR - ❌ Error inserting into riders: column "rider_name" of relation "riders" does not exist
+LINE 3:                 rider_id, rider_name, email, signup_date,
+                                  ^
+
+2025-08-23 23:57:44,385 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:57:44,387 - INFO - Google Sheets service created successfully
+2025-08-23 23:57:54,628 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-23 23:57:56,844 - ERROR - ❌ Error inserting into trips: column "request_ts" of relation "trips" does not exist
+LINE 4:                 request_ts, pickup_ts, dropoff_ts,
+                        ^
+
+2025-08-23 23:57:56,912 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:57:56,914 - INFO - Google Sheets service created successfully
+2025-08-23 23:58:03,916 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-23 23:58:04,508 - ERROR - ❌ Error inserting into payments: column "payment_date" of relation "payments" does not exist
+LINE 3:                 payment_id, trip_id, payment_date,
+                                             ^
+
+2025-08-23 23:58:04,517 - INFO - 🎉 Bronze load completed
+2025-08-23 23:59:57,561 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-23 23:59:57,561 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-23 23:59:57,626 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-23 23:59:57,629 - INFO - Google Sheets service created successfully
+2025-08-24 00:00:04,479 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 00:00:05,149 - ERROR - ❌ Error inserting into drivers: column "signup_date" of relation "drivers" does not exist
+LINE 3: ...              driver_id, driver_name, email, dob, signup_dat...
+                                                             ^
+
+2025-08-24 00:00:05,199 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:00:05,201 - INFO - Google Sheets service created successfully
+2025-08-24 00:00:12,195 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 00:00:18,740 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 00:00:18,787 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:00:18,843 - INFO - Google Sheets service created successfully
+2025-08-24 00:00:25,811 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 00:00:39,558 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 00:00:39,619 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:00:39,621 - INFO - Google Sheets service created successfully
+2025-08-24 00:00:48,604 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 00:01:09,176 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 00:01:09,246 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:01:09,248 - INFO - Google Sheets service created successfully
+2025-08-24 00:01:15,222 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 00:01:26,831 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 00:01:26,841 - INFO - 🎉 Bronze load completed
+2025-08-24 00:05:46,466 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 00:05:46,466 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 00:05:46,529 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:05:46,533 - INFO - Google Sheets service created successfully
+2025-08-24 00:05:52,991 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 00:05:53,675 - ERROR - ❌ Error inserting into drivers: column "driver_rating" of relation "drivers" does not exist
+LINE 4:                 driver_rating, city, license_number, is_acti...
+                        ^
+
+2025-08-24 00:05:53,727 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:05:53,729 - INFO - Google Sheets service created successfully
+2025-08-24 00:05:59,452 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 00:06:05,549 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 00:06:05,596 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:06:05,651 - INFO - Google Sheets service created successfully
+2025-08-24 00:06:11,848 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 00:06:23,901 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 00:06:23,978 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:06:23,983 - INFO - Google Sheets service created successfully
+2025-08-24 00:06:33,303 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 00:06:53,989 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 00:06:54,061 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:06:54,063 - INFO - Google Sheets service created successfully
+2025-08-24 00:07:00,958 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 00:07:12,102 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 00:07:12,110 - INFO - 🎉 Bronze load completed
+2025-08-24 00:07:27,344 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 00:07:27,344 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 00:07:27,403 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:07:27,406 - INFO - Google Sheets service created successfully
+2025-08-24 00:07:34,052 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 00:07:34,746 - ERROR - ❌ Error inserting into drivers: column "driver_rating" of relation "drivers" does not exist
+LINE 4:                 driver_rating, city, license_number, is_acti...
+                        ^
+
+2025-08-24 00:07:34,799 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:07:34,802 - INFO - Google Sheets service created successfully
+2025-08-24 00:07:40,834 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 00:07:49,051 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 00:07:49,051 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 00:07:49,107 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:07:49,110 - INFO - Google Sheets service created successfully
+2025-08-24 00:07:55,301 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 00:07:55,957 - ERROR - ❌ Error inserting into drivers: column "is_active" of relation "drivers" does not exist
+LINE 4:                 rating, city, license_number, is_active
+                                                      ^
+
+2025-08-24 00:07:56,007 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:07:56,009 - INFO - Google Sheets service created successfully
+2025-08-24 00:08:01,990 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 00:08:09,139 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 00:08:09,189 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:08:09,250 - INFO - Google Sheets service created successfully
+2025-08-24 00:08:16,009 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 00:08:27,429 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 00:08:27,480 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:08:27,482 - INFO - Google Sheets service created successfully
+2025-08-24 00:08:36,298 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 00:08:56,118 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 00:08:56,192 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:08:56,194 - INFO - Google Sheets service created successfully
+2025-08-24 00:09:03,030 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 00:09:16,661 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 00:09:16,670 - INFO - 🎉 Bronze load completed
+2025-08-24 00:11:33,667 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 00:11:33,667 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 00:11:33,734 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:11:33,738 - INFO - Google Sheets service created successfully
+2025-08-24 00:11:39,704 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 00:11:40,426 - ERROR - ❌ Error inserting into drivers: column "rating" of relation "drivers" does not exist
+LINE 4:                 rating, city, license_number, is_active
+                        ^
+
+2025-08-24 00:11:40,478 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:11:40,480 - INFO - Google Sheets service created successfully
+2025-08-24 00:11:46,886 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 00:11:54,029 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 00:11:54,076 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:11:54,130 - INFO - Google Sheets service created successfully
+2025-08-24 00:12:00,468 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 00:12:08,043 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 00:12:08,043 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 00:12:08,107 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:12:08,111 - INFO - Google Sheets service created successfully
+2025-08-24 00:12:14,060 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 00:12:22,477 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-24 00:12:22,529 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:12:22,530 - INFO - Google Sheets service created successfully
+2025-08-24 00:12:28,582 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 00:12:35,106 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 00:12:35,150 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:12:35,206 - INFO - Google Sheets service created successfully
+2025-08-24 00:12:41,833 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 00:12:52,253 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 00:12:52,305 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:12:52,307 - INFO - Google Sheets service created successfully
+2025-08-24 00:13:00,458 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 00:13:20,946 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 00:13:21,013 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:13:21,015 - INFO - Google Sheets service created successfully
+2025-08-24 00:13:27,438 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 00:13:39,485 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 00:13:39,496 - INFO - 🎉 Bronze load completed
+2025-08-24 00:20:21,121 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 00:20:21,121 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 00:20:21,188 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:20:21,192 - INFO - Google Sheets service created successfully
+2025-08-24 00:20:27,997 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 00:20:37,304 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-24 00:20:37,356 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:20:37,358 - INFO - Google Sheets service created successfully
+2025-08-24 00:20:43,102 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 00:20:49,238 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 00:20:49,285 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:20:49,346 - INFO - Google Sheets service created successfully
+2025-08-24 00:23:10,652 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 00:23:20,890 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 00:23:20,943 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:23:20,944 - INFO - Google Sheets service created successfully
+2025-08-24 00:23:30,484 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 00:23:50,670 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 00:23:50,737 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 00:23:50,739 - INFO - Google Sheets service created successfully
+2025-08-24 00:23:57,183 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 00:24:09,191 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 00:24:09,200 - INFO - 🎉 Bronze load completed

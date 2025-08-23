@@ -64,8 +64,8 @@ def create_bronze_schema():
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS bronze.drivers (
                 driver_id TEXT PRIMARY KEY,
-                name TEXT NOT NULL,
-                phone TEXT,
+                driver_name TEXT NOT NULL,
+                dob TEXT,
                 email TEXT,
                 license_number TEXT,
                 rating NUMERIC(3,2),
@@ -73,6 +73,27 @@ def create_bronze_schema():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
+        """)
+        logger.info("✓ Table 'bronze.drivers' created/verified")
+
+        # Create drivers table
+        cursor.execute("""
+            DROP TABLE IF EXISTS bronze.drivers CASCADE;
+
+CREATE TABLE bronze.drivers (
+    driver_id TEXT PRIMARY KEY,
+    driver_name TEXT NOT NULL,
+    email TEXT,
+    dob DATE,
+    signup_date DATE,
+    rating NUMERIC(3,2),
+    city TEXT,
+    license_number TEXT,
+    is_active BOOLEAN,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
         """)
         logger.info("✓ Table 'bronze.drivers' created/verified")
 
@@ -84,9 +105,11 @@ def create_bronze_schema():
                 make TEXT,
                 model TEXT,
                 year INT,
-                plate_number TEXT,
+                plate TEXT,
+                capacity INT,
                 color TEXT,
-                status TEXT,
+                rider_name TEXT,
+                rider_email TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -97,11 +120,13 @@ def create_bronze_schema():
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS bronze.riders (
                 rider_id TEXT PRIMARY KEY,
-                name TEXT NOT NULL,
-                phone TEXT,
+                rider_name TEXT NOT NULL,
                 email TEXT,
-                city TEXT,
-                rating NUMERIC(3,2),
+                signup_date DATE,
+                home_city TEXT,
+                rider_rating NUMERIC(3,2),
+                default_payment_method TEXT,
+                is_verified BOOLEAN,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -112,16 +137,22 @@ def create_bronze_schema():
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS bronze.trips (
                 trip_id TEXT PRIMARY KEY,
-                driver_id TEXT,
                 rider_id TEXT,
+                driver_id TEXT,
                 vehicle_id TEXT,
-                start_time TIMESTAMP,
-                end_time TIMESTAMP,
-                start_location TEXT,
-                end_location TEXT,
+                request_ts TIMESTAMP,
+                pickup_ts TIMESTAMP,
+                dropoff_ts TIMESTAMP,
+                pickup_location TEXT,
+                drop_location TEXT,
                 distance_km NUMERIC(10,2),
                 duration_min NUMERIC(10,2),
-                fare_amount NUMERIC(10,2),
+                wait_time_minutes NUMERIC(10,2),
+                surge_multiplier NUMERIC(5,2),
+                base_fare_usd NUMERIC(10,2),
+                tax_usd NUMERIC(10,2),
+                tip_usd NUMERIC(10,2),
+                total_fare_usd NUMERIC(10,2),
                 status TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -134,17 +165,46 @@ def create_bronze_schema():
             CREATE TABLE IF NOT EXISTS bronze.payments (
                 payment_id TEXT PRIMARY KEY,
                 trip_id TEXT,
-                rider_id TEXT,
-                driver_id TEXT,
-                amount NUMERIC(10,2),
+                payment_date DATE,
                 payment_method TEXT,
+                amount_usd NUMERIC(10,2),
+                tip_usd NUMERIC(10,2),
                 status TEXT,
+                auth_code TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
         logger.info("✓ Table 'bronze.payments' created/verified")
 
+        # Create Indexes
+        # =============================
+
+        # Drivers
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_drivers_email ON bronze.drivers(email)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_drivers_city ON bronze.drivers(city)")
+
+        # Vehicles
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_vehicles_driver_id ON bronze.vehicles(driver_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_vehicles_plate ON bronze.vehicles(plate)")
+
+        # Riders
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_riders_email ON bronze.riders(email)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_riders_city ON bronze.riders(home_city)")
+
+        # Trips
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trips_driver_id ON bronze.trips(driver_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trips_rider_id ON bronze.trips(rider_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trips_vehicle_id ON bronze.trips(vehicle_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_trips_request_ts ON bronze.trips(request_ts)")
+
+        # Payments
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_payments_trip_id ON bronze.payments(trip_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_payments_method ON bronze.payments(payment_method)")
+
+        conn.commit()
+        cursor.close()
+        logger.info("✓ Tables & Indexes created/verified")
         conn.commit()
         cursor.close()
         conn.close()
