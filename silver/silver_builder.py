@@ -1,28 +1,53 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Silver Layer Builder for Medallion Data Pipeline
 Handles data cleaning, validation, and quality checks (ride-sharing domain)
+
+Key features
+------------
+1) Schema + audit tables bootstrap (silver, audit)
+2) Bronze -> Silver _base (SQL light cleaning / dedupe)
+3) Deep validation with Pandas (rich, row-level checks)
+4) Rejected rows captured to audit.rejected_rows as JSONB
+5) Data Quality checks (PK uniqueness, FK integrity, email uniqueness)
+6) Summary + lightweight data checksum (md5 of first 1k JSON rows)
+
+Fixes
+-----
+- Rejected rows insertion now uses `json.dumps(..., default=str)` and
+  `CAST(:r AS JSONB)` so there is no `:r::jsonb` placeholder issue,
+  and no usage of `pandas.io.json`.
 """
 
 from __future__ import annotations
 
 import logging
+import json
 import pandas as pd
 from datetime import datetime
 import sys
 from pathlib import Path
 from urllib.parse import quote_plus
-from typing import Tuple, List, Dict
+from typing import Optional
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
-from sqlalchemy.types import Text, Date, Integer, Numeric
+
 
 # ---------------- Config import ----------------
-# Expecting config.py at project root (one level up) that exposes DB_CONFIG, LOG_CONFIG
-# DB_CONFIG = {"user":"...", "password":"...", "host":"...", "port":5432, "database":"..."}
-# LOG_CONFIG = {"level":"INFO", "format":"...", "log_dir":"logs"}
+# Expect a config.py one level up:
+# DB_CONFIG = {
+#   "user": "...",
+#   "password": "...",
+#   "host": "...",
+#   "port": 5432,
+#   "database": "..."
+# }
+# LOG_CONFIG = {"log_dir": "logs", "level": "INFO", "format": "..."}
 sys.path.append(str(Path(__file__).parent.parent))
 from config import DB_CONFIG, LOG_CONFIG  # noqa: E402
+
 
 # ---------------- Logging ----------------
 log_dir = Path(__file__).parent.parent / LOG_CONFIG.get("log_dir", "logs")
@@ -47,15 +72,15 @@ def make_engine() -> Engine:
     port = DB_CONFIG["port"]
     db = DB_CONFIG["database"]
     url = f"postgresql+psycopg2://{user}:{pwd}@{host}:{port}/{db}"
-    # future=True ensures 2.0 style behavior
+    # future=True works well with SQLAlchemy 2.x style
     return create_engine(url, future=True)
 
 
 engine = make_engine()
 
 
-def run_sql(sql: str, params: dict | None = None):
-    """Execute arbitrary SQL in its own transaction."""
+def run_sql(sql: str, params: Optional[dict] = None):
+    """Run a single SQL statement in its own transaction."""
     with engine.begin() as conn:
         conn.execute(text(sql), params or {})
 
@@ -65,9 +90,11 @@ class SilverBuilder:
 
     def __init__(self):
         self.run_id = datetime.now().strftime('%Y%m%d_%H%M%S')
-        # Write parents before children to avoid dependency surprises
         self.tables = ['drivers', 'vehicles', 'riders', 'trips', 'payments']
-        self.stats: Dict[str, Dict[str, int]] = {}
+        self.stats: dict[str, dict[str, int]] = {}
+        # to_sql perf knobs
+        self.to_sql_chunksize = 20000
+        self.to_sql_method = 'multi'  # let pandas batch INSERTs
 
     # ---------------- Step 1: Schemas + Audit ----------------
     def setup_schemas(self) -> bool:
@@ -124,14 +151,15 @@ class SilverBuilder:
     def create_silver_base_tables(self) -> bool:
         logger.info("Creating Silver base tables with light cleaning...")
 
-        # All IDs are kept as TEXT to allow alphanumeric keys like "P0000001"
-        sql_scripts: Dict[str, str] = {
+        # Keep these as pure SQL for pushdown + reproducibility.
+        # Use ROW_NUMBER to dedupe on natural keys, keeping the "latest" by a date column.
+        sql_scripts = {
             'drivers': """
                 DROP TABLE IF EXISTS silver.drivers_base;
                 CREATE TABLE silver.drivers_base AS
                 WITH cleaned AS (
                     SELECT
-                        TRIM(driver_id::TEXT) AS driver_id,   -- TEXT
+                        TRIM(driver_id::TEXT) AS driver_id,   -- keep as TEXT
                         TRIM(driver_name::TEXT) AS driver_name,
                         LOWER(TRIM(email::TEXT)) AS email,
                         NULLIF(TRIM(dob::TEXT), '')::DATE AS dob,
@@ -158,8 +186,8 @@ class SilverBuilder:
                 CREATE TABLE silver.vehicles_base AS
                 WITH cleaned AS (
                     SELECT
-                        TRIM(vehicle_id::TEXT) AS vehicle_id,  -- TEXT
-                        TRIM(driver_id::TEXT) AS driver_id,    -- TEXT
+                        TRIM(vehicle_id::TEXT) AS vehicle_id,
+                        TRIM(driver_id::TEXT) AS driver_id,
                         INITCAP(TRIM(make::TEXT)) AS make,
                         INITCAP(TRIM(model::TEXT)) AS model,
                         NULLIF(year::TEXT,'')::INT AS year,
@@ -183,7 +211,7 @@ class SilverBuilder:
                 CREATE TABLE silver.riders_base AS
                 WITH cleaned AS (
                     SELECT
-                        TRIM(rider_id::TEXT) AS rider_id,  -- TEXT
+                        TRIM(rider_id::TEXT) AS rider_id,
                         TRIM(rider_name::TEXT) AS rider_name,
                         LOWER(TRIM(email::TEXT)) AS email,
                         NULLIF(TRIM(signup_date::TEXT),'')::DATE AS signup_date,
@@ -209,15 +237,18 @@ class SilverBuilder:
                 CREATE TABLE silver.trips_base AS
                 WITH cleaned AS (
                     SELECT
-                        TRIM(trip_id::TEXT) AS trip_id,      -- TEXT
-                        TRIM(rider_id::TEXT) AS rider_id,    -- TEXT
-                        TRIM(driver_id::TEXT) AS driver_id,  -- TEXT
-                        TRIM(vehicle_id::TEXT) AS vehicle_id, -- TEXT
+                        TRIM(trip_id::TEXT) AS trip_id,
+                        TRIM(rider_id::TEXT) AS rider_id,
+                        TRIM(driver_id::TEXT) AS driver_id,
+                        TRIM(vehicle_id::TEXT) AS vehicle_id,
+
                         NULLIF(TRIM(request_ts::TEXT),'')::TIMESTAMP AS request_ts,
                         NULLIF(TRIM(pickup_ts::TEXT),'')::TIMESTAMP AS pickup_ts,
                         NULLIF(TRIM(dropoff_ts::TEXT),'')::TIMESTAMP AS dropoff_ts,
+
                         TRIM(pickup_location::TEXT) AS pickup_location,
                         TRIM(drop_location::TEXT) AS drop_location,
+
                         NULLIF(distance_km::TEXT,'')::NUMERIC AS distance_km,
                         NULLIF(duration_min::TEXT,'')::NUMERIC AS duration_min,
                         NULLIF(wait_time_minutes::TEXT,'')::NUMERIC AS wait_time_minutes,
@@ -226,7 +257,9 @@ class SilverBuilder:
                         NULLIF(tax_usd::TEXT,'')::NUMERIC AS tax_usd,
                         NULLIF(tip_usd::TEXT,'')::NUMERIC AS tip_usd,
                         NULLIF(total_fare_usd::TEXT,'')::NUMERIC AS total_fare_usd,
+
                         INITCAP(TRIM(status::TEXT)) AS status,
+
                         ROW_NUMBER() OVER (PARTITION BY trip_id ORDER BY request_ts DESC NULLS LAST) AS rn
                     FROM bronze.trips
                     WHERE trip_id IS NOT NULL
@@ -242,10 +275,17 @@ class SilverBuilder:
                 CREATE TABLE silver.payments_base AS
                 WITH cleaned AS (
                     SELECT
-                        TRIM(payment_id::TEXT) AS payment_id, -- TEXT
-                        TRIM(trip_id::TEXT) AS trip_id,       -- TEXT
+                        TRIM(payment_id::TEXT) AS payment_id,
+                        TRIM(trip_id::TEXT) AS trip_id,
                         NULLIF(TRIM(payment_date::TEXT),'')::DATE AS payment_date,
-                        TRIM(payment_method::TEXT) AS payment_method,
+                        -- normalize common variants into a canonical set
+                        CASE
+                            WHEN LOWER(TRIM(payment_method::TEXT)) IN ('card','credit','credit card','debit','debit card') THEN 'Card'
+                            WHEN LOWER(TRIM(payment_method::TEXT)) IN ('cash') THEN 'Cash'
+                            WHEN LOWER(TRIM(payment_method::TEXT)) IN ('wallet','paytm','phonepe','gpay','stripe wallet') THEN 'Wallet'
+                            WHEN LOWER(TRIM(payment_method::TEXT)) IN ('upi','u.p.i','upi id') THEN 'UPI'
+                            ELSE INITCAP(TRIM(payment_method::TEXT))
+                        END AS payment_method,
                         NULLIF(amount_usd::TEXT,'')::NUMERIC AS amount_usd,
                         NULLIF(tip_usd::TEXT,'')::NUMERIC AS tip_usd,
                         INITCAP(TRIM(status::TEXT)) AS status,
@@ -277,6 +317,8 @@ class SilverBuilder:
     def deep_validation(self) -> bool:
         logger.info("Performing deep validation...")
         ok = True
+        # order matters only if you have real FK constraints on silver.* tables.
+        # In this version we only *check* FKs, we don't enforce constraints.
         for t in self.tables:
             logger.info(f"Validating {t}...")
             if not self._validate_table(t):
@@ -297,52 +339,18 @@ class SilverBuilder:
                 logger.warning(f"No data found in silver.{table_name}_base")
                 return True
 
-            # Normalize columns for validations where helpful (non-destructive)
-            if table_name == 'payments' and 'payment_method' in df.columns:
-                df['payment_method_norm'] = self._normalize_payment_method_series(df['payment_method'])
-            else:
-                df['payment_method_norm'] = None  # placeholder when not used
-
             valid_df, invalid_df, reasons = self._apply_table_validations(table_name, df)
 
-            # Persist valid data into final silver table
+            # Write valid rows to final silver table
             if not valid_df.empty:
-                # Dtype hints to keep text IDs as TEXT
-                dtype_map = {}
-                if table_name == 'drivers':
-                    dtype_map = {
-                        'driver_id': Text(), 'driver_name': Text(), 'email': Text(),
-                        'city': Text(), 'license_number': Text()
-                    }
-                elif table_name == 'vehicles':
-                    dtype_map = {
-                        'vehicle_id': Text(), 'driver_id': Text(), 'make': Text(),
-                        'model': Text(), 'plate': Text(), 'color': Text()
-                    }
-                elif table_name == 'riders':
-                    dtype_map = {
-                        'rider_id': Text(), 'rider_name': Text(), 'email': Text(),
-                        'home_city': Text(), 'default_payment_method': Text()
-                    }
-                elif table_name == 'trips':
-                    dtype_map = {
-                        'trip_id': Text(), 'rider_id': Text(), 'driver_id': Text(),
-                        'vehicle_id': Text(), 'pickup_location': Text(), 'drop_location': Text(),
-                        'status': Text()
-                    }
-                elif table_name == 'payments':
-                    dtype_map = {
-                        'payment_id': Text(), 'trip_id': Text(), 'payment_method': Text(),
-                        'status': Text(), 'auth_code': Text()
-                    }
-
-                # Drop helper column if present
-                if 'payment_method_norm' in valid_df.columns:
-                    valid_df = valid_df.drop(columns=['payment_method_norm'], errors='ignore')
-
                 valid_df.to_sql(
-                    table_name, engine, schema='silver',
-                    if_exists='replace', index=False, dtype=dtype_map
+                    table_name,
+                    engine,
+                    schema='silver',
+                    if_exists='replace',
+                    index=False,
+                    chunksize=self.to_sql_chunksize,
+                    method=self.to_sql_method
                 )
                 logger.info(f"✅ {len(valid_df):,} valid rows saved to silver.{table_name}")
             else:
@@ -353,7 +361,6 @@ class SilverBuilder:
                 self._save_rejected_rows(table_name, invalid_df, reasons)
                 logger.warning(f"⚠️  {len(invalid_df):,} invalid rows saved to audit.rejected_rows")
 
-            # Update stats
             self.stats[table_name] = {
                 'input_rows': len(df),
                 'valid_rows': len(valid_df),
@@ -361,58 +368,37 @@ class SilverBuilder:
             }
 
             self.log_etl_step(
-                f"deep_validation_{table_name}", table_name,
-                len(df), len(valid_df), len(invalid_df)
+                f"deep_validation_{table_name}",
+                table_name,
+                len(df),
+                int(self.stats[table_name]['valid_rows']),
+                int(self.stats[table_name]['invalid_rows'])
             )
             return True
         except Exception as e:
             logger.error(f"Error validating {table_name}: {e}")
             return False
 
-    def _normalize_payment_method_series(self, s: pd.Series) -> pd.Series:
-        """
-        Normalize payment method values to a canonical small set.
-        Examples mapped to: Card, Cash, Wallet, UPI
-        """
-        if s is None:
-            return pd.Series(dtype=object)
-
-        mapping = {
-            'credit card': 'Card',
-            'debit card': 'Card',
-            'card': 'Card',
-            'cash': 'Cash',
-            'wallet': 'Wallet',
-            'upi': 'UPI',
-            'gpay': 'UPI',
-            'google pay': 'UPI',
-            'phonepe': 'UPI',
-            'paytm': 'UPI',
-            'apple pay': 'Card',   # treat as card-rails for now
-            'mastercard': 'Card',
-            'visa': 'Card'
-        }
-        def norm(x):
-            if x is None:
-                return None
-            t = str(x).strip().lower()
-            return mapping.get(t, str(x).strip().title())  # default Title Case (e.g., "Upi" -> "Upi")
-        return s.apply(norm)
-
-    def _apply_table_validations(self, table_name: str, df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame, List[str]]:
+    def _apply_table_validations(self, table_name: str, df: pd.DataFrame):
+        """Return (valid_df, invalid_df, reasons)."""
         valid_mask = pd.Series(True, index=df.index)
         reasons = [''] * len(df)
 
         def add_reason(mask: pd.Series, msg: str):
             nonlocal valid_mask, reasons
             # for rows where mask is True (bad rows), append reason
+            # mask True => BAD row
+            if mask is None or mask.empty:
+                return
+            # Ensure alignment by reindexing
+            mask = mask.reindex(df.index, fill_value=False)
             for i, bad in mask.items():
                 if bad:
                     reasons[i] = (reasons[i] + '; ' if reasons[i] else '') + msg
             valid_mask &= ~mask
 
         if table_name == 'drivers':
-            email_pat = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+            email_pat = r"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"
             add_reason(~df['email'].fillna('').str.match(email_pat), 'Invalid email')
             add_reason(~df['license_number'].notna(), 'Missing license number')
             add_reason(~df['driver_rating'].fillna(0).between(0, 5), 'Driver rating out of range (0-5)')
@@ -420,12 +406,13 @@ class SilverBuilder:
         elif table_name == 'vehicles':
             current_year = datetime.now().year
             add_reason(~df['driver_id'].notna(), 'Missing driver_id')
-            add_reason(~df['year'].fillna(0).between(1980, current_year + 1), f'Invalid year (1980-{current_year+1})')
+            add_reason(~df['year'].fillna(0).between(1980, current_year + 1),
+                       f'Invalid year (1980-{current_year+1})')
             add_reason(~df['capacity'].fillna(0).between(1, 8), 'Capacity out of range (1-8)')
             add_reason(~df['plate'].fillna('').str.match(r'^[A-Z0-9\-]{3,12}$'), 'Invalid plate')
 
         elif table_name == 'riders':
-            email_pat = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+            email_pat = r"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"
             add_reason(~df['email'].fillna('').str.match(email_pat), 'Invalid email')
             add_reason(~df['rider_rating'].fillna(0).between(0, 5), 'Rider rating out of range (0-5)')
 
@@ -434,10 +421,14 @@ class SilverBuilder:
             add_reason(~df['driver_id'].notna(), 'Missing driver_id')
             add_reason(~df['vehicle_id'].notna(), 'Missing vehicle_id')
             # time logic
-            add_reason((df['pickup_ts'].notna()) & (df['request_ts'].notna()) & (df['pickup_ts'] < df['request_ts']),
-                       'pickup_ts before request_ts')
-            add_reason((df['dropoff_ts'].notna()) & (df['pickup_ts'].notna()) & (df['dropoff_ts'] < df['pickup_ts']),
-                       'dropoff_ts before pickup_ts')
+            add_reason(
+                (df['pickup_ts'].notna()) & (df['request_ts'].notna()) & (df['pickup_ts'] < df['request_ts']),
+                'pickup_ts before request_ts'
+            )
+            add_reason(
+                (df['dropoff_ts'].notna()) & (df['pickup_ts'].notna()) & (df['dropoff_ts'] < df['pickup_ts']),
+                'dropoff_ts before pickup_ts'
+            )
             # non-negatives
             for col, label in [
                 ('distance_km', 'distance_km'),
@@ -449,67 +440,60 @@ class SilverBuilder:
                 ('total_fare_usd', 'total_fare_usd')
             ]:
                 add_reason(df[col].fillna(0) < 0, f'Negative {label}')
-            # fare sanity (allow tiny float noise)
+            # fare sanity: base + tax + tip == total (within epsilon)
             if {'base_fare_usd', 'tax_usd', 'tip_usd', 'total_fare_usd'}.issubset(df.columns):
                 add_reason(
-                    (df[['base_fare_usd', 'tax_usd', 'tip_usd']].fillna(0).sum(axis=1) - df['total_fare_usd'].fillna(0)).abs() > 1e-6,
+                    (df[['base_fare_usd', 'tax_usd', 'tip_usd']].fillna(0).sum(axis=1) -
+                     df['total_fare_usd'].fillna(0)).abs() > 1e-6,
                     'total_fare_usd != base+tax+tip'
                 )
 
         elif table_name == 'payments':
-            # prefer normalized method if present
-            pm_series = (df['payment_method_norm']
-                         if 'payment_method_norm' in df.columns
-                         else df['payment_method'])
             add_reason(~df['trip_id'].notna(), 'Missing trip_id')
             add_reason(df['amount_usd'].fillna(0) < 0, 'Negative amount_usd')
             add_reason(df['tip_usd'].fillna(0) < 0, 'Negative tip_usd')
+            # Allowed canonical set after normalization in _base step
             allowed = {'Card', 'Cash', 'Wallet', 'UPI'}
-            add_reason(~pm_series.fillna('').isin(allowed), 'Unknown payment_method')
-
-            # If normalized value is good but original is weird casing, fix it for valid rows
-            if 'payment_method_norm' in df.columns:
-                needs_fix = pm_series.notna() & pm_series.isin(allowed)
-                df.loc[needs_fix, 'payment_method'] = df.loc[needs_fix, 'payment_method_norm']
+            add_reason(~df['payment_method'].fillna('').isin(allowed), 'Unknown payment_method')
 
         valid_df = df[valid_mask].copy()
         invalid_df = df[~valid_mask].copy()
         invalid_reasons = [reasons[i] for i in invalid_df.index]
-
-        # Drop helper column from both before saving/inserting
-        for d in (valid_df, invalid_df):
-            if 'payment_method_norm' in d.columns:
-                d.drop(columns=['payment_method_norm'], inplace=True, errors='ignore')
-
         return valid_df, invalid_df, invalid_reasons
 
-    def _save_rejected_rows(self, table_name: str, invalid_df: pd.DataFrame, reasons: List[str]):
-        """
-        Persist rejected rows into audit.rejected_rows using uniform named params
-        and server-side cast to JSONB to avoid psycopg param style pitfalls.
+    def _save_rejected_rows(self, table_name: str, invalid_df: pd.DataFrame, reasons: list[str]):
+        """Batch insert rejected rows into audit.rejected_rows as JSONB.
+
+        Uses CAST(:r AS JSONB) so psycopg2 parameter style is respected;
+        payloads are json-serialized with default=str to handle timestamps/Decimals.
         """
         try:
             if invalid_df.empty:
                 return
-            rows = invalid_df.to_dict(orient='records')
-            payload = [
-                {
+
+            # build parameter list for executemany
+            params = []
+            # Attach reason per row (aligned by index)
+            # To reduce payload size, you can drop entirely-null columns if desired:
+            for (idx, row), reason in zip(invalid_df.iterrows(), reasons):
+                rec_dict = row.to_dict()
+                rec_json = json.dumps(rec_dict, default=str)
+                params.append({
                     "t": table_name,
-                    "r": pd.io.json.dumps(rec),  # JSON text
-                    "reason": reasons[idx] if idx < len(reasons) else "Validation failed",
+                    "r": rec_json,
+                    "reason": reason or "Validation failed",
                     "run": self.run_id
-                }
-                for idx, rec in enumerate(rows)
-            ]
+                })
+
+            sql = text("""
+                INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                VALUES (:t, CAST(:r AS JSONB), :reason, :run)
+            """)
+
+            # executemany style insert
             with engine.begin() as conn:
-                for item in payload:
-                    conn.execute(
-                        text("""
-                            INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
-                            VALUES (:t, CAST(:r AS JSONB), :reason, :run)
-                        """),
-                        item
-                    )
+                conn.execute(sql, params)
+
         except Exception as e:
             logger.error(f"Error saving rejected rows for {table_name}: {e}")
 
@@ -517,7 +501,8 @@ class SilverBuilder:
     def run_data_quality_checks(self) -> bool:
         logger.info("Running Data Quality checks...")
 
-        checks: Dict[str, List[Tuple[str, str]]] = {
+        # These DQ checks do NOT create constraints; they record results in audit.dq_results
+        checks = {
             'drivers': [
                 ('pk_uniqueness', "SELECT COUNT(*) - COUNT(DISTINCT driver_id) FROM silver.drivers"),
                 ('email_uniqueness', "SELECT COUNT(*) - COUNT(DISTINCT email) FROM silver.drivers WHERE email IS NOT NULL")
@@ -580,8 +565,7 @@ class SilverBuilder:
         return True
 
     # ---------------- Audit logging helpers ----------------
-    def log_etl_step(self, step_name: str, table_name: str,
-                     input_count: int | None, output_count: int | None, rejected_count: int | None):
+    def log_etl_step(self, step_name, table_name, input_count, output_count, rejected_count):
         checksum = None
         try:
             if output_count and output_count > 0:
@@ -600,16 +584,16 @@ class SilverBuilder:
                 "ts": datetime.now(),
                 "step": step_name,
                 "table": table_name,
-                "in_c": input_count,
-                "out_c": output_count,
-                "rej_c": rejected_count,
+                "in_c": int(input_count) if input_count is not None else None,
+                "out_c": int(output_count) if output_count is not None else None,
+                "rej_c": int(rejected_count) if rejected_count is not None else None,
                 "chk": checksum
             })
         except Exception as e:
             logger.error(f"Error logging ETL step ({table_name} - {step_name}): {e}")
 
-    def _calculate_checksum(self, table_name: str):
-        # Prefer final table if it exists, otherwise base
+    def _calculate_checksum(self, table_name: str) -> Optional[str]:
+        """Return md5 over first 1000 JSON rows of silver.<table> (or <table>_base if final missing)."""
         with engine.connect() as conn:
             exists = conn.execute(
                 text("SELECT to_regclass(:tbl) IS NOT NULL"),
@@ -617,7 +601,6 @@ class SilverBuilder:
             ).scalar_one()
             obj = f"silver.{table_name}" if exists else f"silver.{table_name}_base"
 
-            # md5 over first 1000 json rows for reproducible lightweight checksum
             res = conn.execute(text(f"""
                 SELECT MD5(STRING_AGG(md5_row, '' ORDER BY md5_row)) AS md5
                 FROM (
@@ -671,5 +654,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#

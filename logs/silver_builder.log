@@ -708,3 +708,196 @@ LINE 3:                             VALUES ('payments', :r::jsonb, '...
 2025-08-24 15:24:58,678 - INFO -   Run ID: 20250824_152435
 2025-08-24 15:24:58,678 - INFO - ============================================================
 2025-08-24 15:24:58,678 - INFO - 🎉 Silver build completed
+2025-08-24 15:39:43,861 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:39:43,861 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:39:43,879 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:39:43,880 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:39:43,880 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:39:44,167 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:39:44,177 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:39:44,427 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:39:44,435 - INFO - Creating silver.riders_base ...
+2025-08-24 15:39:44,807 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:39:44,814 - INFO - Creating silver.trips_base ...
+2025-08-24 15:39:45,453 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:39:45,465 - INFO - Creating silver.payments_base ...
+2025-08-24 15:39:45,882 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:39:45,890 - INFO - ✅ All Silver base tables created
+2025-08-24 15:39:45,890 - INFO - Performing deep validation...
+2025-08-24 15:39:45,890 - INFO - Validating drivers...
+2025-08-24 15:39:46,142 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:39:56,352 - INFO - ✅ 50,000 valid rows saved to silver.drivers
+2025-08-24 15:39:56,372 - INFO - Validating vehicles...
+2025-08-24 15:39:56,535 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
+2025-08-24 15:40:08,393 - INFO - ✅ 50,000 valid rows saved to silver.vehicles
+2025-08-24 15:40:08,416 - INFO - Validating riders...
+2025-08-24 15:40:08,724 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-24 15:40:22,837 - INFO - ✅ 75,000 valid rows saved to silver.riders
+2025-08-24 15:40:22,864 - INFO - Validating trips...
+2025-08-24 15:40:24,129 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-24 15:40:52,912 - INFO - ✅ 65,994 valid rows saved to silver.trips
+2025-08-24 15:40:53,977 - ERROR - Error saving rejected rows for trips: (psycopg2.errors.UndefinedColumn) column "record" of relation "rejected_rows" does not exist
+LINE 2: ...     INSERT INTO audit.rejected_rows (table_name, record, re...
+                                                             ^
+
+[SQL: 
+                INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                VALUES (%(t)s, CAST(%(r)s AS JSONB), %(reason)s, %(run)s)
+            ]
+[parameters: [{'t': 'trips', 'r': '{"trip_id": "T0000009", "rider_id": "R0022707", "driver_id": "D035187", "vehicle_id": "V035187", "request_ts": "2025-10-17 00:00:00", "pickup_ts": "2 ... (170 characters truncated) ... es": 13.0, "surge_multiplier": 1.12, "base_fare_usd": 18.09, "tax_usd": 1.45, "tip_usd": 2.06, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0000014", "rider_id": "R0051880", "driver_id": "D018345", "vehicle_id": "V018345", "request_ts": "2022-09-27 00:00:00", "pickup_ts": "2 ... (173 characters truncated) ... es": 8.0, "surge_multiplier": 1.21, "base_fare_usd": 50.27, "tax_usd": 4.02, "tip_usd": 0.68, "total_fare_usd": 0.0, "status": "Cancelled_By_Driver"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0000019", "rider_id": "R0064556", "driver_id": "D025374", "vehicle_id": "V025374", "request_ts": "2021-07-06 00:00:00", "pickup_ts": "2 ... (164 characters truncated) ... it_time_minutes": 1.0, "surge_multiplier": 1.28, "base_fare_usd": 57.54, "tax_usd": 4.6, "tip_usd": 1.33, "total_fare_usd": 0.0, "status": "No_Show"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0000028", "rider_id": "R0062058", "driver_id": "D037765", "vehicle_id": "V037765", "request_ts": "2021-11-19 00:00:00", "pickup_ts": "2 ... (172 characters truncated) ... es": 14.0, "surge_multiplier": 1.05, "base_fare_usd": 29.71, "tax_usd": 2.38, "tip_usd": 1.44, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0000030", "rider_id": "R0035782", "driver_id": "D002177", "vehicle_id": "V002177", "request_ts": "2020-04-01 00:00:00", "pickup_ts": "2 ... (166 characters truncated) ... t_time_minutes": 3.0, "surge_multiplier": 1.18, "base_fare_usd": 51.17, "tax_usd": 4.09, "tip_usd": 2.35, "total_fare_usd": 0.0, "status": "No_Show"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0000038", "rider_id": "R0004849", "driver_id": "D045591", "vehicle_id": "V045591", "request_ts": "2025-08-09 00:00:00", "pickup_ts": "2 ... (176 characters truncated) ... tes": 3.0, "surge_multiplier": 1.29, "base_fare_usd": 29.18, "tax_usd": 2.33, "tip_usd": 2.47, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0000044", "rider_id": "R0038828", "driver_id": "D021421", "vehicle_id": "V021421", "request_ts": "2022-08-23 00:00:00", "pickup_ts": "2 ... (177 characters truncated) ... s": 12.0, "surge_multiplier": 1.02, "base_fare_usd": 48.62, "tax_usd": 3.89, "tip_usd": 2.55, "total_fare_usd": 0.0, "status": "Cancelled_By_Driver"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0000064", "rider_id": "R0011395", "driver_id": "D018440", "vehicle_id": "V018440", "request_ts": "2023-02-26 00:00:00", "pickup_ts": "2 ... (177 characters truncated) ... s": 12.0, "surge_multiplier": 1.27, "base_fare_usd": 25.88, "tax_usd": 2.07, "tip_usd": 2.54, "total_fare_usd": 0.0, "status": "Cancelled_By_Driver"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}  ... displaying 10 of 9006 total bound parameter sets ...  {'t': 'trips', 'r': '{"trip_id": "T0074983", "rider_id": "R0027027", "driver_id": "D015454", "vehicle_id": "V015454", "request_ts": "2025-01-17 00:00:00", "pickup_ts": "2 ... (158 characters truncated) ... ait_time_minutes": 6.0, "surge_multiplier": 1.18, "base_fare_usd": 48.4, "tax_usd": 3.87, "tip_usd": 3.1, "total_fare_usd": 0.0, "status": "No_Show"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}, {'t': 'trips', 'r': '{"trip_id": "T0074985", "rider_id": "R0013207", "driver_id": "D040892", "vehicle_id": "V040892", "request_ts": "2025-05-03 00:00:00", "pickup_ts": "2 ... (173 characters truncated) ... es": 15.0, "surge_multiplier": 1.07, "base_fare_usd": 48.54, "tax_usd": 3.88, "tip_usd": 3.06, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_153943'}]]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:40:53,978 - WARNING - ⚠️  9,006 invalid rows saved to audit.rejected_rows
+2025-08-24 15:40:53,995 - INFO - Validating payments...
+2025-08-24 15:40:54,444 - INFO - Loaded 75,000 rows for validation: silver.payments_base
+2025-08-24 15:41:06,443 - INFO - ✅ 64,433 valid rows saved to silver.payments
+2025-08-24 15:41:07,284 - ERROR - Error saving rejected rows for payments: (psycopg2.errors.UndefinedColumn) column "record" of relation "rejected_rows" does not exist
+LINE 2: ...     INSERT INTO audit.rejected_rows (table_name, record, re...
+                                                             ^
+
+[SQL: 
+                INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                VALUES (%(t)s, CAST(%(r)s AS JSONB), %(reason)s, %(run)s)
+            ]
+[parameters: [{'t': 'payments', 'r': '{"payment_id": "P0000001", "trip_id": "T0070812", "payment_date": "2022-06-13", "payment_method": "Paypal", "amount_usd": 92.69, "tip_usd": 3.53, "status": "Captured", "auth_code": "AUTH987102"}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0000002", "trip_id": "T0002979", "payment_date": "2024-06-28", "payment_method": "Paypal", "amount_usd": 94.56, "tip_usd": 0.49, "status": "Captured", "auth_code": "AUTH618060"}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0000006", "trip_id": "T0021811", "payment_date": "2022-06-16", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0000015", "trip_id": "T0042367", "payment_date": "2024-10-20", "payment_method": "Paypal", "amount_usd": 40.64, "tip_usd": 1.66, "status": "Captured", "auth_code": "AUTH281090"}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0000017", "trip_id": "T0048098", "payment_date": "2025-05-24", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0000029", "trip_id": "T0040782", "payment_date": "2025-08-24", "payment_method": "Paypal", "amount_usd": 71.82, "tip_usd": 3.91, "status": "Captured", "auth_code": "AUTH931907"}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0000033", "trip_id": "T0001180", "payment_date": "2021-05-22", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0000037", "trip_id": "T0003688", "payment_date": "2023-08-07", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}  ... displaying 10 of 10567 total bound parameter sets ...  {'t': 'payments', 'r': '{"payment_id": "P0074980", "trip_id": "T0037373", "payment_date": "2021-05-08", "payment_method": "Paypal", "amount_usd": 15.68, "tip_usd": 1.6, "status": "Captured", "auth_code": "AUTH378123"}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}, {'t': 'payments', 'r': '{"payment_id": "P0074992", "trip_id": "T0013477", "payment_date": "2020-04-28", "payment_method": "Paypal", "amount_usd": 99.54, "tip_usd": 2.18, "status": "Captured", "auth_code": "AUTH953889"}', 'reason': 'Unknown payment_method', 'run': '20250824_153943'}]]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:41:07,284 - WARNING - ⚠️  10,567 invalid rows saved to audit.rejected_rows
+2025-08-24 15:41:07,297 - INFO - ✅ All tables passed deep validation
+2025-08-24 15:41:07,297 - INFO - Running Data Quality checks...
+2025-08-24 15:41:07,297 - INFO - Running DQ checks for drivers...
+2025-08-24 15:41:07,315 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-24 15:41:07,398 - WARNING - ❌ drivers.email_uniqueness: 41030 bad rows
+2025-08-24 15:41:07,399 - INFO - Running DQ checks for vehicles...
+2025-08-24 15:41:07,502 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-24 15:41:07,525 - INFO - ✅ vehicles.fk_driver: PASSED
+2025-08-24 15:41:07,526 - INFO - Running DQ checks for riders...
+2025-08-24 15:41:07,724 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-24 15:41:07,848 - WARNING - ❌ riders.email_uniqueness: 66001 bad rows
+2025-08-24 15:41:07,868 - INFO - Running DQ checks for trips...
+2025-08-24 15:41:07,893 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-24 15:41:07,924 - INFO - ✅ trips.fk_rider: PASSED
+2025-08-24 15:41:07,950 - INFO - ✅ trips.fk_driver: PASSED
+2025-08-24 15:41:07,977 - INFO - ✅ trips.fk_vehicle: PASSED
+2025-08-24 15:41:07,978 - INFO - Running DQ checks for payments...
+2025-08-24 15:41:08,002 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-24 15:41:08,034 - WARNING - ❌ payments.fk_trip: 7758 bad rows
+2025-08-24 15:41:08,040 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-24 15:41:08,041 - INFO - ============================================================
+2025-08-24 15:41:08,041 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-24 15:41:08,041 - INFO - ============================================================
+2025-08-24 15:41:08,041 - INFO -   drivers   :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:41:08,041 - INFO -   vehicles  :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:41:08,041 - INFO -   riders    :   75,000 →   75,000 valid,      0 rejected
+2025-08-24 15:41:08,041 - INFO -   trips     :   75,000 →   65,994 valid,  9,006 rejected
+2025-08-24 15:41:08,041 - INFO -   payments  :   75,000 →   64,433 valid, 10,567 rejected
+2025-08-24 15:41:08,041 - INFO - ------------------------------------------------------------
+2025-08-24 15:41:08,041 - INFO -   TOTAL     :  325,000 →  305,427 valid, 19,573 rejected
+2025-08-24 15:41:08,042 - INFO -   Run ID: 20250824_153943
+2025-08-24 15:41:08,042 - INFO - ============================================================
+2025-08-24 15:41:08,042 - INFO - 🎉 Silver build completed
+2025-08-24 15:42:37,033 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:42:37,033 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:42:37,054 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:42:37,054 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:42:37,054 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:42:37,338 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:42:37,347 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:42:37,579 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:42:37,588 - INFO - Creating silver.riders_base ...
+2025-08-24 15:42:37,914 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:42:37,921 - INFO - Creating silver.trips_base ...
+2025-08-24 15:42:38,525 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:42:38,537 - INFO - Creating silver.payments_base ...
+2025-08-24 15:42:38,900 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:42:38,907 - INFO - ✅ All Silver base tables created
+2025-08-24 15:42:38,907 - INFO - Performing deep validation...
+2025-08-24 15:42:38,907 - INFO - Validating drivers...
+2025-08-24 15:42:39,135 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:42:48,387 - INFO - ✅ 50,000 valid rows saved to silver.drivers
+2025-08-24 15:42:48,404 - INFO - Validating vehicles...
+2025-08-24 15:42:48,570 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
+2025-08-24 15:42:58,653 - INFO - ✅ 50,000 valid rows saved to silver.vehicles
+2025-08-24 15:42:58,674 - INFO - Validating riders...
+2025-08-24 15:42:58,963 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-24 15:43:12,755 - INFO - ✅ 75,000 valid rows saved to silver.riders
+2025-08-24 15:43:12,776 - INFO - Validating trips...
+2025-08-24 15:43:13,898 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-24 15:43:39,844 - INFO - ✅ 65,994 valid rows saved to silver.trips
+2025-08-24 15:43:40,756 - ERROR - Error saving rejected rows for trips: (psycopg2.errors.UndefinedColumn) column "reason" of relation "rejected_rows" does not exist
+LINE 2: ...ERT INTO audit.rejected_rows (table_name, record, reason, ru...
+                                                             ^
+
+[SQL: 
+                INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                VALUES (%(t)s, CAST(%(r)s AS JSONB), %(reason)s, %(run)s)
+            ]
+[parameters: [{'t': 'trips', 'r': '{"trip_id": "T0000009", "rider_id": "R0022707", "driver_id": "D035187", "vehicle_id": "V035187", "request_ts": "2025-10-17 00:00:00", "pickup_ts": "2 ... (170 characters truncated) ... es": 13.0, "surge_multiplier": 1.12, "base_fare_usd": 18.09, "tax_usd": 1.45, "tip_usd": 2.06, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0000014", "rider_id": "R0051880", "driver_id": "D018345", "vehicle_id": "V018345", "request_ts": "2022-09-27 00:00:00", "pickup_ts": "2 ... (173 characters truncated) ... es": 8.0, "surge_multiplier": 1.21, "base_fare_usd": 50.27, "tax_usd": 4.02, "tip_usd": 0.68, "total_fare_usd": 0.0, "status": "Cancelled_By_Driver"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0000019", "rider_id": "R0064556", "driver_id": "D025374", "vehicle_id": "V025374", "request_ts": "2021-07-06 00:00:00", "pickup_ts": "2 ... (164 characters truncated) ... it_time_minutes": 1.0, "surge_multiplier": 1.28, "base_fare_usd": 57.54, "tax_usd": 4.6, "tip_usd": 1.33, "total_fare_usd": 0.0, "status": "No_Show"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0000028", "rider_id": "R0062058", "driver_id": "D037765", "vehicle_id": "V037765", "request_ts": "2021-11-19 00:00:00", "pickup_ts": "2 ... (172 characters truncated) ... es": 14.0, "surge_multiplier": 1.05, "base_fare_usd": 29.71, "tax_usd": 2.38, "tip_usd": 1.44, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0000030", "rider_id": "R0035782", "driver_id": "D002177", "vehicle_id": "V002177", "request_ts": "2020-04-01 00:00:00", "pickup_ts": "2 ... (166 characters truncated) ... t_time_minutes": 3.0, "surge_multiplier": 1.18, "base_fare_usd": 51.17, "tax_usd": 4.09, "tip_usd": 2.35, "total_fare_usd": 0.0, "status": "No_Show"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0000038", "rider_id": "R0004849", "driver_id": "D045591", "vehicle_id": "V045591", "request_ts": "2025-08-09 00:00:00", "pickup_ts": "2 ... (176 characters truncated) ... tes": 3.0, "surge_multiplier": 1.29, "base_fare_usd": 29.18, "tax_usd": 2.33, "tip_usd": 2.47, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0000044", "rider_id": "R0038828", "driver_id": "D021421", "vehicle_id": "V021421", "request_ts": "2022-08-23 00:00:00", "pickup_ts": "2 ... (177 characters truncated) ... s": 12.0, "surge_multiplier": 1.02, "base_fare_usd": 48.62, "tax_usd": 3.89, "tip_usd": 2.55, "total_fare_usd": 0.0, "status": "Cancelled_By_Driver"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0000064", "rider_id": "R0011395", "driver_id": "D018440", "vehicle_id": "V018440", "request_ts": "2023-02-26 00:00:00", "pickup_ts": "2 ... (177 characters truncated) ... s": 12.0, "surge_multiplier": 1.27, "base_fare_usd": 25.88, "tax_usd": 2.07, "tip_usd": 2.54, "total_fare_usd": 0.0, "status": "Cancelled_By_Driver"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}  ... displaying 10 of 9006 total bound parameter sets ...  {'t': 'trips', 'r': '{"trip_id": "T0074983", "rider_id": "R0027027", "driver_id": "D015454", "vehicle_id": "V015454", "request_ts": "2025-01-17 00:00:00", "pickup_ts": "2 ... (158 characters truncated) ... ait_time_minutes": 6.0, "surge_multiplier": 1.18, "base_fare_usd": 48.4, "tax_usd": 3.87, "tip_usd": 3.1, "total_fare_usd": 0.0, "status": "No_Show"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}, {'t': 'trips', 'r': '{"trip_id": "T0074985", "rider_id": "R0013207", "driver_id": "D040892", "vehicle_id": "V040892", "request_ts": "2025-05-03 00:00:00", "pickup_ts": "2 ... (173 characters truncated) ... es": 15.0, "surge_multiplier": 1.07, "base_fare_usd": 48.54, "tax_usd": 3.88, "tip_usd": 3.06, "total_fare_usd": 0.0, "status": "Cancelled_By_Rider"}', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_154237'}]]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:43:40,757 - WARNING - ⚠️  9,006 invalid rows saved to audit.rejected_rows
+2025-08-24 15:43:40,767 - INFO - Validating payments...
+2025-08-24 15:43:41,129 - INFO - Loaded 75,000 rows for validation: silver.payments_base
+2025-08-24 15:43:51,415 - INFO - ✅ 64,433 valid rows saved to silver.payments
+2025-08-24 15:43:52,235 - ERROR - Error saving rejected rows for payments: (psycopg2.errors.UndefinedColumn) column "reason" of relation "rejected_rows" does not exist
+LINE 2: ...ERT INTO audit.rejected_rows (table_name, record, reason, ru...
+                                                             ^
+
+[SQL: 
+                INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                VALUES (%(t)s, CAST(%(r)s AS JSONB), %(reason)s, %(run)s)
+            ]
+[parameters: [{'t': 'payments', 'r': '{"payment_id": "P0000001", "trip_id": "T0070812", "payment_date": "2022-06-13", "payment_method": "Paypal", "amount_usd": 92.69, "tip_usd": 3.53, "status": "Captured", "auth_code": "AUTH987102"}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0000002", "trip_id": "T0002979", "payment_date": "2024-06-28", "payment_method": "Paypal", "amount_usd": 94.56, "tip_usd": 0.49, "status": "Captured", "auth_code": "AUTH618060"}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0000006", "trip_id": "T0021811", "payment_date": "2022-06-16", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0000015", "trip_id": "T0042367", "payment_date": "2024-10-20", "payment_method": "Paypal", "amount_usd": 40.64, "tip_usd": 1.66, "status": "Captured", "auth_code": "AUTH281090"}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0000017", "trip_id": "T0048098", "payment_date": "2025-05-24", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0000029", "trip_id": "T0040782", "payment_date": "2025-08-24", "payment_method": "Paypal", "amount_usd": 71.82, "tip_usd": 3.91, "status": "Captured", "auth_code": "AUTH931907"}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0000033", "trip_id": "T0001180", "payment_date": "2021-05-22", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0000037", "trip_id": "T0003688", "payment_date": "2023-08-07", "payment_method": "Paypal", "amount_usd": 0.0, "tip_usd": 0.0, "status": "Failed", "auth_code": null}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}  ... displaying 10 of 10567 total bound parameter sets ...  {'t': 'payments', 'r': '{"payment_id": "P0074980", "trip_id": "T0037373", "payment_date": "2021-05-08", "payment_method": "Paypal", "amount_usd": 15.68, "tip_usd": 1.6, "status": "Captured", "auth_code": "AUTH378123"}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}, {'t': 'payments', 'r': '{"payment_id": "P0074992", "trip_id": "T0013477", "payment_date": "2020-04-28", "payment_method": "Paypal", "amount_usd": 99.54, "tip_usd": 2.18, "status": "Captured", "auth_code": "AUTH953889"}', 'reason': 'Unknown payment_method', 'run': '20250824_154237'}]]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:43:52,235 - WARNING - ⚠️  10,567 invalid rows saved to audit.rejected_rows
+2025-08-24 15:43:52,248 - INFO - ✅ All tables passed deep validation
+2025-08-24 15:43:52,248 - INFO - Running Data Quality checks...
+2025-08-24 15:43:52,248 - INFO - Running DQ checks for drivers...
+2025-08-24 15:43:52,268 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-24 15:43:52,357 - WARNING - ❌ drivers.email_uniqueness: 41030 bad rows
+2025-08-24 15:43:52,358 - INFO - Running DQ checks for vehicles...
+2025-08-24 15:43:52,508 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-24 15:43:52,531 - INFO - ✅ vehicles.fk_driver: PASSED
+2025-08-24 15:43:52,532 - INFO - Running DQ checks for riders...
+2025-08-24 15:43:52,731 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-24 15:43:52,857 - WARNING - ❌ riders.email_uniqueness: 66001 bad rows
+2025-08-24 15:43:52,877 - INFO - Running DQ checks for trips...
+2025-08-24 15:43:52,908 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-24 15:43:52,948 - INFO - ✅ trips.fk_rider: PASSED
+2025-08-24 15:43:52,987 - INFO - ✅ trips.fk_driver: PASSED
+2025-08-24 15:43:53,026 - INFO - ✅ trips.fk_vehicle: PASSED
+2025-08-24 15:43:53,027 - INFO - Running DQ checks for payments...
+2025-08-24 15:43:53,056 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-24 15:43:53,106 - WARNING - ❌ payments.fk_trip: 7758 bad rows
+2025-08-24 15:43:53,113 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-24 15:43:53,113 - INFO - ============================================================
+2025-08-24 15:43:53,113 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-24 15:43:53,113 - INFO - ============================================================
+2025-08-24 15:43:53,113 - INFO -   drivers   :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:43:53,113 - INFO -   vehicles  :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:43:53,113 - INFO -   riders    :   75,000 →   75,000 valid,      0 rejected
+2025-08-24 15:43:53,113 - INFO -   trips     :   75,000 →   65,994 valid,  9,006 rejected
+2025-08-24 15:43:53,113 - INFO -   payments  :   75,000 →   64,433 valid, 10,567 rejected
+2025-08-24 15:43:53,113 - INFO - ------------------------------------------------------------
+2025-08-24 15:43:53,114 - INFO -   TOTAL     :  325,000 →  305,427 valid, 19,573 rejected
+2025-08-24 15:43:53,114 - INFO -   Run ID: 20250824_154237
+2025-08-24 15:43:53,114 - INFO - ============================================================
+2025-08-24 15:43:53,114 - INFO - 🎉 Silver build completed
+2025-08-24 15:45:18,152 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:45:18,152 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:45:18,171 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:45:18,172 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:45:18,172 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:45:18,440 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:45:18,449 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:45:18,694 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:45:18,702 - INFO - Creating silver.riders_base ...
+2025-08-24 15:45:19,033 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:45:19,040 - INFO - Creating silver.trips_base ...
+2025-08-24 15:45:19,669 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:45:19,679 - INFO - Creating silver.payments_base ...
+2025-08-24 15:45:20,075 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:45:20,082 - INFO - ✅ All Silver base tables created
+2025-08-24 15:45:20,083 - INFO - Performing deep validation...
+2025-08-24 15:45:20,083 - INFO - Validating drivers...
+2025-08-24 15:45:20,310 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:45:29,744 - INFO - ✅ 50,000 valid rows saved to silver.drivers
+2025-08-24 15:45:29,761 - INFO - Validating vehicles...
+2025-08-24 15:45:29,906 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
