@@ -15,7 +15,7 @@ from datetime import datetime
 sys.path.append(str(Path(__file__).parent.parent))
 from config import DB_CONFIG, GOOGLE_SHEETS_CONFIG, SHEET_RANGES, LOG_CONFIG
 
-# Logging setup
+# ---------------- Logging Setup ----------------
 log_dir = Path(__file__).parent.parent / LOG_CONFIG['log_dir']
 log_dir.mkdir(exist_ok=True)
 
@@ -48,13 +48,14 @@ def get_sheets_service():
 
 
 def fetch_data(range_name):
+    """Fetch rows from a Google Sheet range (skip headers)."""
     try:
         service = get_sheets_service()
         result = service.spreadsheets().values().get(
             spreadsheetId=GOOGLE_SHEETS_CONFIG['spreadsheet_id'],
             range=range_name
         ).execute()
-        values = result.get('values', [])[1:]  # skip header
+        values = result.get('values', [])[1:]  # skip header row
         logger.info(f"✓ Loaded {len(values)} rows from {range_name}")
         return values
     except Exception as e:
@@ -87,22 +88,23 @@ def parse_timestamp(value):
 
 
 def load_data(table, rows, conn):
+    """Insert rows into the given Bronze table with conflict handling."""
     cursor = conn.cursor()
 
     if table == "drivers":
         query = """
             INSERT INTO bronze.drivers (
                 driver_id, driver_name, email, dob, signup_date,
-                rating, city, license_number, is_active
+                driver_rating, city, license_number, is_active
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
             ON CONFLICT (driver_id) DO NOTHING
         """
         data = [
             (
-                r[0],
-                r[1],
-                r[2],
+                r[0],  # driver_id
+                r[1],  # driver_name
+                r[2],  # email
                 parse_date(r[3]),
                 parse_date(r[4]),
                 float(r[5]) if r[5] else None,
@@ -117,20 +119,23 @@ def load_data(table, rows, conn):
         query = """
             INSERT INTO bronze.vehicles (
                 vehicle_id, driver_id, make, model, year,
-                plate, capacity, color, rider_name, rider_email
+                plate, capacity, color, registration_date, is_active
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             ON CONFLICT (vehicle_id) DO NOTHING
         """
         data = [
             (
-                r[0], r[1], r[2], r[3],
+                r[0],  # vehicle_id
+                r[1],  # driver_id
+                r[2],  # make
+                r[3],  # model
                 int(r[4]) if r[4] else None,
-                r[5],
+                r[5],  # plate
                 int(r[6]) if r[6] else None,
-                r[7],
-                r[8] if len(r) > 8 else None,
-                r[9] if len(r) > 9 else None
+                r[7],  # color
+                parse_date(r[8]) if len(r) > 8 else None,
+                r[9].lower() in ("true", "1", "yes") if len(r) > 9 and r[9] else None
             )
             for r in rows
         ]
@@ -146,9 +151,11 @@ def load_data(table, rows, conn):
         """
         data = [
             (
-                r[0], r[1], r[2],
+                r[0],  # rider_id
+                r[1],  # rider_name
+                r[2],  # email
                 parse_date(r[3]),
-                r[4],
+                r[4],  # home_city
                 float(r[5]) if r[5] else None,
                 r[6] if len(r) > 6 else None,
                 r[7].lower() in ("true", "1", "yes") if len(r) > 7 and r[7] else None
@@ -205,9 +212,10 @@ def load_data(table, rows, conn):
         """
         data = [
             (
-                r[0], r[1],
+                r[0],  # payment_id
+                r[1],  # trip_id
                 parse_date(r[2]),
-                r[3],
+                r[3],  # payment_method
                 float(r[4]) if r[4] else None,
                 float(r[5]) if r[5] else None,
                 r[6],

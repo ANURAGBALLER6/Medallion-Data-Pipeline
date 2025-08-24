@@ -437,3 +437,317 @@ LINE 4:                 rating, city, license_number, is_active
 2025-08-24 00:23:57,183 - INFO - ✓ Loaded 75000 rows from payments!A:H
 2025-08-24 00:24:09,191 - INFO - ✓ Inserted 75000 rows into bronze.payments
 2025-08-24 00:24:09,200 - INFO - 🎉 Bronze load completed
+2025-08-24 11:01:46,811 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 11:01:46,812 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 11:01:46,864 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:01:46,869 - INFO - Google Sheets service created successfully
+2025-08-24 11:01:52,893 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 11:02:01,424 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-24 11:02:01,471 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:02:01,473 - INFO - Google Sheets service created successfully
+2025-08-24 11:02:07,548 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 11:02:14,339 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 11:02:14,387 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:02:14,439 - INFO - Google Sheets service created successfully
+2025-08-24 11:02:20,877 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 11:02:30,840 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 11:02:30,887 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:02:30,888 - INFO - Google Sheets service created successfully
+2025-08-24 11:02:40,601 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 11:02:58,174 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 11:02:58,231 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:02:58,233 - INFO - Google Sheets service created successfully
+2025-08-24 11:03:04,399 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 11:03:15,021 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 11:03:15,030 - INFO - 🎉 Bronze load completed
+2025-08-24 11:26:59,138 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 11:26:59,138 - INFO - 🚀 Starting Bronze Layer Data Loading Pipeline...
+2025-08-24 11:26:59,138 - INFO - 📥 Loading drivers data to bronze layer...
+2025-08-24 11:26:59,180 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:26:59,183 - INFO - Google Sheets service created successfully
+2025-08-24 11:27:11,333 - INFO - Fetched 50,000 rows from drivers!A:I
+2025-08-24 11:27:11,349 - ERROR - Error loading drivers: 'name'
+2025-08-24 11:27:11,366 - INFO - 📥 Loading vehicles data to bronze layer...
+2025-08-24 11:27:11,406 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:27:11,408 - INFO - Google Sheets service created successfully
+2025-08-24 11:27:17,748 - INFO - Fetched 50,000 rows from vehicles!A:J
+2025-08-24 11:27:17,762 - ERROR - Error loading vehicles: 'plate_number'
+2025-08-24 11:27:17,780 - INFO - 📥 Loading riders data to bronze layer...
+2025-08-24 11:27:17,820 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:27:17,822 - INFO - Google Sheets service created successfully
+2025-08-24 11:27:23,672 - INFO - Fetched 75,000 rows from riders!A:H
+2025-08-24 11:27:23,688 - ERROR - Error loading riders: 'name'
+2025-08-24 11:27:23,706 - INFO - 📥 Loading trips data to bronze layer...
+2025-08-24 11:27:23,748 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:27:23,750 - INFO - Google Sheets service created successfully
+2025-08-24 11:27:33,184 - INFO - Fetched 75,000 rows from trips!A:R
+2025-08-24 11:27:33,205 - ERROR - Error loading trips: 'start_time'
+2025-08-24 11:27:33,248 - INFO - 📥 Loading payments data to bronze layer...
+2025-08-24 11:27:33,287 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:27:33,289 - INFO - Google Sheets service created successfully
+2025-08-24 11:27:38,222 - INFO - Fetched 75,000 rows from payments!A:H
+2025-08-24 11:27:38,238 - ERROR - Error loading payments: 'amount'
+2025-08-24 11:27:38,275 - INFO - drivers: 50000 records
+2025-08-24 11:27:38,280 - INFO - vehicles: 50000 records
+2025-08-24 11:27:38,286 - INFO - riders: 75000 records
+2025-08-24 11:27:38,291 - INFO - trips: 75000 records
+2025-08-24 11:27:38,296 - INFO - payments: 75000 records
+2025-08-24 11:27:38,296 - INFO - Summary:
+2025-08-24 11:27:38,297 - INFO - drivers: ❌ FAILED
+2025-08-24 11:27:38,297 - INFO - vehicles: ❌ FAILED
+2025-08-24 11:27:38,297 - INFO - riders: ❌ FAILED
+2025-08-24 11:27:38,297 - INFO - trips: ❌ FAILED
+2025-08-24 11:27:38,297 - INFO - payments: ❌ FAILED
+2025-08-24 11:37:51,473 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 11:37:51,474 - INFO - 🚀 Starting Bronze Layer Data Loading Pipeline...
+2025-08-24 11:37:51,474 - INFO - 📥 Loading drivers data to bronze layer...
+2025-08-24 11:37:51,515 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:37:51,518 - INFO - Google Sheets service created successfully
+2025-08-24 11:37:58,002 - INFO - Fetched 50,000 rows from drivers!A:I
+2025-08-24 11:37:58,025 - ERROR - Error loading drivers: column "driver_rating" of relation "drivers" does not exist
+LINE 3:                                     driver_rating, city, lic...
+                                            ^
+
+2025-08-24 11:37:58,042 - INFO - 📥 Loading vehicles data to bronze layer...
+2025-08-24 11:37:58,081 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:37:58,083 - INFO - Google Sheets service created successfully
+2025-08-24 11:38:03,824 - INFO - Fetched 50,000 rows from vehicles!A:J
+2025-08-24 11:38:22,286 - INFO - Loaded 50000 vehicles into bronze.vehicles
+2025-08-24 11:38:22,308 - INFO - 📥 Loading riders data to bronze layer...
+2025-08-24 11:38:22,347 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:38:22,349 - INFO - Google Sheets service created successfully
+2025-08-24 11:38:29,339 - INFO - Fetched 75,000 rows from riders!A:H
+2025-08-24 11:39:39,402 - INFO - Loaded 75000 riders into bronze.riders
+2025-08-24 11:39:39,433 - INFO - 📥 Loading trips data to bronze layer...
+2025-08-24 11:39:39,479 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:39:39,481 - INFO - Google Sheets service created successfully
+2025-08-24 11:39:48,824 - INFO - Fetched 75,000 rows from trips!A:R
+2025-08-24 11:40:37,742 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 11:40:37,742 - INFO - 🚀 Starting Bronze Layer Data Loading Pipeline...
+2025-08-24 11:40:37,742 - INFO - 📥 Loading drivers data to bronze layer...
+2025-08-24 11:40:37,783 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:40:37,787 - INFO - Google Sheets service created successfully
+2025-08-24 11:40:43,226 - INFO - Fetched 50,000 rows from drivers!A:I
+2025-08-24 11:41:45,008 - INFO - Loaded 50000 drivers into bronze.drivers
+2025-08-24 11:41:45,033 - INFO - 📥 Loading vehicles data to bronze layer...
+2025-08-24 11:41:45,074 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:41:45,075 - INFO - Google Sheets service created successfully
+2025-08-24 11:41:52,008 - INFO - Fetched 50,000 rows from vehicles!A:J
+2025-08-24 11:42:10,864 - INFO - Loaded 50000 vehicles into bronze.vehicles
+2025-08-24 11:42:10,881 - INFO - 📥 Loading riders data to bronze layer...
+2025-08-24 11:42:10,922 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:42:10,924 - INFO - Google Sheets service created successfully
+2025-08-24 11:42:17,484 - INFO - Fetched 75,000 rows from riders!A:H
+2025-08-24 11:43:22,636 - INFO - Loaded 75000 riders into bronze.riders
+2025-08-24 11:43:22,657 - INFO - 📥 Loading trips data to bronze layer...
+2025-08-24 11:43:22,696 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:43:22,698 - INFO - Google Sheets service created successfully
+2025-08-24 11:43:31,974 - INFO - Fetched 75,000 rows from trips!A:R
+2025-08-24 11:45:36,998 - INFO - Loaded 75000 trips into bronze.trips
+2025-08-24 11:45:37,045 - INFO - 📥 Loading payments data to bronze layer...
+2025-08-24 11:45:37,083 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:45:37,085 - INFO - Google Sheets service created successfully
+2025-08-24 11:45:43,387 - INFO - Fetched 75,000 rows from payments!A:H
+2025-08-24 11:46:43,090 - INFO - Loaded 75000 payments into bronze.payments
+2025-08-24 11:46:43,128 - INFO - drivers: 50000 records
+2025-08-24 11:46:43,133 - INFO - vehicles: 50000 records
+2025-08-24 11:46:43,139 - INFO - riders: 75000 records
+2025-08-24 11:46:43,144 - INFO - trips: 75000 records
+2025-08-24 11:46:43,158 - INFO - payments: 75000 records
+2025-08-24 11:46:43,159 - INFO - Summary:
+2025-08-24 11:46:43,159 - INFO - drivers: ✅ SUCCESS
+2025-08-24 11:46:43,159 - INFO - vehicles: ✅ SUCCESS
+2025-08-24 11:46:43,159 - INFO - riders: ✅ SUCCESS
+2025-08-24 11:46:43,159 - INFO - trips: ✅ SUCCESS
+2025-08-24 11:46:43,159 - INFO - payments: ✅ SUCCESS
+2025-08-24 11:50:32,443 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 11:50:32,483 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:51:11,303 - ERROR - ❌ Error loading bronze.drivers: "['rating'] not in index"
+2025-08-24 11:51:20,544 - INFO - ✅ Loaded 50000 rows into bronze.vehicles
+2025-08-24 11:51:59,889 - INFO - ✅ Loaded 75000 rows into bronze.riders
+2025-08-24 11:52:30,273 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 11:52:30,321 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 11:53:09,425 - ERROR - ❌ Error loading bronze.drivers: column "driver_rating" of relation "drivers" does not exist
+LINE 2: ...vers (driver_id,driver_name,email,dob,signup_date,driver_rat...
+                                                             ^
+
+2025-08-24 11:53:17,833 - INFO - ✅ Loaded 50000 rows into bronze.vehicles
+2025-08-24 11:53:55,019 - INFO - ✅ Loaded 75000 rows into bronze.riders
+2025-08-24 11:55:27,788 - INFO - ✅ Loaded 75000 rows into bronze.trips
+2025-08-24 11:56:04,455 - INFO - ✅ Loaded 75000 rows into bronze.payments
+2025-08-24 11:56:04,470 - INFO - Summary: {'drivers': False, 'vehicles': True, 'riders': True, 'trips': True, 'payments': True}
+2025-08-24 11:57:41,161 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 11:57:41,203 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 12:01:03,846 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 12:01:03,887 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 12:01:49,180 - INFO - ✅ Loaded 50000 rows into bronze.drivers
+2025-08-24 12:01:58,705 - INFO - ✅ Loaded 50000 rows into bronze.vehicles
+2025-08-24 12:02:38,288 - INFO - ✅ Loaded 75000 rows into bronze.riders
+2025-08-24 12:04:19,339 - INFO - ✅ Loaded 75000 rows into bronze.trips
+2025-08-24 12:04:58,549 - INFO - ✅ Loaded 75000 rows into bronze.payments
+2025-08-24 12:04:58,569 - INFO - Summary: {'drivers': True, 'vehicles': True, 'riders': True, 'trips': True, 'payments': True}
+2025-08-24 12:17:44,259 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 12:17:44,301 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 12:18:45,795 - INFO - ✅ Loaded 50000 rows into bronze.drivers
+2025-08-24 12:18:55,583 - INFO - ✅ Loaded 50000 rows into bronze.vehicles
+2025-08-24 12:19:38,634 - INFO - ✅ Loaded 75000 rows into bronze.riders
+2025-08-24 12:21:14,025 - INFO - ✅ Loaded 75000 rows into bronze.trips
+2025-08-24 12:21:50,624 - INFO - ✅ Loaded 75000 rows into bronze.payments
+2025-08-24 12:21:50,643 - INFO - Summary: {'drivers': True, 'vehicles': True, 'riders': True, 'trips': True, 'payments': True}
+2025-08-24 12:31:03,556 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 12:31:03,611 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 12:31:54,585 - INFO - ✅ Loaded 50000 rows into bronze.drivers
+2025-08-24 12:32:05,725 - INFO - ✅ Loaded 50000 rows into bronze.vehicles
+2025-08-24 12:32:45,847 - INFO - ✅ Loaded 75000 rows into bronze.riders
+2025-08-24 12:34:37,765 - INFO - ✅ Loaded 75000 rows into bronze.trips
+2025-08-24 12:35:21,275 - INFO - ✅ Loaded 75000 rows into bronze.payments
+2025-08-24 12:35:21,292 - INFO - Summary: {'drivers': True, 'vehicles': True, 'riders': True, 'trips': True, 'payments': True}
+2025-08-24 12:56:05,805 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 12:56:05,848 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 12:56:45,118 - ERROR - ❌ Error loading bronze.drivers: duplicate key value violates unique constraint "drivers_email_key"
+DETAIL:  Key (email)=(gaurav.dutta@example.com) already exists.
+
+2025-08-24 12:56:50,496 - ERROR - ❌ Error loading bronze.vehicles: "['registration_date', 'is_active'] not in index"
+2025-08-24 12:57:21,186 - ERROR - ❌ Error loading bronze.riders: duplicate key value violates unique constraint "riders_email_key"
+DETAIL:  Key (email)=(trisha.saxena@example.com) already exists.
+
+2025-08-24 12:58:56,842 - ERROR - ❌ Error loading bronze.trips: insert or update on table "trips" violates foreign key constraint "trips_rider_id_fkey"
+DETAIL:  Key (rider_id)=(R0014052) is not present in table "riders".
+
+2025-08-24 12:59:19,331 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 12:59:19,373 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:00:05,499 - INFO - ✅ Loaded 50000 rows into bronze.drivers
+2025-08-24 13:00:11,608 - ERROR - ❌ Error loading bronze.vehicles: column "rider_name" of relation "vehicles" does not exist
+LINE 2: ...id,driver_id,make,model,year,plate,capacity,color,rider_name...
+                                                             ^
+
+2025-08-24 13:00:55,351 - INFO - ✅ Loaded 75000 rows into bronze.riders
+2025-08-24 13:02:27,178 - ERROR - ❌ Error loading bronze.trips: insert or update on table "trips" violates foreign key constraint "trips_rider_id_fkey"
+DETAIL:  Key (rider_id)=(R0014052) is not present in table "riders".
+
+2025-08-24 13:02:59,344 - ERROR - ❌ Error loading bronze.payments: insert or update on table "payments" violates foreign key constraint "payments_trip_id_fkey"
+DETAIL:  Key (trip_id)=(T0070812) is not present in table "trips".
+
+2025-08-24 13:02:59,380 - INFO - Summary: {'drivers': True, 'vehicles': False, 'riders': True, 'trips': False, 'payments': False}
+2025-08-24 13:11:15,322 - INFO - 🥉 Starting Bronze Data Loader
+2025-08-24 13:11:15,368 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:11:59,255 - ERROR - ❌ Error loading bronze.drivers: duplicate key value violates unique constraint "drivers_email_key"
+DETAIL:  Key (email)=(gaurav.dutta@example.com) already exists.
+
+2025-08-24 13:12:04,865 - ERROR - ❌ Error loading bronze.vehicles: "['registration_date', 'is_active'] not in index"
+2025-08-24 13:12:40,447 - ERROR - ❌ Error loading bronze.riders: duplicate key value violates unique constraint "riders_email_key"
+DETAIL:  Key (email)=(trisha.saxena@example.com) already exists.
+
+2025-08-24 13:16:29,897 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 13:16:29,897 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 13:16:29,958 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:16:29,961 - INFO - Google Sheets service created successfully
+2025-08-24 13:16:35,704 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 13:16:36,528 - ERROR - ❌ Error inserting into drivers: column "rating" of relation "drivers" does not exist
+LINE 4:                 rating, city, license_number, is_active
+                        ^
+
+2025-08-24 13:16:36,579 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:16:36,580 - INFO - Google Sheets service created successfully
+2025-08-24 13:16:42,308 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 13:16:42,406 - ERROR - ❌ Error inserting into vehicles: column "rider_name" of relation "vehicles" does not exist
+LINE 4:                 plate, capacity, color, rider_name, rider_em...
+                                                ^
+
+2025-08-24 13:16:42,459 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:16:42,521 - INFO - Google Sheets service created successfully
+2025-08-24 13:16:49,361 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 13:16:50,069 - ERROR - ❌ Error inserting into riders: duplicate key value violates unique constraint "riders_email_key"
+DETAIL:  Key (email)=(trisha.saxena@example.com) already exists.
+
+2025-08-24 13:16:50,123 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:16:50,125 - INFO - Google Sheets service created successfully
+2025-08-24 13:16:59,454 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 13:17:01,699 - ERROR - ❌ Error inserting into trips: insert or update on table "trips" violates foreign key constraint "trips_rider_id_fkey"
+DETAIL:  Key (rider_id)=(R0014052) is not present in table "riders".
+
+2025-08-24 13:17:01,763 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:17:01,765 - INFO - Google Sheets service created successfully
+2025-08-24 13:17:08,354 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 13:17:08,945 - ERROR - ❌ Error inserting into payments: insert or update on table "payments" violates foreign key constraint "payments_trip_id_fkey"
+DETAIL:  Key (trip_id)=(T0070812) is not present in table "trips".
+
+2025-08-24 13:17:08,953 - INFO - 🎉 Bronze load completed
+2025-08-24 13:19:15,750 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 13:19:15,823 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:19:21,973 - ERROR - ❌ Error inserting into drivers: duplicate key value violates unique constraint "drivers_email_key"
+DETAIL:  Key (email)=(gaurav.dutta@example.com) already exists.
+
+2025-08-24 13:19:22,025 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:19:29,378 - ERROR - ❌ Error inserting into vehicles: insert or update on table "vehicles" violates foreign key constraint "vehicles_driver_id_fkey"
+DETAIL:  Key (driver_id)=(D000113) is not present in table "drivers".
+
+2025-08-24 13:19:29,427 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:19:36,451 - ERROR - ❌ Error inserting into riders: duplicate key value violates unique constraint "riders_email_key"
+DETAIL:  Key (email)=(trisha.saxena@example.com) already exists.
+
+2025-08-24 13:19:36,505 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:19:48,510 - ERROR - ❌ Error inserting into trips: insert or update on table "trips" violates foreign key constraint "trips_rider_id_fkey"
+DETAIL:  Key (rider_id)=(R0014052) is not present in table "riders".
+
+2025-08-24 13:19:48,575 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:19:55,861 - ERROR - ❌ Error inserting into payments: insert or update on table "payments" violates foreign key constraint "payments_trip_id_fkey"
+DETAIL:  Key (trip_id)=(T0070812) is not present in table "trips".
+
+2025-08-24 13:19:55,869 - INFO - 🎉 Bronze load completed
+2025-08-24 13:29:08,101 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 13:29:08,101 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 13:29:08,163 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:29:08,167 - INFO - Google Sheets service created successfully
+2025-08-24 13:29:14,701 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 13:29:15,406 - ERROR - ❌ Error inserting into drivers: duplicate key value violates unique constraint "drivers_email_key"
+DETAIL:  Key (email)=(gaurav.dutta@example.com) already exists.
+
+2025-08-24 13:29:15,458 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:29:15,460 - INFO - Google Sheets service created successfully
+2025-08-24 13:29:21,104 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 13:29:21,536 - ERROR - ❌ Error inserting into vehicles: insert or update on table "vehicles" violates foreign key constraint "vehicles_driver_id_fkey"
+DETAIL:  Key (driver_id)=(D000113) is not present in table "drivers".
+
+2025-08-24 13:29:21,585 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:29:21,644 - INFO - Google Sheets service created successfully
+2025-08-24 13:29:26,786 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 13:29:27,500 - ERROR - ❌ Error inserting into riders: duplicate key value violates unique constraint "riders_email_key"
+DETAIL:  Key (email)=(trisha.saxena@example.com) already exists.
+
+2025-08-24 13:29:27,559 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:29:27,561 - INFO - Google Sheets service created successfully
+2025-08-24 13:29:38,173 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 13:29:40,838 - ERROR - ❌ Error inserting into trips: insert or update on table "trips" violates foreign key constraint "trips_rider_id_fkey"
+DETAIL:  Key (rider_id)=(R0014052) is not present in table "riders".
+
+2025-08-24 13:29:40,912 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:29:40,914 - INFO - Google Sheets service created successfully
+2025-08-24 13:29:47,345 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 13:29:48,011 - ERROR - ❌ Error inserting into payments: insert or update on table "payments" violates foreign key constraint "payments_trip_id_fkey"
+DETAIL:  Key (trip_id)=(T0070812) is not present in table "trips".
+
+2025-08-24 13:29:48,020 - INFO - 🎉 Bronze load completed
+2025-08-24 13:31:08,730 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 13:31:08,730 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 13:31:08,793 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:31:08,797 - INFO - Google Sheets service created successfully
+2025-08-24 13:31:16,091 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 13:31:23,912 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-24 13:31:23,962 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:31:23,964 - INFO - Google Sheets service created successfully
+2025-08-24 13:31:30,102 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 13:31:36,813 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 13:31:36,860 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:31:36,915 - INFO - Google Sheets service created successfully
+2025-08-24 13:31:43,574 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 13:31:54,784 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 13:31:54,837 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:31:54,839 - INFO - Google Sheets service created successfully
+2025-08-24 13:32:05,209 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 13:32:24,596 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 13:32:24,690 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 13:32:24,692 - INFO - Google Sheets service created successfully
+2025-08-24 13:32:31,806 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 13:32:46,131 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 13:32:46,140 - INFO - 🎉 Bronze load completed
