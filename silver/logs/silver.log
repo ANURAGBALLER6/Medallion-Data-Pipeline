@@ -1,0 +1,4 @@
+2025-08-24 14:35:45,907 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 14:35:45,959 - ERROR - ❌ Database connection failed: (psycopg2.OperationalError) could not translate host name "123@localhost" to address: Name or service not known
+
+(Background on this error at: https://sqlalche.me/e/20/e3q8)

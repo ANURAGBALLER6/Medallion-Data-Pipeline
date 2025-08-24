@@ -1,0 +1,710 @@
+2025-08-24 11:14:34,740 - INFO - 🚀 Starting Silver Builder (Bronze → Silver)
+2025-08-24 11:14:35,329 - WARNING - ⚠ No valid rows for silver.drivers, skipping insert
+2025-08-24 11:14:35,852 - ERROR - ❌ Error inserting into silver.vehicles: column "rider_name" of relation "vehicles" does not exist
+LINE 1: ...id,driver_id,make,model,year,plate,capacity,color,rider_name...
+                                                             ^
+
+2025-08-24 11:14:36,369 - WARNING - ⚠ No valid rows for silver.riders, skipping insert
+2025-08-24 11:14:38,302 - ERROR - ❌ Error inserting into silver.trips: insert or update on table "trips" violates foreign key constraint "trips_rider_id_fkey"
+DETAIL:  Key (rider_id)=(R0014052) is not present in table "riders".
+
+2025-08-24 11:14:39,088 - ERROR - ❌ Error inserting into silver.payments: new row for relation "payments" violates check constraint "payments_status_check"
+DETAIL:  Failing row contains (P0000001, T0070812, 2022-06-13, paypal, 92.69, 3.53, captured, AUTH987102, 2025-08-24 00:01:15.815033, 2025-08-24 00:01:15.815033).
+
+2025-08-24 11:14:39,108 - INFO - 🎉 Silver layer build completed successfully!
+2025-08-24 13:36:23,855 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 13:36:24,428 - INFO - 📥 Loaded 50000 rows from bronze.drivers
+2025-08-24 13:36:24,764 - INFO - 📥 Loaded 50000 rows from bronze.vehicles
+2025-08-24 13:36:25,204 - INFO - 📥 Loaded 75000 rows from bronze.riders
+2025-08-24 13:36:26,727 - INFO - 📥 Loaded 75000 rows from bronze.trips
+2025-08-24 13:36:27,187 - INFO - 📥 Loaded 75000 rows from bronze.payments
+2025-08-24 13:36:27,210 - INFO - 🚖 Drivers cleaned: 50000 rows
+2025-08-24 13:36:27,250 - INFO - 🚗 Vehicles cleaned: 50000 rows
+2025-08-24 13:36:27,280 - INFO - 🧍 Riders cleaned: 75000 rows
+2025-08-24 13:36:27,458 - INFO - 🛺 Trips cleaned: 75000 rows
+2025-08-24 13:36:27,517 - INFO - 💳 Payments cleaned: 75000 rows
+2025-08-24 13:36:27,755 - ERROR - ❌ Error writing silver.drivers: column "city" of relation "drivers" does not exist
+LINE 1: ...d,driver_name,email,dob,signup_date,driver_rating,city,licen...
+                                                             ^
+
+2025-08-24 13:36:27,953 - ERROR - ❌ Error writing silver.vehicles: column "registration_date" of relation "vehicles" does not exist
+LINE 1: ...id,driver_id,make,model,year,plate,capacity,color,registrati...
+                                                             ^
+
+2025-08-24 13:36:28,309 - ERROR - ❌ Error writing silver.riders: column "home_city" of relation "riders" does not exist
+LINE 1: ...ver.riders (rider_id,rider_name,email,signup_date,home_city,...
+                                                             ^
+
+2025-08-24 13:36:28,954 - ERROR - ❌ Error writing silver.trips: column "request_ts" of relation "trips" does not exist
+LINE 1: ...lver.trips (trip_id,rider_id,driver_id,vehicle_id,request_ts...
+                                                             ^
+
+2025-08-24 13:36:29,327 - ERROR - ❌ Error writing silver.payments: column "payment_method" of relation "payments" does not exist
+LINE 1: ... silver.payments (payment_id,trip_id,payment_date,payment_me...
+                                                             ^
+
+2025-08-24 13:36:29,336 - INFO - 🎉 Silver build completed successfully
+2025-08-24 13:37:43,779 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 13:37:44,399 - INFO - 📥 Loaded 50000 rows from bronze.drivers
+2025-08-24 13:37:44,693 - INFO - 📥 Loaded 50000 rows from bronze.vehicles
+2025-08-24 13:37:45,175 - INFO - 📥 Loaded 75000 rows from bronze.riders
+2025-08-24 13:37:46,665 - INFO - 📥 Loaded 75000 rows from bronze.trips
+2025-08-24 13:37:47,151 - INFO - 📥 Loaded 75000 rows from bronze.payments
+2025-08-24 13:37:47,173 - INFO - 🚖 Drivers cleaned: 50000 rows
+2025-08-24 13:37:47,187 - INFO - 🚗 Vehicles cleaned: 50000 rows
+2025-08-24 13:37:47,214 - INFO - 🧍 Riders cleaned: 75000 rows
+2025-08-24 13:37:47,236 - INFO - 🛺 Trips cleaned: 75000 rows
+2025-08-24 13:37:47,254 - INFO - 💳 Payments cleaned: 75000 rows
+2025-08-24 13:37:53,383 - INFO - ✅ Inserted 50000 rows into silver.drivers
+2025-08-24 13:38:00,970 - INFO - ✅ Inserted 50000 rows into silver.vehicles
+2025-08-24 13:38:09,187 - INFO - ✅ Inserted 75000 rows into silver.riders
+2025-08-24 13:38:23,352 - INFO - ✅ Inserted 75000 rows into silver.trips
+2025-08-24 13:38:23,508 - ERROR - ❌ Error writing silver.payments: new row for relation "payments" violates check constraint "payments_status_check"
+DETAIL:  Failing row contains (P0000098, T0072304, 2024-11-22, null, null, null, refunded, null).
+
+2025-08-24 13:38:23,515 - INFO - 🎉 Silver build completed successfully
+2025-08-24 13:53:36,076 - INFO - 🥈 Starting Silver Build
+2025-08-24 14:26:05,960 - INFO - 🥈 Starting Silver Build
+2025-08-24 14:26:05,974 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 14:26:09,161 - INFO - ✅ drivers.pk_unique passed
+2025-08-24 14:49:39,504 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 14:49:39,505 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 14:49:39,554 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 14:49:39,554 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 14:49:39,554 - INFO - Creating silver.drivers_base ...
+2025-08-24 14:49:39,558 - ERROR - ❌ Error creating Silver base tables: (psycopg2.errors.UndefinedFunction) function pg_catalog.btrim(date) does not exist
+LINE 9:                         NULLIF(TRIM(dob), '')::DATE AS dob,
+                                       ^
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+
+[SQL: 
+                DROP TABLE IF EXISTS silver.drivers_base;
+                CREATE TABLE silver.drivers_base AS
+                WITH cleaned AS (
+                    SELECT
+                        driver_id::BIGINT AS driver_id,
+                        TRIM(driver_name) AS driver_name,
+                        LOWER(TRIM(email)) AS email,
+                        NULLIF(TRIM(dob), '')::DATE AS dob,
+                        NULLIF(TRIM(signup_date), '')::DATE AS signup_date,
+                        CASE WHEN driver_rating IS NULL THEN NULL
+                             WHEN driver_rating::NUMERIC BETWEEN 0 AND 5 THEN driver_rating::NUMERIC
+                             ELSE NULL END AS driver_rating,
+                        TRIM(city) AS city,
+                        TRIM(license_number) AS license_number,
+                        CASE WHEN LOWER(COALESCE(is_active::TEXT,'')) IN ('true','1','yes') THEN TRUE
+                             WHEN LOWER(COALESCE(is_active::TEXT,'')) IN ('false','0','no') THEN FALSE
+                             ELSE NULL END AS is_active,
+                        ROW_NUMBER() OVER (PARTITION BY driver_id ORDER BY signup_date DESC NULLS LAST) AS rn
+                    FROM bronze.drivers
+                    WHERE driver_id IS NOT NULL
+                )
+                SELECT driver_id, driver_name, email, dob, signup_date, driver_rating,
+                       city, license_number, is_active
+                FROM cleaned WHERE rn = 1;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 14:55:42,866 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 14:55:42,867 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 14:55:42,886 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 14:55:42,887 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 14:55:42,887 - INFO - Creating silver.drivers_base ...
+2025-08-24 14:55:42,893 - ERROR - ❌ Error creating Silver base tables: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type bigint: "D000001"
+
+[SQL: 
+                DROP TABLE IF EXISTS silver.drivers_base;
+                CREATE TABLE silver.drivers_base AS
+                WITH cleaned AS (
+                    SELECT
+                        driver_id::BIGINT AS driver_id,
+                        TRIM(driver_name::TEXT) AS driver_name,
+                        LOWER(TRIM(email::TEXT)) AS email,
+                        NULLIF(TRIM(dob::TEXT), '')::DATE AS dob,
+                        NULLIF(TRIM(signup_date::TEXT), '')::DATE AS signup_date,
+                        CASE WHEN driver_rating IS NULL THEN NULL
+                             WHEN driver_rating::NUMERIC BETWEEN 0 AND 5 THEN driver_rating::NUMERIC
+                             ELSE NULL END AS driver_rating,
+                        TRIM(city::TEXT) AS city,
+                        TRIM(license_number::TEXT) AS license_number,
+                        CASE WHEN LOWER(COALESCE(is_active::TEXT,'')) IN ('true','1','yes') THEN TRUE
+                             WHEN LOWER(COALESCE(is_active::TEXT,'')) IN ('false','0','no') THEN FALSE
+                             ELSE NULL END AS is_active,
+                        ROW_NUMBER() OVER (PARTITION BY driver_id ORDER BY signup_date DESC NULLS LAST) AS rn
+                    FROM bronze.drivers
+                    WHERE driver_id IS NOT NULL
+                )
+                SELECT driver_id, driver_name, email, dob, signup_date, driver_rating,
+                       city, license_number, is_active
+                FROM cleaned WHERE rn = 1;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-24 14:57:08,342 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 14:57:08,342 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 14:57:08,363 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 14:57:08,363 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 14:57:08,363 - INFO - Creating silver.drivers_base ...
+2025-08-24 14:57:08,637 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 14:57:08,655 - INFO - Creating silver.vehicles_base ...
+2025-08-24 14:57:08,660 - ERROR - ❌ Error creating Silver base tables: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type bigint: "V000001"
+
+[SQL: 
+                DROP TABLE IF EXISTS silver.vehicles_base;
+                CREATE TABLE silver.vehicles_base AS
+                WITH cleaned AS (
+                    SELECT
+                        vehicle_id::BIGINT AS vehicle_id,
+                        driver_id::BIGINT AS driver_id,
+                        INITCAP(TRIM(make::TEXT)) AS make,
+                        INITCAP(TRIM(model::TEXT)) AS model,
+                        NULLIF(year::TEXT,'')::INT AS year,
+                        UPPER(TRIM(plate::TEXT)) AS plate,
+                        NULLIF(capacity::TEXT,'')::INT AS capacity,
+                        INITCAP(TRIM(color::TEXT)) AS color,
+                        NULLIF(TRIM(registration_date::TEXT),'')::DATE AS registration_date,
+                        CASE WHEN LOWER(COALESCE(is_active::TEXT,'')) IN ('true','1','yes') THEN TRUE
+                             WHEN LOWER(COALESCE(is_active::TEXT,'')) IN ('false','0','no') THEN FALSE
+                             ELSE NULL END AS is_active,
+                        ROW_NUMBER() OVER (PARTITION BY vehicle_id ORDER BY registration_date DESC NULLS LAST) AS rn
+                    FROM bronze.vehicles
+                    WHERE vehicle_id IS NOT NULL
+                )
+                SELECT vehicle_id, driver_id, make, model, year, plate, capacity, color, registration_date, is_active
+                FROM cleaned WHERE rn = 1;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-24 14:58:37,747 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 14:58:37,747 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 14:58:37,769 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 14:58:37,769 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 14:58:37,769 - INFO - Creating silver.drivers_base ...
+2025-08-24 14:58:38,027 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 14:58:38,036 - INFO - Creating silver.vehicles_base ...
+2025-08-24 14:58:38,299 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 14:58:38,309 - INFO - Creating silver.riders_base ...
+2025-08-24 14:58:38,312 - ERROR - ❌ Error creating Silver base tables: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type bigint: "R0000001"
+
+[SQL: 
+                DROP TABLE IF EXISTS silver.riders_base;
+                CREATE TABLE silver.riders_base AS
+                WITH cleaned AS (
+                    SELECT
+                        rider_id::BIGINT AS rider_id,
+                        TRIM(rider_name::TEXT) AS rider_name,
+                        LOWER(TRIM(email::TEXT)) AS email,
+                        NULLIF(TRIM(signup_date::TEXT),'')::DATE AS signup_date,
+                        INITCAP(TRIM(home_city::TEXT)) AS home_city,
+                        CASE WHEN rider_rating IS NULL THEN NULL
+                             WHEN rider_rating::NUMERIC BETWEEN 0 AND 5 THEN rider_rating::NUMERIC
+                             ELSE NULL END AS rider_rating,
+                        TRIM(default_payment_method::TEXT) AS default_payment_method,
+                        CASE WHEN LOWER(COALESCE(is_verified::TEXT,'')) IN ('true','1','yes') THEN TRUE
+                             WHEN LOWER(COALESCE(is_verified::TEXT,'')) IN ('false','0','no') THEN FALSE
+                             ELSE NULL END AS is_verified,
+                        ROW_NUMBER() OVER (PARTITION BY rider_id ORDER BY signup_date DESC NULLS LAST) AS rn
+                    FROM bronze.riders
+                    WHERE rider_id IS NOT NULL
+                )
+                SELECT rider_id, rider_name, email, signup_date, home_city, rider_rating,
+                       default_payment_method, is_verified
+                FROM cleaned WHERE rn = 1;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-24 14:59:25,572 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 14:59:25,572 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 14:59:25,594 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 14:59:25,595 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 14:59:25,595 - INFO - Creating silver.drivers_base ...
+2025-08-24 14:59:25,872 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 14:59:25,881 - INFO - Creating silver.vehicles_base ...
+2025-08-24 14:59:26,136 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 14:59:26,144 - INFO - Creating silver.riders_base ...
+2025-08-24 14:59:26,508 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 14:59:26,516 - INFO - Creating silver.trips_base ...
+2025-08-24 14:59:26,520 - ERROR - ❌ Error creating Silver base tables: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type bigint: "T0000001"
+
+[SQL: 
+                DROP TABLE IF EXISTS silver.trips_base;
+                CREATE TABLE silver.trips_base AS
+                WITH cleaned AS (
+                    SELECT
+                        trip_id::BIGINT AS trip_id,
+                        rider_id::BIGINT AS rider_id,
+                        driver_id::BIGINT AS driver_id,
+                        vehicle_id::BIGINT AS vehicle_id,
+                        NULLIF(TRIM(request_ts::TEXT),'')::TIMESTAMP AS request_ts,
+                        NULLIF(TRIM(pickup_ts::TEXT),'')::TIMESTAMP AS pickup_ts,
+                        NULLIF(TRIM(dropoff_ts::TEXT),'')::TIMESTAMP AS dropoff_ts,
+                        TRIM(pickup_location::TEXT) AS pickup_location,
+                        TRIM(drop_location::TEXT) AS drop_location,
+                        NULLIF(distance_km::TEXT,'')::NUMERIC AS distance_km,
+                        NULLIF(duration_min::TEXT,'')::NUMERIC AS duration_min,
+                        NULLIF(wait_time_minutes::TEXT,'')::NUMERIC AS wait_time_minutes,
+                        NULLIF(surge_multiplier::TEXT,'')::NUMERIC AS surge_multiplier,
+                        NULLIF(base_fare_usd::TEXT,'')::NUMERIC AS base_fare_usd,
+                        NULLIF(tax_usd::TEXT,'')::NUMERIC AS tax_usd,
+                        NULLIF(tip_usd::TEXT,'')::NUMERIC AS tip_usd,
+                        NULLIF(total_fare_usd::TEXT,'')::NUMERIC AS total_fare_usd,
+                        INITCAP(TRIM(status::TEXT)) AS status,
+                        ROW_NUMBER() OVER (PARTITION BY trip_id ORDER BY request_ts DESC NULLS LAST) AS rn
+                    FROM bronze.trips
+                    WHERE trip_id IS NOT NULL
+                )
+                SELECT trip_id, rider_id, driver_id, vehicle_id, request_ts, pickup_ts, dropoff_ts,
+                       pickup_location, drop_location, distance_km, duration_min, wait_time_minutes,
+                       surge_multiplier, base_fare_usd, tax_usd, tip_usd, total_fare_usd, status
+                FROM cleaned WHERE rn = 1;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-24 15:00:37,035 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:00:37,035 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:00:37,059 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:00:37,059 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:00:37,059 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:00:37,303 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:00:37,312 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:00:37,580 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:00:37,591 - INFO - Creating silver.riders_base ...
+2025-08-24 15:00:37,959 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:00:37,968 - INFO - Creating silver.trips_base ...
+2025-08-24 15:00:38,644 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:00:38,659 - INFO - Creating silver.payments_base ...
+2025-08-24 15:00:38,663 - ERROR - ❌ Error creating Silver base tables: (psycopg2.errors.InvalidTextRepresentation) invalid input syntax for type bigint: "P0000001"
+
+[SQL: 
+                DROP TABLE IF EXISTS silver.payments_base;
+                CREATE TABLE silver.payments_base AS
+                WITH cleaned AS (
+                    SELECT
+                        payment_id::BIGINT AS payment_id,
+                        trip_id::BIGINT AS trip_id,
+                        NULLIF(TRIM(payment_date::TEXT),'')::DATE AS payment_date,
+                        TRIM(payment_method::TEXT) AS payment_method,
+                        NULLIF(amount_usd::TEXT,'')::NUMERIC AS amount_usd,
+                        NULLIF(tip_usd::TEXT,'')::NUMERIC AS tip_usd,
+                        INITCAP(TRIM(status::TEXT)) AS status,
+                        TRIM(auth_code::TEXT) AS auth_code,
+                        ROW_NUMBER() OVER (PARTITION BY payment_id ORDER BY payment_date DESC NULLS LAST) AS rn
+                    FROM bronze.payments
+                    WHERE payment_id IS NOT NULL
+                )
+                SELECT payment_id, trip_id, payment_date, payment_method, amount_usd, tip_usd, status, auth_code
+                FROM cleaned WHERE rn = 1;
+            ]
+(Background on this error at: https://sqlalche.me/e/20/9h9h)
+2025-08-24 15:01:12,969 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:01:12,969 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:01:12,992 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:01:12,992 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:01:12,993 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:01:13,245 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:01:13,255 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:01:13,545 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:01:13,555 - INFO - Creating silver.riders_base ...
+2025-08-24 15:01:13,927 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:01:13,935 - INFO - Creating silver.trips_base ...
+2025-08-24 15:01:14,503 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:01:14,512 - INFO - Creating silver.payments_base ...
+2025-08-24 15:01:14,859 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:01:14,868 - INFO - ✅ All Silver base tables created
+2025-08-24 15:01:14,868 - INFO - Performing deep validation...
+2025-08-24 15:01:14,868 - INFO - Validating drivers...
+2025-08-24 15:01:15,139 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:01:15,303 - ERROR - Error validating drivers: (psycopg2.errors.DependentObjectsStillExist) cannot drop table silver.drivers because other objects depend on it
+DETAIL:  constraint vehicles_driver_id_fkey on table silver.vehicles depends on table silver.drivers
+constraint trips_driver_id_fkey on table silver.trips depends on table silver.drivers
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+
+[SQL: 
+DROP TABLE silver.drivers]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2025-08-24 15:01:15,303 - INFO - Validating vehicles...
+2025-08-24 15:01:15,586 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
+2025-08-24 15:01:15,732 - ERROR - Error validating vehicles: (psycopg2.errors.DependentObjectsStillExist) cannot drop table silver.vehicles because other objects depend on it
+DETAIL:  constraint trips_vehicle_id_fkey on table silver.trips depends on table silver.vehicles
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+
+[SQL: 
+DROP TABLE silver.vehicles]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2025-08-24 15:01:15,732 - INFO - Validating riders...
+2025-08-24 15:01:16,110 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-24 15:01:16,240 - ERROR - Error validating riders: (psycopg2.errors.DependentObjectsStillExist) cannot drop table silver.riders because other objects depend on it
+DETAIL:  constraint trips_rider_id_fkey on table silver.trips depends on table silver.riders
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+
+[SQL: 
+DROP TABLE silver.riders]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2025-08-24 15:01:16,240 - INFO - Validating trips...
+2025-08-24 15:01:17,579 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-24 15:01:23,878 - INFO - ✅ 65,994 valid rows saved to silver.trips
+2025-08-24 15:01:23,906 - ERROR - Error saving rejected rows for trips: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 3:                             VALUES ('trips', :r::jsonb, 'tot...
+                                                     ^
+
+[SQL: 
+                            INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                            VALUES (%(t)s, :r::jsonb, %(reason)s, %(run)s)
+                        ]
+[parameters: {'t': 'trips', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_150112'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:01:23,906 - WARNING - ⚠️  9,006 invalid rows saved to audit.rejected_rows
+2025-08-24 15:01:23,920 - INFO - Validating payments...
+2025-08-24 15:01:24,362 - INFO - Loaded 75,000 rows for validation: silver.payments_base
+2025-08-24 15:01:24,461 - WARNING - ⚠️ No valid rows to write for payments
+2025-08-24 15:01:24,482 - ERROR - Error saving rejected rows for payments: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 3:                             VALUES ('payments', :r::jsonb, '...
+                                                        ^
+
+[SQL: 
+                            INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                            VALUES (%(t)s, :r::jsonb, %(reason)s, %(run)s)
+                        ]
+[parameters: {'t': 'payments', 'reason': 'Unknown payment_method', 'run': '20250824_150112'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:01:24,482 - WARNING - ⚠️  75,000 invalid rows saved to audit.rejected_rows
+2025-08-24 15:01:24,489 - WARNING - ⚠️  Some tables had validation issues
+2025-08-24 15:01:24,489 - INFO - Running Data Quality checks...
+2025-08-24 15:01:24,489 - INFO - Running DQ checks for drivers...
+2025-08-24 15:01:24,503 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-24 15:01:24,601 - WARNING - ❌ drivers.email_uniqueness: 41030 bad rows
+2025-08-24 15:01:24,602 - INFO - Running DQ checks for vehicles...
+2025-08-24 15:01:24,617 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-24 15:01:24,637 - INFO - ✅ vehicles.fk_driver: PASSED
+2025-08-24 15:01:24,637 - INFO - Running DQ checks for riders...
+2025-08-24 15:01:24,654 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-24 15:01:24,779 - WARNING - ❌ riders.email_uniqueness: 66001 bad rows
+2025-08-24 15:01:24,780 - INFO - Running DQ checks for trips...
+2025-08-24 15:01:24,808 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-24 15:01:24,844 - INFO - ✅ trips.fk_rider: PASSED
+2025-08-24 15:01:24,874 - INFO - ✅ trips.fk_driver: PASSED
+2025-08-24 15:01:24,906 - INFO - ✅ trips.fk_vehicle: PASSED
+2025-08-24 15:01:24,907 - INFO - Running DQ checks for payments...
+2025-08-24 15:01:25,089 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-24 15:01:25,131 - WARNING - ❌ payments.fk_trip: 9028 bad rows
+2025-08-24 15:01:25,132 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-24 15:01:25,132 - INFO - ============================================================
+2025-08-24 15:01:25,132 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-24 15:01:25,133 - INFO - ============================================================
+2025-08-24 15:01:25,133 - INFO -   drivers   :        0 →        0 valid,      0 rejected
+2025-08-24 15:01:25,133 - INFO -   vehicles  :        0 →        0 valid,      0 rejected
+2025-08-24 15:01:25,133 - INFO -   riders    :        0 →        0 valid,      0 rejected
+2025-08-24 15:01:25,133 - INFO -   trips     :   75,000 →   65,994 valid,  9,006 rejected
+2025-08-24 15:01:25,133 - INFO -   payments  :   75,000 →        0 valid, 75,000 rejected
+2025-08-24 15:01:25,133 - INFO - ------------------------------------------------------------
+2025-08-24 15:01:25,133 - INFO -   TOTAL     :  150,000 →   65,994 valid, 84,006 rejected
+2025-08-24 15:01:25,133 - INFO -   Run ID: 20250824_150112
+2025-08-24 15:01:25,133 - INFO - ============================================================
+2025-08-24 15:01:25,133 - INFO - 🎉 Silver build completed
+2025-08-24 15:04:12,772 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:04:12,772 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:04:12,793 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:04:12,793 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:04:12,794 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:04:13,067 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:04:13,076 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:04:13,307 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:04:13,316 - INFO - Creating silver.riders_base ...
+2025-08-24 15:04:13,664 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:04:13,672 - INFO - Creating silver.trips_base ...
+2025-08-24 15:04:14,391 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:04:14,404 - INFO - Creating silver.payments_base ...
+2025-08-24 15:04:14,733 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:04:14,743 - INFO - ✅ All Silver base tables created
+2025-08-24 15:04:14,743 - INFO - Performing deep validation...
+2025-08-24 15:04:14,743 - INFO - Validating drivers...
+2025-08-24 15:04:15,013 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:04:15,176 - ERROR - Error validating drivers: (psycopg2.errors.DependentObjectsStillExist) cannot drop table silver.drivers because other objects depend on it
+DETAIL:  constraint vehicles_driver_id_fkey on table silver.vehicles depends on table silver.drivers
+HINT:  Use DROP ... CASCADE to drop the dependent objects too.
+
+[SQL: 
+DROP TABLE silver.drivers]
+(Background on this error at: https://sqlalche.me/e/20/2j85)
+2025-08-24 15:04:15,176 - INFO - Validating vehicles...
+2025-08-24 15:04:15,454 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
+2025-08-24 15:04:17,429 - INFO - ✅ 50,000 valid rows saved to silver.vehicles
+2025-08-24 15:04:17,457 - INFO - Validating riders...
+2025-08-24 15:04:17,812 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-24 15:04:20,432 - INFO - ✅ 75,000 valid rows saved to silver.riders
+2025-08-24 15:04:20,475 - INFO - Validating trips...
+2025-08-24 15:04:21,732 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-24 15:04:27,830 - INFO - ✅ 65,994 valid rows saved to silver.trips
+2025-08-24 15:04:27,878 - ERROR - Error saving rejected rows for trips: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 3:                             VALUES ('trips', :r::jsonb, 'tot...
+                                                     ^
+
+[SQL: 
+                            INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                            VALUES (%(t)s, :r::jsonb, %(reason)s, %(run)s)
+                        ]
+[parameters: {'t': 'trips', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_150412'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:04:27,878 - WARNING - ⚠️  9,006 invalid rows saved to audit.rejected_rows
+2025-08-24 15:04:27,896 - INFO - Validating payments...
+2025-08-24 15:04:28,376 - INFO - Loaded 75,000 rows for validation: silver.payments_base
+2025-08-24 15:04:28,479 - WARNING - ⚠️ No valid rows to write for payments
+2025-08-24 15:04:28,500 - ERROR - Error saving rejected rows for payments: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 3:                             VALUES ('payments', :r::jsonb, '...
+                                                        ^
+
+[SQL: 
+                            INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                            VALUES (%(t)s, :r::jsonb, %(reason)s, %(run)s)
+                        ]
+[parameters: {'t': 'payments', 'reason': 'Unknown payment_method', 'run': '20250824_150412'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:04:28,500 - WARNING - ⚠️  75,000 invalid rows saved to audit.rejected_rows
+2025-08-24 15:04:28,502 - WARNING - ⚠️  Some tables had validation issues
+2025-08-24 15:04:28,502 - INFO - Running Data Quality checks...
+2025-08-24 15:04:28,502 - INFO - Running DQ checks for drivers...
+2025-08-24 15:04:28,514 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-24 15:04:28,612 - WARNING - ❌ drivers.email_uniqueness: 41030 bad rows
+2025-08-24 15:04:28,613 - INFO - Running DQ checks for vehicles...
+2025-08-24 15:04:28,721 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-24 15:04:28,742 - INFO - ✅ vehicles.fk_driver: PASSED
+2025-08-24 15:04:28,742 - INFO - Running DQ checks for riders...
+2025-08-24 15:04:28,942 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-24 15:04:29,068 - WARNING - ❌ riders.email_uniqueness: 66001 bad rows
+2025-08-24 15:04:29,069 - INFO - Running DQ checks for trips...
+2025-08-24 15:04:29,099 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-24 15:04:29,137 - INFO - ✅ trips.fk_rider: PASSED
+2025-08-24 15:04:29,168 - INFO - ✅ trips.fk_driver: PASSED
+2025-08-24 15:04:29,199 - INFO - ✅ trips.fk_vehicle: PASSED
+2025-08-24 15:04:29,200 - INFO - Running DQ checks for payments...
+2025-08-24 15:04:29,372 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-24 15:04:29,407 - WARNING - ❌ payments.fk_trip: 9028 bad rows
+2025-08-24 15:04:29,413 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-24 15:04:29,413 - INFO - ============================================================
+2025-08-24 15:04:29,413 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-24 15:04:29,413 - INFO - ============================================================
+2025-08-24 15:04:29,413 - INFO -   drivers   :        0 →        0 valid,      0 rejected
+2025-08-24 15:04:29,413 - INFO -   vehicles  :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:04:29,413 - INFO -   riders    :   75,000 →   75,000 valid,      0 rejected
+2025-08-24 15:04:29,413 - INFO -   trips     :   75,000 →   65,994 valid,  9,006 rejected
+2025-08-24 15:04:29,414 - INFO -   payments  :   75,000 →        0 valid, 75,000 rejected
+2025-08-24 15:04:29,414 - INFO - ------------------------------------------------------------
+2025-08-24 15:04:29,414 - INFO -   TOTAL     :  275,000 →  190,994 valid, 84,006 rejected
+2025-08-24 15:04:29,414 - INFO -   Run ID: 20250824_150412
+2025-08-24 15:04:29,414 - INFO - ============================================================
+2025-08-24 15:04:29,414 - INFO - 🎉 Silver build completed
+2025-08-24 15:13:45,746 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:13:45,747 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:13:45,773 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:13:45,773 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:13:45,773 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:13:46,069 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:13:46,082 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:13:46,388 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:13:46,402 - INFO - Creating silver.riders_base ...
+2025-08-24 15:13:46,915 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:13:46,925 - INFO - Creating silver.trips_base ...
+2025-08-24 15:13:47,631 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:13:47,650 - INFO - Creating silver.payments_base ...
+2025-08-24 15:13:48,098 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:13:48,108 - INFO - ✅ All Silver base tables created
+2025-08-24 15:13:48,108 - INFO - Performing deep validation...
+2025-08-24 15:13:48,108 - INFO - Validating drivers...
+2025-08-24 15:13:48,366 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:13:50,893 - INFO - ✅ 50,000 valid rows saved to silver.drivers
+2025-08-24 15:13:50,915 - INFO - Validating vehicles...
+2025-08-24 15:13:51,110 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
+2025-08-24 15:13:53,076 - INFO - ✅ 50,000 valid rows saved to silver.vehicles
+2025-08-24 15:13:53,114 - INFO - Validating riders...
+2025-08-24 15:13:53,472 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-24 15:13:56,240 - INFO - ✅ 75,000 valid rows saved to silver.riders
+2025-08-24 15:13:56,271 - INFO - Validating trips...
+2025-08-24 15:13:57,592 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-24 15:14:05,394 - INFO - ✅ 65,994 valid rows saved to silver.trips
+2025-08-24 15:14:05,417 - ERROR - Error saving rejected rows for trips: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 3:                             VALUES ('trips', :r::jsonb, 'tot...
+                                                     ^
+
+[SQL: 
+                            INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                            VALUES (%(t)s, :r::jsonb, %(reason)s, %(run)s)
+                        ]
+[parameters: {'t': 'trips', 'reason': 'total_fare_usd != base+tax+tip', 'run': '20250824_151345'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:14:05,417 - WARNING - ⚠️  9,006 invalid rows saved to audit.rejected_rows
+2025-08-24 15:14:05,436 - INFO - Validating payments...
+2025-08-24 15:14:05,992 - INFO - Loaded 75,000 rows for validation: silver.payments_base
+2025-08-24 15:14:06,097 - WARNING - ⚠️ No valid rows to write for payments
+2025-08-24 15:14:06,117 - ERROR - Error saving rejected rows for payments: (psycopg2.errors.SyntaxError) syntax error at or near ":"
+LINE 3:                             VALUES ('payments', :r::jsonb, '...
+                                                        ^
+
+[SQL: 
+                            INSERT INTO audit.rejected_rows (table_name, record, reason, run_id)
+                            VALUES (%(t)s, :r::jsonb, %(reason)s, %(run)s)
+                        ]
+[parameters: {'t': 'payments', 'reason': 'Unknown payment_method', 'run': '20250824_151345'}]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-08-24 15:14:06,117 - WARNING - ⚠️  75,000 invalid rows saved to audit.rejected_rows
+2025-08-24 15:14:06,123 - INFO - ✅ All tables passed deep validation
+2025-08-24 15:14:06,123 - INFO - Running Data Quality checks...
+2025-08-24 15:14:06,123 - INFO - Running DQ checks for drivers...
+2025-08-24 15:14:06,145 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-24 15:14:06,266 - WARNING - ❌ drivers.email_uniqueness: 41030 bad rows
+2025-08-24 15:14:06,267 - INFO - Running DQ checks for vehicles...
+2025-08-24 15:14:06,416 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-24 15:14:06,439 - INFO - ✅ vehicles.fk_driver: PASSED
+2025-08-24 15:14:06,440 - INFO - Running DQ checks for riders...
+2025-08-24 15:14:06,689 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-24 15:14:06,836 - WARNING - ❌ riders.email_uniqueness: 66001 bad rows
+2025-08-24 15:14:06,836 - INFO - Running DQ checks for trips...
+2025-08-24 15:14:06,869 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-24 15:14:06,919 - INFO - ✅ trips.fk_rider: PASSED
+2025-08-24 15:14:06,955 - INFO - ✅ trips.fk_driver: PASSED
+2025-08-24 15:14:06,990 - INFO - ✅ trips.fk_vehicle: PASSED
+2025-08-24 15:14:06,991 - INFO - Running DQ checks for payments...
+2025-08-24 15:14:07,218 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-24 15:14:07,263 - WARNING - ❌ payments.fk_trip: 9028 bad rows
+2025-08-24 15:14:07,265 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-24 15:14:07,265 - INFO - ============================================================
+2025-08-24 15:14:07,265 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-24 15:14:07,265 - INFO - ============================================================
+2025-08-24 15:14:07,265 - INFO -   drivers   :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:14:07,265 - INFO -   vehicles  :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:14:07,265 - INFO -   riders    :   75,000 →   75,000 valid,      0 rejected
+2025-08-24 15:14:07,265 - INFO -   trips     :   75,000 →   65,994 valid,  9,006 rejected
+2025-08-24 15:14:07,265 - INFO -   payments  :   75,000 →        0 valid, 75,000 rejected
+2025-08-24 15:14:07,265 - INFO - ------------------------------------------------------------
+2025-08-24 15:14:07,266 - INFO -   TOTAL     :  325,000 →  240,994 valid, 84,006 rejected
+2025-08-24 15:14:07,266 - INFO -   Run ID: 20250824_151345
+2025-08-24 15:14:07,266 - INFO - ============================================================
+2025-08-24 15:14:07,266 - INFO - 🎉 Silver build completed
+2025-08-24 15:16:38,249 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:16:38,249 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:16:38,268 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:16:38,269 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:16:38,269 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:16:38,557 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:16:38,565 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:16:38,804 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:16:38,813 - INFO - Creating silver.riders_base ...
+2025-08-24 15:16:39,185 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:16:39,195 - INFO - Creating silver.trips_base ...
+2025-08-24 15:16:39,804 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:16:39,815 - INFO - Creating silver.payments_base ...
+2025-08-24 15:16:40,152 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:16:40,160 - INFO - ✅ All Silver base tables created
+2025-08-24 15:16:40,160 - INFO - Performing deep validation...
+2025-08-24 15:16:40,160 - INFO - Validating drivers...
+2025-08-24 15:16:40,389 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:16:42,363 - INFO - ✅ 50,000 valid rows saved to silver.drivers
+2025-08-24 15:16:42,381 - INFO - Validating vehicles...
+2025-08-24 15:16:42,550 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
+2025-08-24 15:16:44,321 - INFO - ✅ 50,000 valid rows saved to silver.vehicles
+2025-08-24 15:16:44,345 - INFO - Validating riders...
+2025-08-24 15:16:44,643 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-24 15:16:47,111 - INFO - ✅ 75,000 valid rows saved to silver.riders
+2025-08-24 15:16:47,154 - INFO - Validating trips...
+2025-08-24 15:16:48,294 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-24 15:16:53,743 - INFO - ✅ 65,994 valid rows saved to silver.trips
+2025-08-24 15:16:53,743 - ERROR - Error validating trips: 'SilverBuilder' object has no attribute '_save_rejected_rows'
+2025-08-24 15:16:53,771 - INFO - Validating payments...
+2025-08-24 15:16:54,129 - INFO - Loaded 75,000 rows for validation: silver.payments_base
+2025-08-24 15:16:54,221 - WARNING - ⚠️ No valid rows to write for payments
+2025-08-24 15:16:54,221 - ERROR - Error validating payments: 'SilverBuilder' object has no attribute '_save_rejected_rows'
+2025-08-24 15:16:54,236 - WARNING - ⚠️  Some tables had validation issues
+2025-08-24 15:16:54,236 - INFO - Running Data Quality checks...
+2025-08-24 15:16:54,236 - INFO - Running DQ checks for drivers...
+2025-08-24 15:16:54,256 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-24 15:16:54,342 - WARNING - ❌ drivers.email_uniqueness: 41030 bad rows
+2025-08-24 15:16:54,343 - INFO - Running DQ checks for vehicles...
+2025-08-24 15:16:54,451 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-24 15:16:54,472 - INFO - ✅ vehicles.fk_driver: PASSED
+2025-08-24 15:16:54,472 - INFO - Running DQ checks for riders...
+2025-08-24 15:16:54,675 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-24 15:16:54,801 - WARNING - ❌ riders.email_uniqueness: 66001 bad rows
+2025-08-24 15:16:54,801 - INFO - Running DQ checks for trips...
+2025-08-24 15:16:54,828 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-24 15:16:54,865 - INFO - ✅ trips.fk_rider: PASSED
+2025-08-24 15:16:54,898 - INFO - ✅ trips.fk_driver: PASSED
+2025-08-24 15:16:54,931 - INFO - ✅ trips.fk_vehicle: PASSED
+2025-08-24 15:16:54,932 - INFO - Running DQ checks for payments...
+2025-08-24 15:16:55,101 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-24 15:16:55,143 - WARNING - ❌ payments.fk_trip: 9028 bad rows
+2025-08-24 15:16:55,144 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-24 15:16:55,144 - INFO - ============================================================
+2025-08-24 15:16:55,144 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-24 15:16:55,145 - INFO - ============================================================
+2025-08-24 15:16:55,145 - INFO -   drivers   :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:16:55,145 - INFO -   vehicles  :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:16:55,145 - INFO -   riders    :   75,000 →   75,000 valid,      0 rejected
+2025-08-24 15:16:55,145 - INFO -   trips     :        0 →        0 valid,      0 rejected
+2025-08-24 15:16:55,145 - INFO -   payments  :        0 →        0 valid,      0 rejected
+2025-08-24 15:16:55,145 - INFO - ------------------------------------------------------------
+2025-08-24 15:16:55,145 - INFO -   TOTAL     :  175,000 →  175,000 valid,      0 rejected
+2025-08-24 15:16:55,145 - INFO -   Run ID: 20250824_151638
+2025-08-24 15:16:55,145 - INFO - ============================================================
+2025-08-24 15:16:55,145 - INFO - 🎉 Silver build completed
+2025-08-24 15:24:35,445 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 15:24:35,445 - INFO - Setting up Silver and Audit schemas...
+2025-08-24 15:24:35,486 - INFO - ✅ Schemas and audit tables ready
+2025-08-24 15:24:35,486 - INFO - Creating Silver base tables with light cleaning...
+2025-08-24 15:24:35,486 - INFO - Creating silver.drivers_base ...
+2025-08-24 15:24:36,089 - INFO - ✅ silver.drivers_base created with 50,000 rows
+2025-08-24 15:24:36,103 - INFO - Creating silver.vehicles_base ...
+2025-08-24 15:24:36,646 - INFO - ✅ silver.vehicles_base created with 50,000 rows
+2025-08-24 15:24:36,668 - INFO - Creating silver.riders_base ...
+2025-08-24 15:24:37,200 - INFO - ✅ silver.riders_base created with 75,000 rows
+2025-08-24 15:24:37,210 - INFO - Creating silver.trips_base ...
+2025-08-24 15:24:37,956 - INFO - ✅ silver.trips_base created with 75,000 rows
+2025-08-24 15:24:37,969 - INFO - Creating silver.payments_base ...
+2025-08-24 15:24:38,358 - INFO - ✅ silver.payments_base created with 75,000 rows
+2025-08-24 15:24:38,368 - INFO - ✅ All Silver base tables created
+2025-08-24 15:24:38,368 - INFO - Performing deep validation...
+2025-08-24 15:24:38,368 - INFO - Validating drivers...
+2025-08-24 15:24:38,672 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-24 15:24:41,122 - INFO - ✅ 50,000 valid rows saved to silver.drivers
+2025-08-24 15:24:41,145 - INFO - Validating vehicles...
+2025-08-24 15:24:41,336 - INFO - Loaded 50,000 rows for validation: silver.vehicles_base
+2025-08-24 15:24:43,515 - INFO - ✅ 50,000 valid rows saved to silver.vehicles
+2025-08-24 15:24:43,542 - INFO - Validating riders...
+2025-08-24 15:24:43,860 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-24 15:24:46,681 - INFO - ✅ 75,000 valid rows saved to silver.riders
+2025-08-24 15:24:46,707 - INFO - Validating trips...
+2025-08-24 15:24:48,054 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-24 15:24:54,541 - INFO - ✅ 65,994 valid rows saved to silver.trips
+2025-08-24 15:24:54,644 - ERROR - Error saving rejected rows for trips: module 'pandas.io.json' has no attribute 'dumps'
+2025-08-24 15:24:54,648 - WARNING - ⚠️  9,006 invalid rows saved to audit.rejected_rows
+2025-08-24 15:24:54,696 - INFO - Validating payments...
+2025-08-24 15:24:55,089 - INFO - Loaded 75,000 rows for validation: silver.payments_base
+2025-08-24 15:24:57,660 - INFO - ✅ 64,433 valid rows saved to silver.payments
+2025-08-24 15:24:57,724 - ERROR - Error saving rejected rows for payments: module 'pandas.io.json' has no attribute 'dumps'
+2025-08-24 15:24:57,727 - WARNING - ⚠️  10,567 invalid rows saved to audit.rejected_rows
+2025-08-24 15:24:57,756 - INFO - ✅ All tables passed deep validation
+2025-08-24 15:24:57,756 - INFO - Running Data Quality checks...
+2025-08-24 15:24:57,756 - INFO - Running DQ checks for drivers...
+2025-08-24 15:24:57,778 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-24 15:24:57,875 - WARNING - ❌ drivers.email_uniqueness: 41030 bad rows
+2025-08-24 15:24:57,876 - INFO - Running DQ checks for vehicles...
+2025-08-24 15:24:58,030 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-24 15:24:58,057 - INFO - ✅ vehicles.fk_driver: PASSED
+2025-08-24 15:24:58,058 - INFO - Running DQ checks for riders...
+2025-08-24 15:24:58,309 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-24 15:24:58,456 - WARNING - ❌ riders.email_uniqueness: 66001 bad rows
+2025-08-24 15:24:58,457 - INFO - Running DQ checks for trips...
+2025-08-24 15:24:58,487 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-24 15:24:58,530 - INFO - ✅ trips.fk_rider: PASSED
+2025-08-24 15:24:58,567 - INFO - ✅ trips.fk_driver: PASSED
+2025-08-24 15:24:58,600 - INFO - ✅ trips.fk_vehicle: PASSED
+2025-08-24 15:24:58,601 - INFO - Running DQ checks for payments...
+2025-08-24 15:24:58,628 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-24 15:24:58,672 - WARNING - ❌ payments.fk_trip: 7758 bad rows
+2025-08-24 15:24:58,678 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-24 15:24:58,678 - INFO - ============================================================
+2025-08-24 15:24:58,678 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-24 15:24:58,678 - INFO - ============================================================
+2025-08-24 15:24:58,678 - INFO -   drivers   :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:24:58,678 - INFO -   vehicles  :   50,000 →   50,000 valid,      0 rejected
+2025-08-24 15:24:58,678 - INFO -   riders    :   75,000 →   75,000 valid,      0 rejected
+2025-08-24 15:24:58,678 - INFO -   trips     :   75,000 →   65,994 valid,  9,006 rejected
+2025-08-24 15:24:58,678 - INFO -   payments  :   75,000 →   64,433 valid, 10,567 rejected
+2025-08-24 15:24:58,678 - INFO - ------------------------------------------------------------
+2025-08-24 15:24:58,678 - INFO -   TOTAL     :  325,000 →  305,427 valid, 19,573 rejected
+2025-08-24 15:24:58,678 - INFO -   Run ID: 20250824_152435
+2025-08-24 15:24:58,678 - INFO - ============================================================
+2025-08-24 15:24:58,678 - INFO - 🎉 Silver build completed

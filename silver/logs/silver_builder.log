@@ -1,0 +1,4 @@
+2025-08-24 14:08:10,072 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 14:08:10,075 - INFO - 🥈 Starting Silver Build
+2025-08-24 14:41:44,731 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-24 14:41:44,731 - INFO - Setting up Silver and Audit schemas...
