@@ -238,6 +238,33 @@ def load_data(table, rows, conn):
     finally:
         cursor.close()
 
+def load_all_data_to_bronze():
+    """
+    Wrapper for orchestration layer.
+    Loads all Google Sheets data into Bronze tables.
+    Returns True if successful, False otherwise.
+    """
+    try:
+        logger.info("🥉 MEDALLION BRONZE LAYER - DATA LOADER")
+        logger.info("🚀 Starting Bronze Data Pipeline")
+
+        conn = psycopg2.connect(**DB_CONFIG)
+
+        for table, sheet_range in SHEET_RANGES.items():
+            rows = fetch_data(sheet_range)
+            if rows:
+                load_data(table, rows, conn)
+            else:
+                logger.warning(f"⚠️ No {table} data loaded")
+
+        conn.close()
+        logger.info("🎉 Bronze load completed")
+        return True
+
+    except Exception as e:
+        logger.error(f"❌ Error in Bronze load: {e}")
+        return False
+
 
 def main():
     logger.info("🥉 MEDALLION BRONZE LAYER - DATA LOADER")
@@ -262,3 +289,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+#
