@@ -797,3 +797,49 @@ DETAIL:  Key (trip_id)=(T0070812) is not present in table "trips".
 2025-08-24 15:34:14,083 - INFO - ✓ Loaded 75000 rows from payments!A:H
 2025-08-24 15:34:29,409 - INFO - ✓ Inserted 75000 rows into bronze.payments
 2025-08-24 15:34:29,419 - INFO - 🎉 Bronze load completed
+2025-08-24 16:05:43,616 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 16:05:43,616 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 16:05:43,856 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:05:43,871 - INFO - Google Sheets service created successfully
+2025-08-24 16:05:57,924 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 16:06:39,671 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-24 16:06:39,843 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:06:39,849 - INFO - Google Sheets service created successfully
+2025-08-24 16:06:46,309 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 16:07:04,040 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 16:07:04,087 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:07:04,146 - INFO - Google Sheets service created successfully
+2025-08-24 16:07:09,971 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 16:07:21,711 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 16:07:21,770 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:07:21,772 - INFO - Google Sheets service created successfully
+2025-08-24 16:07:30,336 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 16:07:51,290 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 16:07:51,363 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:07:51,365 - INFO - Google Sheets service created successfully
+2025-08-24 16:07:57,629 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 16:08:09,275 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 16:08:09,284 - INFO - 🎉 Bronze load completed
+2025-08-24 16:14:50,870 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-24 16:14:50,870 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-24 16:14:50,946 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:14:50,950 - INFO - Google Sheets service created successfully
+2025-08-24 16:14:59,169 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-24 16:15:08,059 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-24 16:15:08,115 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:15:08,117 - INFO - Google Sheets service created successfully
+2025-08-24 16:15:12,855 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-24 16:15:19,982 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-24 16:15:20,029 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:15:20,082 - INFO - Google Sheets service created successfully
+2025-08-24 16:15:25,694 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-24 16:15:37,498 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-24 16:15:37,553 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:15:37,555 - INFO - Google Sheets service created successfully
+2025-08-24 16:15:44,547 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-24 16:16:03,319 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-24 16:16:03,390 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-24 16:16:03,392 - INFO - Google Sheets service created successfully
+2025-08-24 16:16:09,146 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-24 16:16:21,121 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-24 16:16:21,130 - INFO - 🎉 Bronze load completed
