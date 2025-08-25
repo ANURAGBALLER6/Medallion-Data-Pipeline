@@ -149,20 +149,97 @@ Follow these steps to prepare your Ubuntu environment for the Medallion Data Pip
 Logs will be available inside the logs/ directory.**
 ##
 
+---
 
+## 📑 Google Sheets Setup (via Google Cloud Console)
 
+To load data directly from **Google Sheets** into **PostgreSQL**, you need to enable and configure the **Google Sheets API** and generate credentials.
 
+### 1️⃣ Enable Google Sheets API
 
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).  
+2. Create a new project (e.g., `medallion-pipeline`).  
+3. Navigate to **APIs & Services → Library**.  
+4. Search for **Google Sheets API** and click **Enable**.  
+5. Also enable **Google Drive API** (needed to access sheet files).  
 
+---
 
+### 2️⃣ Create Service Account & Credentials
 
+1. In the **APIs & Services → Credentials** section, click **Create Credentials → Service Account**.  
+2. Give it a name (e.g., `medallion-service-account`).  
+3. Assign the role **Editor** (or restricted role with only Sheets/Drive access).  
+4. Once created, go to **Keys → Add Key → Create New Key**.  
+5. Choose **JSON** format → download the file (e.g., `credentials.json`).  
 
+⚠️ Keep this file safe and **never commit it to GitHub**. Add it to `.gitignore`.
 
+---
 
+### 3️⃣ Share Google Sheet with Service Account
 
+1. Open your Google Sheet (e.g., `mobility_dataset`).  
+2. Click **Share**.  
+3. Add the **Service Account email** (found in the JSON file, usually like `your-service@project-id.iam.gserviceaccount.com`).  
+4. Give it **Viewer** or **Editor** access.  
 
+---
 
+### 4️⃣ Install Required Python Libraries
 
+Inside your project environment:
 
+```bash
+    pip install gspread oauth2client psycopg2
+    gspread → Access Google Sheets
+    oauth2client → Authenticate with Google API
+    psycopg2 → Connect to PostgreSQL
+```
 
+### 5️⃣ Connect Google Sheets → Python → PostgreSQL
+    ## Example script (silver/config.py or a separate loader):
+```bash
+    import psycopg2
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+# Step 1: Authenticate with Google Sheets
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
+client = gspread.authorize(creds)
+
+# Step 2: Open Google Sheet
+sheet = client.open("mobility_dataset").sheet1
+data = sheet.get_all_records()
+
+# Step 3: Connect to PostgreSQL
+conn = psycopg2.connect(
+    dbname="medallion_db",
+    user="myuser",
+    password="mypassword",
+    host="localhost",
+    port="5432"
+)
+cur = conn.cursor()
+
+# Step 4: Insert data into PostgreSQL
+for row in data:
+    cur.execute(
+        "INSERT INTO mobility_table (col1, col2, col3) VALUES (%s, %s, %s)",
+        (row['Column1'], row['Column2'], row['Column3'])
+    )
+
+conn.commit()
+cur.close()
+conn.close()
+```
+
+### 6️⃣ Update Pipeline Config
+
+- Place your credentials.json inside the silver/ folder (but keep it in .gitignore).
+
+- Update silver/config.py with your PostgreSQL connection details.
+
+- When you run the pipeline (python silver/etl.py), the data will be pulled from Google Sheets and inserted into PostgreSQL.
 
