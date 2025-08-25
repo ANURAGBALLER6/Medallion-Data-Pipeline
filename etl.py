@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 from datetime import datetime
 
+
 # Add project root to sys.path
 ROOT = Path(__file__).parent
 sys.path.append(str(ROOT))
@@ -15,6 +16,9 @@ sys.path.append(str(ROOT))
 # Config
 from config import LOG_CONFIG
 from silver.silver_builder import SilverBuilder
+from gold.gold import GoldBuilder
+
+
 
 
 # -----------------------------------------------------------------------------
@@ -99,11 +103,28 @@ def build_silver() -> bool:
 # -----------------------------------------------------------------------------
 # Gold Layer
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# Gold Layer
+# -----------------------------------------------------------------------------
 def build_gold() -> bool:
     """Build Gold layer - Create business metrics and aggregations."""
     logger.info("🥇 Building Gold Layer...")
-    logger.info("⚠️  Gold layer not yet implemented")
-    return True
+    try:
+        from gold.gold import GoldBuilder
+
+        gold_builder = GoldBuilder()   # ✅ no conn needed
+        success = gold_builder.run()
+
+        if success:
+            logger.info("✅ Gold layer built successfully")
+            return True
+        else:
+            logger.error("❌ Gold layer build failed")
+            return False
+    except Exception as e:
+        logger.exception(f"❌ Error building Gold layer: {e}")
+        return False
+
 
 
 # -----------------------------------------------------------------------------
