@@ -328,3 +328,60 @@ After successfully running the **Bronze Data Loader**, the following tables have
 | `bronze.payments` | ✅ 75,000 rows |
 
 ---
+---
+
+# 🥈 Silver Pipeline Results
+
+After running the **Silver Layer Builder**, the raw Bronze data was cleaned, validated, and transformed into Silver tables. Below is the summary of the processing:
+
+---
+
+## 📊 Silver Processing Summary
+
+| Table        | Input Rows | Valid Rows | Rejected Rows |
+|--------------|------------|------------|---------------|
+| `drivers`    | 50,000     | 50,000     | 0             |
+| `vehicles`   | 50,000     | 50,000     | 0             |
+| `riders`     | 75,000     | 75,000     | 0             |
+| `trips`      | 75,000     | 65,994     | 9,006         |
+| `payments`   | 75,000     | 64,433     | 10,567        |
+| **TOTAL**    | **325,000**| **305,427**| **19,573**    |
+
+✅ **Valid rows** were saved into the **Silver schema**  
+⚠️ **Rejected rows** were moved to `audit.rejected_rows`  
+
+---
+
+## 🔍 Data Quality (DQ) Checks
+
+The pipeline also ran data quality validations:
+
+| Check                          | Status   | Notes                        |
+|--------------------------------|----------|------------------------------|
+| `drivers.pk_uniqueness`        | ✅ Passed|                              |
+| `drivers.email_uniqueness`     | ❌ Failed| 41,030 duplicate emails      |
+| `vehicles.pk_uniqueness`       | ✅ Passed|                              |
+| `vehicles.fk_driver`           | ✅ Passed|                              |
+| `riders.pk_uniqueness`         | ✅ Passed|                              |
+| `riders.email_uniqueness`      | ❌ Failed| 66,001 duplicate emails      |
+| `trips.pk_uniqueness`          | ✅ Passed|                              |
+| `trips.fk_rider`               | ✅ Passed|                              |
+| `trips.fk_driver`              | ✅ Passed|                              |
+| `trips.fk_vehicle`             | ✅ Passed|                              |
+| `payments.pk_uniqueness`       | ✅ Passed|                              |
+| `payments.fk_trip`             | ❌ Failed| 7,758 orphan payments        |
+
+⚠️ **Some DQ checks failed** — results were logged into `audit.dq_results`.
+
+---
+
+## 📝 Run Metadata
+
+- **Run ID:** `20250825_125405`  
+- **Schemas created:** `silver`, `audit`  
+- **Logs available at:** `logs/silver_builder.log`
+
+---
+
+🎉 The Silver pipeline has completed successfully.  
+You now have a **clean, validated Silver layer**, with rejected/invalid rows tracked in the **Audit schema** for further analysis.
