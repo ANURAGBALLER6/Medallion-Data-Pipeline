@@ -271,18 +271,44 @@ From the project root, execute:
 - Test the connection and report record counts from the Bronze tables.
 - Execution logs will be stored inside the logs/ directory for traceability.
 
+---
 
+## 🥉 Bronze Data Loader (Google Sheets → PostgreSQL)
 
+The **Bronze Data Loader** script extracts data from **Google Sheets** (via the Google Sheets API) and inserts it directly into the **Bronze tables** in PostgreSQL.
 
+### Run the Loader
 
+From the project root, execute:
 
+```bash
+  python bronze/data_loader.py
+```
+## What It Does
+- Connects to Google Sheets using service account credentials.
 
+- Fetches rows from the configured sheet ranges defined in config.py.
 
+- Cleans and parses data (dates, timestamps, numbers, booleans).
 
+- Inserts data into the respective Bronze tables:
 
+- bronze.drivers
 
+- bronze.vehicles
 
+- bronze.riders
 
+- bronze.trips
 
+- bronze.payments
 
+- Skips duplicates using ON CONFLICT DO NOTHING.
 
+- Logs all activity to logs/data_loader.log.
+
+## Configuration
+- **Database connection** → DB_CONFIG in config.py
+- **Google Sheets credentials & spreadsheet ID** → GOOGLE_SHEETS_CONFIG in config.py
+- **Sheet ranges mapping** → SHEET_RANGES in config.py
+- Execution logs are streamed to the console and stored in:
