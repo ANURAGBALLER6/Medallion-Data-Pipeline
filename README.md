@@ -243,3 +243,46 @@ conn.close()
 
 - When you run the pipeline (python silver/etl.py), the data will be pulled from Google Sheets and inserted into PostgreSQL.
 
+---
+
+## 🗄️ Database Setup
+
+The project includes an automated script to create the **Medallion Architecture** database structure:
+
+- **Bronze Layer** → Raw tables  
+- **Silver Layer** → Cleaned views  
+- **Gold Layer** → Aggregated views  
+
+### Run the Database Setup Script
+
+From the project root, execute:
+
+```bash
+    python bronze/database_setup.py
+```
+
+## This script will:
+
+- Connect to your PostgreSQL server using credentials from silver/config.py.
+- Create the database (if it doesn’t already exist).
+- Create the bronze schema and raw tables (drivers, vehicles, riders, trips, payments).
+- Create silver views (cleaned and validated data).
+- Create gold views (aggregated analytics such as driver_earnings, rider_spending, city_performance).
+- Test the connection and report record counts from the Bronze tables.
+- Execution logs will be stored inside the logs/ directory for traceability.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
