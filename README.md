@@ -312,3 +312,19 @@ From the project root, execute:
 - **Google Sheets credentials & spreadsheet ID** → GOOGLE_SHEETS_CONFIG in config.py
 - **Sheet ranges mapping** → SHEET_RANGES in config.py
 - Execution logs are streamed to the console and stored in:
+
+---
+
+# 📊 Bronze Pipeline Results
+
+After successfully running the **Bronze Data Loader**, the following tables have been populated in the **Bronze schema** of PostgreSQL:
+
+| Bronze Table  | Rows Inserted |
+|---------------|---------------|
+| `bronze.drivers`  | ✅ 50,000 rows |
+| `bronze.vehicles` | ✅ 50,000 rows |
+| `bronze.riders`   | ✅ 75,000 rows |
+| `bronze.trips`    | ✅ 75,000 rows |
+| `bronze.payments` | ✅ 75,000 rows |
+
+---
