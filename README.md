@@ -19,8 +19,8 @@ It organizes data into **progressive layers** — Bronze, Silver, and Gold — e
 ## 🏗️ Architecture Overview
 
 - 🥉 **Bronze Layer**  
-  Raw data ingestion from **Google Sheets**  
-  ✅ COMPLETE  
+  Raw data ingestion from **Google Sheets**   
+- ✅ COMPLETE  
 
 - 🥈 **Silver Layer**  
   Cleaned, validated, and transformed data  
@@ -44,3 +44,125 @@ flowchart TD
     S --> QC[Data Quality Checks]
     S --> AL[Audit Logging]
     S --> VR[Validation Rules]
+
+```
+## 📂 Project Structure
+```aiignore
+Medallion-Data-Pipeline/
+│
+├── bronze/                     # Raw data ingestion layer
+│   └── logs/
+│       ├── data_loader.py      # Raw data loading scripts
+│       └── database_setup.py   # Database initialization
+│
+├── gold/                       # Business-ready data layer
+│   └── README.md               # Gold layer documentation
+│
+├── logs/                       # Application logging
+│   ├── data_loader.log         # Data loading logs
+│   ├── database_setup.log      # Database setup logs
+│   ├── etl.log                 # ETL process logs
+│   ├── silver.log              # Silver layer logs
+│   └── silver_builder.log      # Silver builder logs
+│
+├── silver/                     # Cleaned and transformed data layer
+│   ├── logs/
+│   │   └── silver_builder.py   # Silver layer processing
+│   ├── config.py               # Configuration settings
+│   ├── etl.py                  # ETL operations
+│   └── README.md               # Silver layer documentation
+│
+├── External Libraries/         # Third-party dependencies
+├── Scratches and Consoles      # Development workspace
+└── requirements.txt            # Project dependencies
+
+```
+---
+
+## ⚙️ Prerequisites (Ubuntu Setup)
+
+Follow these steps to prepare your Ubuntu environment for the Medallion Data Pipeline.
+
+### 1️⃣ Install PyCharm (Community Edition)
+
+```bash
+  sudo snap install pycharm-community --classic
+```
+
+## 2️⃣ Install PostgreSQL
+
+```bash
+    sudo apt update
+    sudo apt install postgresql postgresql-contrib -
+```
+
+## 3️⃣ Configure PostgreSQL
+
+```bash
+    ##Switch to the PostgreSQL user:
+    sudo -i -u postgres
+```
+
+```bash
+    ##Create a new database and user (replace myuser and mypassword with your own):
+    psql
+    CREATE DATABASE medallion_db;
+    CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';
+    GRANT ALL PRIVILEGES ON DATABASE medallion_db TO myuser;
+    \q
+    exit
+```
+
+## 3️⃣ Install DBeaver (PostgreSQL GUI Client)
+
+```bash
+    sudo apt update
+    sudo apt install dbeaver-ce -y
+```
+## ⚙️ Project Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/Medallion-Data-Pipeline.git
+   cd Medallion-Data-Pipeline
+##
+
+2. **Create and activate a virtual environment:**
+    ```bash
+   git clone https://github.com/your-username/Medallion-Data-Pipeline.git
+   cd Medallion-Data-Pipeline
+##
+
+3. **Install dependencies:**
+    ```bash
+   pip install -r requirements.txt
+##
+
+4. **Configure database connection in silver/config.py using the credentials created above.**
+##
+
+5. **Run the pipeline:**
+    ```bash
+   python silver/etl.py
+##
+6. **Check logs:
+Logs will be available inside the logs/ directory.**
+##
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
