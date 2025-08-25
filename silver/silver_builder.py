@@ -30,6 +30,7 @@ import sys
 from pathlib import Path
 from urllib.parse import quote_plus
 from typing import Optional
+from collections import Counter
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
@@ -461,20 +462,17 @@ class SilverBuilder:
         invalid_reasons = [reasons[i] for i in invalid_df.index]
         return valid_df, invalid_df, invalid_reasons
 
-    def _save_rejected_rows(self, table_name: str, invalid_df: pd.DataFrame, reasons: list[str]):
-        """Batch insert rejected rows into audit.rejected_rows as JSONB.
 
-        Uses CAST(:r AS JSONB) so psycopg2 parameter style is respected;
-        payloads are json-serialized with default=str to handle timestamps/Decimals.
+
+    def _save_rejected_rows(self, table_name: str, invalid_df: pd.DataFrame, reasons: list[str]):
+        """Batch insert rejected rows into audit.rejected_rows as JSONB,
+        and log counts per reason.
         """
         try:
             if invalid_df.empty:
                 return
 
-            # build parameter list for executemany
             params = []
-            # Attach reason per row (aligned by index)
-            # To reduce payload size, you can drop entirely-null columns if desired:
             for (idx, row), reason in zip(invalid_df.iterrows(), reasons):
                 rec_dict = row.to_dict()
                 rec_json = json.dumps(rec_dict, default=str)
@@ -490,9 +488,13 @@ class SilverBuilder:
                 VALUES (:t, CAST(:r AS JSONB), :reason, :run)
             """)
 
-            # executemany style insert
             with engine.begin() as conn:
                 conn.execute(sql, params)
+
+            # 🔎 Log breakdown of rejection reasons
+            reason_counts = Counter([p["reason"] for p in params])
+            for reason, count in reason_counts.items():
+                logger.info(f"🚫 {table_name}: {count} rows rejected due to {reason}")
 
         except Exception as e:
             logger.error(f"Error saving rejected rows for {table_name}: {e}")
