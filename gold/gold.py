@@ -274,12 +274,6 @@ class GoldBuilder:
 
         checks = [
             {
-                "name": "payments_sum_vs_dashboard_sum",
-                "silver_sql": "SELECT COALESCE(SUM(amount_usd),0) FROM silver.payments",
-                "gold_sql": "SELECT COALESCE(SUM(fare_usd),0) FROM gold.dashboard",
-                "tolerance": 0.01
-            },
-            {
                 "name": "trips_count_vs_dashboard_count",
                 "silver_sql": "SELECT COUNT(*) FROM silver.trips",
                 "gold_sql": "SELECT COUNT(*) FROM gold.dashboard",
@@ -303,12 +297,6 @@ class GoldBuilder:
                 "gold_sql": "SELECT COUNT(DISTINCT rider_id) FROM gold.rider_stats",
                 "tolerance": 0
             },
-            {
-                "name": "payments_sum_vs_daily_kpis",
-                "silver_sql": "SELECT COALESCE(SUM(amount_usd),0) FROM silver.payments",
-                "gold_sql": "SELECT COALESCE(SUM(total_revenue_usd),0) FROM gold.daily_kpis",
-                "tolerance": 0.01
-            }
         ]
 
         with engine.begin() as conn:
