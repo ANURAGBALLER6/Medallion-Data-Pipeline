@@ -20,11 +20,15 @@ Tables:
 
 from __future__ import annotations
 import logging
+import os
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
 import sys
 import csv
+import pandas as pd
+from dotenv import load_dotenv
+
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
@@ -74,10 +78,40 @@ def make_engine() -> Engine:
 engine = make_engine()
 
 
+# ---------------- Supabase Engine ----------------
+load_dotenv()
+
+SUPABASE_HOST = os.getenv("SUPABASE_HOST")
+SUPABASE_PORT = os.getenv("SUPABASE_PORT")
+SUPABASE_DB = os.getenv("SUPABASE_DB")
+SUPABASE_USER = os.getenv("SUPABASE_USER")
+SUPABASE_PASSWORD = quote_plus(os.getenv("SUPABASE_PASSWORD"))  # <-- fix here
+
+supabase_engine = create_engine(
+    f"postgresql+psycopg2://{SUPABASE_USER}:{SUPABASE_PASSWORD}@{SUPABASE_HOST}:{SUPABASE_PORT}/{SUPABASE_DB}",
+    future=True
+)
+
+
+
 def run_sql(sql: str, params: Optional[dict] = None):
     """Run a single SQL statement in its own transaction."""
     with engine.begin() as conn:
         conn.execute(text(sql), params or {})
+
+def push_gold_to_supabase():
+    """Push gold tables to Supabase"""
+    tables = ["driver_stats", "vehicle_stats", "rider_stats", "daily_kpis", "dashboard"]
+
+    with engine.begin() as local_conn:
+        for tbl in tables:
+            logger.info(f"📤 Pushing gold.{tbl} → Supabase...")
+            df = pd.read_sql(f"SELECT * FROM gold.{tbl}", local_conn)
+
+            # Push to Supabase (public schema by default)
+            df.to_sql(tbl, supabase_engine, schema="public", if_exists="replace", index=False)
+
+            logger.info(f"✅ {tbl} pushed to Supabase")
 
 
 class GoldBuilder:
@@ -415,7 +449,14 @@ class GoldBuilder:
 
 def main():
     gb = GoldBuilder()
-    gb.run()
+    success = gb.run()
+
+    if success:
+        push_gold_to_supabase()
+        logger.info("🎉 Gold data successfully pushed to Supabase")
+    else:
+        logger.warning("⚠️ Skipping Supabase push because Gold build failed")
+
 
 
 if __name__ == "__main__":
