@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+🥉 Bronze Layer Loader
+Fetches data from Google Sheets and loads into Postgres bronze tables.
+- Always refreshed: TRUNCATE + INSERT on every run
+- Uses your config.py (DB_CONFIG, GOOGLE_SHEETS_CONFIG, SHEET_RANGES, LOG_CONFIG)
+- Creates bronze schema & tables if missing
+"""
+
 import os
 import logging
 import httplib2
@@ -10,14 +20,19 @@ from googleapiclient.discovery import build
 from pathlib import Path
 import sys
 from datetime import datetime
+import csv
 
+# ------------------------------------------------------------
 # Add parent directory to path for config import
+# ------------------------------------------------------------
 sys.path.append(str(Path(__file__).parent.parent))
-from config import DB_CONFIG, GOOGLE_SHEETS_CONFIG, SHEET_RANGES, LOG_CONFIG
+from config import DB_CONFIG, GOOGLE_SHEETS_CONFIG, SHEET_RANGES, LOG_CONFIG  # noqa: E402
 
-# ---------------- Logging Setup ----------------
+# ------------------------------------------------------------
+# Logging Setup
+# ------------------------------------------------------------
 log_dir = Path(__file__).parent.parent / LOG_CONFIG['log_dir']
-log_dir.mkdir(exist_ok=True)
+log_dir.mkdir(exist_ok=True, parents=True)
 
 logging.basicConfig(
     level=getattr(logging, LOG_CONFIG['level']),
@@ -29,8 +44,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
-# ---------------- Helpers ----------------
+# ------------------------------------------------------------
+# Helpers
+# ------------------------------------------------------------
 def safe_float(val):
     try:
         return float(val) if val not in (None, "", "NA") else None
@@ -46,7 +62,7 @@ def safe_int(val):
 
 
 def safe_bool(val):
-    if not val:
+    if val in (None, "", "NA"):
         return None
     return str(val).strip().lower() in ("true", "1", "yes")
 
@@ -75,9 +91,11 @@ def parse_timestamp(value):
     return None
 
 
-# ---------------- Google Sheets ----------------
+# ------------------------------------------------------------
+# Google Sheets
+# ------------------------------------------------------------
 def get_sheets_service():
-    """Create and return Google Sheets service."""
+    """Create and return Google Sheets service (AuthorizedHttp, like your version)."""
     try:
         creds = Credentials.from_service_account_file(
             GOOGLE_SHEETS_CONFIG['credentials_path'],
@@ -97,22 +115,124 @@ def fetch_data(range_name):
     """Fetch rows from a Google Sheet range (skip headers)."""
     try:
         service = get_sheets_service()
+        if service is None:
+            return []
         result = service.spreadsheets().values().get(
             spreadsheetId=GOOGLE_SHEETS_CONFIG['spreadsheet_id'],
             range=range_name
         ).execute()
-        values = result.get('values', [])[1:]  # skip header row
-        logger.info(f"✓ Loaded {len(values)} rows from {range_name}")
-        return values
+        values = result.get('values', [])
+        if not values:
+            logger.warning(f"⚠️ No data returned for {range_name}")
+            return []
+        rows = values[1:]  # skip header row
+        logger.info(f"✓ Loaded {len(rows)} rows from {range_name}")
+        return rows
     except Exception as e:
         logger.error(f"❌ Error fetching data from {range_name}: {e}")
         return []
 
 
-# ---------------- DB Loader ----------------
+# ------------------------------------------------------------
+# DB Bootstrap
+# ------------------------------------------------------------
+DDL_TABLES = {
+    "drivers": """
+        CREATE TABLE IF NOT EXISTS bronze.drivers (
+            driver_id TEXT PRIMARY KEY,
+            driver_name TEXT,
+            email TEXT,
+            dob DATE,
+            signup_date DATE,
+            driver_rating NUMERIC,
+            city TEXT,
+            license_number TEXT,
+            is_active BOOLEAN
+        );
+    """,
+    "vehicles": """
+        CREATE TABLE IF NOT EXISTS bronze.vehicles (
+            vehicle_id TEXT PRIMARY KEY,
+            driver_id TEXT,
+            make TEXT,
+            model TEXT,
+            year INT,
+            plate TEXT,
+            capacity INT,
+            color TEXT,
+            registration_date DATE,
+            is_active BOOLEAN
+        );
+    """,
+    "riders": """
+        CREATE TABLE IF NOT EXISTS bronze.riders (
+            rider_id TEXT PRIMARY KEY,
+            rider_name TEXT,
+            email TEXT,
+            signup_date DATE,
+            home_city TEXT,
+            rider_rating NUMERIC,
+            default_payment_method TEXT,
+            is_verified BOOLEAN
+        );
+    """,
+    "trips": """
+        CREATE TABLE IF NOT EXISTS bronze.trips (
+            trip_id TEXT PRIMARY KEY,
+            rider_id TEXT,
+            driver_id TEXT,
+            vehicle_id TEXT,
+            request_ts TIMESTAMP,
+            pickup_ts TIMESTAMP,
+            dropoff_ts TIMESTAMP,
+            pickup_location TEXT,
+            drop_location TEXT,
+            distance_km NUMERIC,
+            duration_min NUMERIC,
+            wait_time_minutes NUMERIC,
+            surge_multiplier NUMERIC,
+            base_fare_usd NUMERIC,
+            tax_usd NUMERIC,
+            tip_usd NUMERIC,
+            total_fare_usd NUMERIC,
+            status TEXT
+        );
+    """,
+    "payments": """
+        CREATE TABLE IF NOT EXISTS bronze.payments (
+            payment_id TEXT PRIMARY KEY,
+            trip_id TEXT,
+            payment_date DATE,
+            payment_method TEXT,
+            amount_usd NUMERIC,
+            tip_usd NUMERIC,
+            status TEXT,
+            auth_code TEXT
+        );
+    """
+}
+
+
+def ensure_bronze_schema_and_tables(conn):
+    """Create schema and bronze tables if missing."""
+    with conn.cursor() as cur:
+        cur.execute("CREATE SCHEMA IF NOT EXISTS bronze;")
+        for tname, ddl in DDL_TABLES.items():
+            cur.execute(ddl)
+    conn.commit()
+    logger.info("✅ bronze schema and tables are ensured")
+
+
+# ------------------------------------------------------------
+# DB Loader
+# ------------------------------------------------------------
 def load_data(table, rows, conn):
-    """Insert rows into the given Bronze table with conflict handling."""
+    """TRUNCATE + INSERT rows into the given Bronze table."""
     cursor = conn.cursor()
+
+    # Always refresh
+    # CASCADE is safe if any downstream objects reference bronze tables (rare in bronze).
+    cursor.execute(f"TRUNCATE TABLE bronze.{table} RESTART IDENTITY CASCADE;")
 
     if table == "drivers":
         query = """
@@ -121,7 +241,15 @@ def load_data(table, rows, conn):
                 driver_rating, city, license_number, is_active
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            ON CONFLICT (driver_id) DO NOTHING
+            ON CONFLICT (driver_id) DO UPDATE SET
+                driver_name = EXCLUDED.driver_name,
+                email = EXCLUDED.email,
+                dob = EXCLUDED.dob,
+                signup_date = EXCLUDED.signup_date,
+                driver_rating = EXCLUDED.driver_rating,
+                city = EXCLUDED.city,
+                license_number = EXCLUDED.license_number,
+                is_active = EXCLUDED.is_active
         """
         data = [
             (
@@ -145,7 +273,16 @@ def load_data(table, rows, conn):
                 plate, capacity, color, registration_date, is_active
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            ON CONFLICT (vehicle_id) DO NOTHING
+            ON CONFLICT (vehicle_id) DO UPDATE SET
+                driver_id = EXCLUDED.driver_id,
+                make = EXCLUDED.make,
+                model = EXCLUDED.model,
+                year = EXCLUDED.year,
+                plate = EXCLUDED.plate,
+                capacity = EXCLUDED.capacity,
+                color = EXCLUDED.color,
+                registration_date = EXCLUDED.registration_date,
+                is_active = EXCLUDED.is_active
         """
         data = [
             (
@@ -170,7 +307,14 @@ def load_data(table, rows, conn):
                 home_city, rider_rating, default_payment_method, is_verified
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-            ON CONFLICT (rider_id) DO NOTHING
+            ON CONFLICT (rider_id) DO UPDATE SET
+                rider_name = EXCLUDED.rider_name,
+                email = EXCLUDED.email,
+                signup_date = EXCLUDED.signup_date,
+                home_city = EXCLUDED.home_city,
+                rider_rating = EXCLUDED.rider_rating,
+                default_payment_method = EXCLUDED.default_payment_method,
+                is_verified = EXCLUDED.is_verified
         """
         data = [
             (
@@ -197,7 +341,24 @@ def load_data(table, rows, conn):
                 total_fare_usd, status
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            ON CONFLICT (trip_id) DO NOTHING
+            ON CONFLICT (trip_id) DO UPDATE SET
+                rider_id = EXCLUDED.rider_id,
+                driver_id = EXCLUDED.driver_id,
+                vehicle_id = EXCLUDED.vehicle_id,
+                request_ts = EXCLUDED.request_ts,
+                pickup_ts = EXCLUDED.pickup_ts,
+                dropoff_ts = EXCLUDED.dropoff_ts,
+                pickup_location = EXCLUDED.pickup_location,
+                drop_location = EXCLUDED.drop_location,
+                distance_km = EXCLUDED.distance_km,
+                duration_min = EXCLUDED.duration_min,
+                wait_time_minutes = EXCLUDED.wait_time_minutes,
+                surge_multiplier = EXCLUDED.surge_multiplier,
+                base_fare_usd = EXCLUDED.base_fare_usd,
+                tax_usd = EXCLUDED.tax_usd,
+                tip_usd = EXCLUDED.tip_usd,
+                total_fare_usd = EXCLUDED.total_fare_usd,
+                status = EXCLUDED.status
         """
         data = [
             (
@@ -231,7 +392,14 @@ def load_data(table, rows, conn):
                 status, auth_code
             )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-            ON CONFLICT (payment_id) DO NOTHING
+            ON CONFLICT (payment_id) DO UPDATE SET
+                trip_id = EXCLUDED.trip_id,
+                payment_date = EXCLUDED.payment_date,
+                payment_method = EXCLUDED.payment_method,
+                amount_usd = EXCLUDED.amount_usd,
+                tip_usd = EXCLUDED.tip_usd,
+                status = EXCLUDED.status,
+                auth_code = EXCLUDED.auth_code
         """
         data = [
             (
@@ -249,6 +417,7 @@ def load_data(table, rows, conn):
 
     else:
         logger.warning(f"⚠️ Unknown table: {table}")
+        cursor.close()
         return
 
     try:
@@ -262,28 +431,56 @@ def load_data(table, rows, conn):
         cursor.close()
 
 
-# ---------------- Orchestration ----------------
+# ------------------------------------------------------------
+# CSV Saver (optional audit)
+# ------------------------------------------------------------
+def save_to_csv(table, rows, output_dir="bronze"):
+    """Save fetched rows into a CSV file in the bronze folder (no header)."""
+    try:
+        output_path = Path(__file__).parent.parent / output_dir
+        output_path.mkdir(exist_ok=True, parents=True)
+
+        file_path = output_path / f"{table}.csv"
+
+        with open(file_path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerows(rows)
+
+        logger.info(f"📂 Saved {len(rows)} rows into {file_path}")
+    except Exception as e:
+        logger.error(f"❌ Error saving {table} CSV: {e}")
+
+
+# ------------------------------------------------------------
+# Orchestration
+# ------------------------------------------------------------
 def load_all_data_to_bronze():
-    """Wrapper for orchestration layer."""
+    """End-to-end run: bootstrap schema/tables, fetch each sheet, truncate+insert."""
     try:
         logger.info("🥉 MEDALLION BRONZE LAYER - DATA LOADER")
         logger.info("🚀 Starting Bronze Data Pipeline")
 
         conn = psycopg2.connect(**DB_CONFIG)
+        ensure_bronze_schema_and_tables(conn)
 
         for table, sheet_range in SHEET_RANGES.items():
             rows = fetch_data(sheet_range)
             if rows:
-                load_data(table, rows, conn)
+                save_to_csv(table, rows)        # optional: keep for audit/debug
+                load_data(table, rows, conn)    # TRUNCATE + INSERT fresh
             else:
-                logger.warning(f"⚠️ No {table} data loaded")
+                # Still hard refresh (empty state) so downstream is consistent
+                logger.warning(f"⚠️ No {table} data loaded; clearing table to reflect sheet state")
+                with conn.cursor() as cur:
+                    cur.execute(f"TRUNCATE TABLE bronze.{table} RESTART IDENTITY CASCADE;")
+                    conn.commit()
 
         conn.close()
-        logger.info("🎉 Bronze load completed")
+        logger.info("🎉 Bronze load completed (tables refreshed).")
         return True
 
     except Exception as e:
-        logger.error(f"❌ Error in Bronze load: {e}")
+        logger.error(f"❌ Error in Bronze load: {e}", exc_info=True)
         return False
 
 

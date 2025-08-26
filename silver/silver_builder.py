@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import logging
 import json
+import numpy as np
 import pandas as pd
 from datetime import datetime
 import sys
@@ -31,6 +32,7 @@ from pathlib import Path
 from urllib.parse import quote_plus
 from typing import Optional
 from collections import Counter
+
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
@@ -160,7 +162,7 @@ class SilverBuilder:
                 CREATE TABLE silver.drivers_base AS
                 WITH cleaned AS (
                     SELECT
-                        TRIM(driver_id::TEXT) AS driver_id,   -- keep as TEXT
+                        TRIM(driver_id::TEXT) AS driver_id,
                         TRIM(driver_name::TEXT) AS driver_name,
                         LOWER(TRIM(email::TEXT)) AS email,
                         NULLIF(TRIM(dob::TEXT), '')::DATE AS dob,
@@ -176,6 +178,9 @@ class SilverBuilder:
                         ROW_NUMBER() OVER (PARTITION BY driver_id ORDER BY signup_date DESC NULLS LAST) AS rn
                     FROM bronze.drivers
                     WHERE driver_id IS NOT NULL
+                      AND driver_name IS NOT NULL
+                      AND license_number IS NOT NULL
+                      AND email IS NOT NULL
                 )
                 SELECT driver_id, driver_name, email, dob, signup_date, driver_rating,
                        city, license_number, is_active
@@ -202,6 +207,9 @@ class SilverBuilder:
                         ROW_NUMBER() OVER (PARTITION BY vehicle_id ORDER BY registration_date DESC NULLS LAST) AS rn
                     FROM bronze.vehicles
                     WHERE vehicle_id IS NOT NULL
+                      AND driver_id IS NOT NULL
+                      AND year IS NOT NULL
+                      AND plate IS NOT NULL
                 )
                 SELECT vehicle_id, driver_id, make, model, year, plate, capacity, color, registration_date, is_active
                 FROM cleaned WHERE rn = 1;
@@ -227,6 +235,8 @@ class SilverBuilder:
                         ROW_NUMBER() OVER (PARTITION BY rider_id ORDER BY signup_date DESC NULLS LAST) AS rn
                     FROM bronze.riders
                     WHERE rider_id IS NOT NULL
+                      AND rider_name IS NOT NULL
+                      AND email IS NOT NULL
                 )
                 SELECT rider_id, rider_name, email, signup_date, home_city, rider_rating,
                        default_payment_method, is_verified
@@ -242,14 +252,11 @@ class SilverBuilder:
                         TRIM(rider_id::TEXT) AS rider_id,
                         TRIM(driver_id::TEXT) AS driver_id,
                         TRIM(vehicle_id::TEXT) AS vehicle_id,
-
                         NULLIF(TRIM(request_ts::TEXT),'')::TIMESTAMP AS request_ts,
                         NULLIF(TRIM(pickup_ts::TEXT),'')::TIMESTAMP AS pickup_ts,
                         NULLIF(TRIM(dropoff_ts::TEXT),'')::TIMESTAMP AS dropoff_ts,
-
                         TRIM(pickup_location::TEXT) AS pickup_location,
                         TRIM(drop_location::TEXT) AS drop_location,
-
                         NULLIF(distance_km::TEXT,'')::NUMERIC AS distance_km,
                         NULLIF(duration_min::TEXT,'')::NUMERIC AS duration_min,
                         NULLIF(wait_time_minutes::TEXT,'')::NUMERIC AS wait_time_minutes,
@@ -258,12 +265,13 @@ class SilverBuilder:
                         NULLIF(tax_usd::TEXT,'')::NUMERIC AS tax_usd,
                         NULLIF(tip_usd::TEXT,'')::NUMERIC AS tip_usd,
                         NULLIF(total_fare_usd::TEXT,'')::NUMERIC AS total_fare_usd,
-
                         INITCAP(TRIM(status::TEXT)) AS status,
-
                         ROW_NUMBER() OVER (PARTITION BY trip_id ORDER BY request_ts DESC NULLS LAST) AS rn
                     FROM bronze.trips
                     WHERE trip_id IS NOT NULL
+                      AND rider_id IS NOT NULL
+                      AND driver_id IS NOT NULL
+                      AND vehicle_id IS NOT NULL
                 )
                 SELECT trip_id, rider_id, driver_id, vehicle_id, request_ts, pickup_ts, dropoff_ts,
                        pickup_location, drop_location, distance_km, duration_min, wait_time_minutes,
@@ -279,7 +287,6 @@ class SilverBuilder:
                         TRIM(payment_id::TEXT) AS payment_id,
                         TRIM(trip_id::TEXT) AS trip_id,
                         NULLIF(TRIM(payment_date::TEXT),'')::DATE AS payment_date,
-                        -- normalize common variants into a canonical set
                         CASE
                             WHEN LOWER(TRIM(payment_method::TEXT)) IN ('card','credit','credit card','debit','debit card') THEN 'Card'
                             WHEN LOWER(TRIM(payment_method::TEXT)) IN ('cash') THEN 'Cash'
@@ -294,6 +301,10 @@ class SilverBuilder:
                         ROW_NUMBER() OVER (PARTITION BY payment_id ORDER BY payment_date DESC NULLS LAST) AS rn
                     FROM bronze.payments
                     WHERE payment_id IS NOT NULL
+                      AND trip_id IS NOT NULL
+                      AND payment_date IS NOT NULL
+                      AND payment_method IS NOT NULL
+                      AND amount_usd IS NOT NULL
                 )
                 SELECT payment_id, trip_id, payment_date, payment_method, amount_usd, tip_usd, status, auth_code
                 FROM cleaned WHERE rn = 1;
@@ -387,41 +398,53 @@ class SilverBuilder:
 
         def add_reason(mask: pd.Series, msg: str):
             nonlocal valid_mask, reasons
-            # for rows where mask is True (bad rows), append reason
-            # mask True => BAD row
             if mask is None or mask.empty:
                 return
-            # Ensure alignment by reindexing
             mask = mask.reindex(df.index, fill_value=False)
             for i, bad in mask.items():
                 if bad:
                     reasons[i] = (reasons[i] + '; ' if reasons[i] else '') + msg
             valid_mask &= ~mask
 
+        # ------------------- Drivers -------------------
         if table_name == 'drivers':
+            critical_cols = ["driver_id", "driver_name", "license_number", "email"]
+            add_reason(df[critical_cols].isnull().any(axis=1), "Critical column NULL")
+
             email_pat = r"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"
             add_reason(~df['email'].fillna('').str.match(email_pat), 'Invalid email')
             add_reason(~df['license_number'].notna(), 'Missing license number')
             add_reason(~df['driver_rating'].fillna(0).between(0, 5), 'Driver rating out of range (0-5)')
 
+        # ------------------- Vehicles -------------------
         elif table_name == 'vehicles':
+            # ⚠️ You mentioned rider_name & rider_email, but those don’t exist in vehicles schema.
+            # Probably you meant driver_name/driver_email OR just vehicle criticals.
+            # Assuming: vehicle_id, driver_id, year, plate are critical.
+            critical_cols = ["vehicle_id", "driver_id", "year", "plate"]
+            add_reason(df[critical_cols].isnull().any(axis=1), "Critical column NULL")
+
             current_year = datetime.now().year
-            add_reason(~df['driver_id'].notna(), 'Missing driver_id')
             add_reason(~df['year'].fillna(0).between(1980, current_year + 1),
-                       f'Invalid year (1980-{current_year+1})')
+                       f'Invalid year (1980-{current_year + 1})')
             add_reason(~df['capacity'].fillna(0).between(1, 8), 'Capacity out of range (1-8)')
             add_reason(~df['plate'].fillna('').str.match(r'^[A-Z0-9\-]{3,12}$'), 'Invalid plate')
 
+        # ------------------- Riders -------------------
         elif table_name == 'riders':
+            critical_cols = ["rider_id", "rider_name", "email"]
+            add_reason(df[critical_cols].isnull().any(axis=1), "Critical column NULL")
+
             email_pat = r"^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$"
             add_reason(~df['email'].fillna('').str.match(email_pat), 'Invalid email')
             add_reason(~df['rider_rating'].fillna(0).between(0, 5), 'Rider rating out of range (0-5)')
 
+        # ------------------- Trips -------------------
         elif table_name == 'trips':
-            add_reason(~df['rider_id'].notna(), 'Missing rider_id')
-            add_reason(~df['driver_id'].notna(), 'Missing driver_id')
-            add_reason(~df['vehicle_id'].notna(), 'Missing vehicle_id')
-            # time logic
+            critical_cols = ["trip_id", "rider_id", "driver_id", "vehicle_id",
+                             "request_ts", "pickup_location", "drop_location", "total_fare_usd"]
+            add_reason(df[critical_cols].isnull().any(axis=1), "Critical column NULL")
+
             add_reason(
                 (df['pickup_ts'].notna()) & (df['request_ts'].notna()) & (df['pickup_ts'] < df['request_ts']),
                 'pickup_ts before request_ts'
@@ -430,7 +453,6 @@ class SilverBuilder:
                 (df['dropoff_ts'].notna()) & (df['pickup_ts'].notna()) & (df['dropoff_ts'] < df['pickup_ts']),
                 'dropoff_ts before pickup_ts'
             )
-            # non-negatives
             for col, label in [
                 ('distance_km', 'distance_km'),
                 ('duration_min', 'duration_min'),
@@ -441,7 +463,6 @@ class SilverBuilder:
                 ('total_fare_usd', 'total_fare_usd')
             ]:
                 add_reason(df[col].fillna(0) < 0, f'Negative {label}')
-            # fare sanity: base + tax + tip == total (within epsilon)
             if {'base_fare_usd', 'tax_usd', 'tip_usd', 'total_fare_usd'}.issubset(df.columns):
                 add_reason(
                     (df[['base_fare_usd', 'tax_usd', 'tip_usd']].fillna(0).sum(axis=1) -
@@ -449,11 +470,13 @@ class SilverBuilder:
                     'total_fare_usd != base+tax+tip'
                 )
 
+        # ------------------- Payments -------------------
         elif table_name == 'payments':
-            add_reason(~df['trip_id'].notna(), 'Missing trip_id')
+            critical_cols = ["payment_id", "trip_id", "payment_date", "payment_method", "amount_usd"]
+            add_reason(df[critical_cols].isnull().any(axis=1), "Critical column NULL")
+
             add_reason(df['amount_usd'].fillna(0) < 0, 'Negative amount_usd')
             add_reason(df['tip_usd'].fillna(0) < 0, 'Negative tip_usd')
-            # Allowed canonical set after normalization in _base step
             allowed = {'Card', 'Cash', 'Wallet', 'UPI'}
             add_reason(~df['payment_method'].fillna('').isin(allowed), 'Unknown payment_method')
 
@@ -461,8 +484,6 @@ class SilverBuilder:
         invalid_df = df[~valid_mask].copy()
         invalid_reasons = [reasons[i] for i in invalid_df.index]
         return valid_df, invalid_df, invalid_reasons
-
-
 
     def _save_rejected_rows(self, table_name: str, invalid_df: pd.DataFrame, reasons: list[str]):
         """Batch insert rejected rows into audit.rejected_rows as JSONB,
@@ -474,7 +495,7 @@ class SilverBuilder:
 
             params = []
             for (idx, row), reason in zip(invalid_df.iterrows(), reasons):
-                rec_dict = row.to_dict()
+                rec_dict = row.replace({pd.NA: None, np.nan: None}).to_dict()
                 rec_json = json.dumps(rec_dict, default=str)
                 params.append({
                     "t": table_name,
