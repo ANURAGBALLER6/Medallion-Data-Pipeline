@@ -19,12 +19,12 @@ Tables:
 """
 
 from __future__ import annotations
-
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
 import sys
+import csv
 
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
@@ -375,16 +375,26 @@ class GoldBuilder:
     def show_reconciliation_summary(self):
         with engine.begin() as conn:
             rows = conn.execute(text("""
-                SELECT check_name, within_tolerance, diff
+                SELECT check_name, within_tolerance, diff, lhs_value, rhs_value, created_at
                 FROM audit.recon_results
                 WHERE run_id = :r
                 ORDER BY check_name;
             """), {"r": self.run_id}).fetchall()
 
         logger.info("📊 Reconciliation Summary:")
-        for check_name, within, diff in rows:
+        for check_name, within, diff, lhs, rhs, created_at in rows:
             status = "OK" if within else "OUT OF TOLERANCE"
             logger.info(f" - {check_name}: {status} (diff={diff})")
+
+        # 📄 Save results to CSV file
+        output_file = Path(__file__).parent / f"reconciliation_results_{self.run_id}.csv"
+        with open(output_file, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["check_name", "lhs_value", "rhs_value", "diff", "within_tolerance", "created_at"])
+            for r in rows:
+                writer.writerow(r)
+
+        logger.info(f"📄 Reconciliation results exported to {output_file}")
 
     def run(self) -> bool:
         logger.info("🥇 MEDALLION GOLD LAYER - BUILDER STARTED")
@@ -411,4 +421,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-    ##
