@@ -99,6 +99,28 @@ def run_sql(sql: str, params: Optional[dict] = None):
     with engine.begin() as conn:
         conn.execute(text(sql), params or {})
 
+
+def export_gold_to_csv(local_conn, output_dir="gold"):
+    os.makedirs(output_dir, exist_ok=True)
+
+    tables = [
+        "driver_stats",
+        "vehicle_stats",
+        "rider_stats",
+        "daily_kpis",
+        "city_kpis",
+        "dashboard"
+    ]
+
+    for tbl in tables:
+        try:
+            df = pd.read_sql(f"SELECT * FROM gold.{tbl}", local_conn)
+            file_path = os.path.join(output_dir, f"{tbl}.csv")
+            df.to_csv(file_path, index=False)  # overwrites existing file
+            logging.info(f"✅ Exported {tbl} → {file_path}")
+        except Exception as e:
+            logging.error(f"❌ Failed to export {tbl}: {e}")
+
 def push_gold_to_supabase():
     """Push gold tables to Supabase"""
     tables = ["driver_stats", "vehicle_stats", "rider_stats", "city_kpis", "daily_kpis", "dashboard"]
@@ -489,6 +511,9 @@ FULL OUTER JOIN dropoffs d ON p.city = d.city;
 def main():
     gb = GoldBuilder()
     success = gb.run()
+    # Export all gold tables to CSV
+    with engine.connect() as conn:
+        export_gold_to_csv(conn, output_dir="gold")
 
     if success:
         push_gold_to_supabase()
