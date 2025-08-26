@@ -421,7 +421,7 @@ class GoldBuilder:
             logger.info(f" - {check_name}: {status} (diff={diff})")
 
         # 📄 Save results to CSV file
-        output_file = Path(__file__).parent / f"reconciliation_results_{self.run_id}.csv"
+        output_file = Path(__file__).parent / "reconciliation_results.csv"
         with open(output_file, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["check_name", "lhs_value", "rhs_value", "diff", "within_tolerance", "created_at"])
