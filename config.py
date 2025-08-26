@@ -31,3 +31,12 @@ LOG_CONFIG = {
     'format': '%(asctime)s - %(levelname)s - %(message)s',
     'log_dir': 'logs'
 }
+
+# Alias for compatibility with gold.py / eda.py
+LOCAL_DB = {
+    "host": DB_CONFIG['host'],
+    "port": DB_CONFIG['port'],
+    "dbname": DB_CONFIG['database'],
+    "user": DB_CONFIG['user'],
+    "password": DB_CONFIG['password'],
+}

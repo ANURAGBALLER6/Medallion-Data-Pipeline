@@ -101,7 +101,7 @@ def run_sql(sql: str, params: Optional[dict] = None):
 
 def push_gold_to_supabase():
     """Push gold tables to Supabase"""
-    tables = ["driver_stats", "vehicle_stats", "rider_stats", "daily_kpis", "dashboard"]
+    tables = ["driver_stats", "vehicle_stats", "rider_stats", "city_kpis", "daily_kpis", "dashboard"]
 
     with engine.begin() as local_conn:
         for tbl in tables:
@@ -242,6 +242,45 @@ class GoldBuilder:
                 """
             )
 
+            # City KPIs
+            run_sql(
+                """
+                DROP TABLE IF EXISTS gold.city_kpis;
+CREATE TABLE gold.city_kpis AS
+WITH pickups AS (
+    SELECT 
+        t.pickup_location AS city,
+        COUNT(t.trip_id) AS total_pickups,
+        COUNT(DISTINCT t.driver_id) AS unique_drivers,
+        COUNT(DISTINCT t.rider_id) AS unique_riders,
+        AVG(t.total_fare_usd) FILTER (WHERE t.total_fare_usd IS NOT NULL) AS avg_fare_usd,
+        AVG(p.amount_usd) FILTER (WHERE p.amount_usd IS NOT NULL) AS avg_revenue_usd,
+        COALESCE(SUM(p.amount_usd), 0) AS total_revenue_usd
+    FROM silver.trips t
+    LEFT JOIN silver.payments p ON p.trip_id = t.trip_id
+    GROUP BY t.pickup_location
+),
+dropoffs AS (
+    SELECT 
+        t.drop_location AS city,
+        COUNT(t.trip_id) AS total_dropoffs
+    FROM silver.trips t
+    GROUP BY t.drop_location
+)
+SELECT 
+    COALESCE(p.city, d.city) AS city,
+    COALESCE(p.total_pickups, 0) AS total_pickups,
+    COALESCE(d.total_dropoffs, 0) AS total_dropoffs,
+    p.avg_fare_usd,
+    p.avg_revenue_usd,
+    p.total_revenue_usd,
+    p.unique_drivers,
+    p.unique_riders
+FROM pickups p
+FULL OUTER JOIN dropoffs d ON p.city = d.city;
+
+                """
+            )
             logger.info("✅ Aggregates created (driver_stats, vehicle_stats, rider_stats, daily_kpis)")
             return True
         except Exception as e:
