@@ -3,11 +3,20 @@ Main ETL orchestration for Medallion Data Pipeline
 Supports Bronze -> Silver -> Gold transformations
 """
 
+import os
+import pandas as pd
+from sqlalchemy import create_engine
+from urllib.parse import quote_plus
+from dotenv import load_dotenv
 import logging
 import sys
 from pathlib import Path
 from datetime import datetime
 
+# -----------------------------------------------------------------------------
+# Load environment variables
+# -----------------------------------------------------------------------------
+load_dotenv()
 
 # Add project root to sys.path
 ROOT = Path(__file__).parent
@@ -18,8 +27,16 @@ from config import LOG_CONFIG
 from silver.silver_builder import SilverBuilder
 from gold.gold import GoldBuilder
 
+# -----------------------------------------------------------------------------
+# Local DB Engine
+# -----------------------------------------------------------------------------
+LOCAL_DB = os.getenv("LOCAL_DB")
 
+if not LOCAL_DB:
+    print("❌ LOCAL_DB not found in environment variables. Please set it in .env")
+    sys.exit(1)
 
+local_engine = create_engine(LOCAL_DB, future=True)
 
 # -----------------------------------------------------------------------------
 # Logging Setup
@@ -103,16 +120,11 @@ def build_silver() -> bool:
 # -----------------------------------------------------------------------------
 # Gold Layer
 # -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# Gold Layer
-# -----------------------------------------------------------------------------
 def build_gold() -> bool:
     """Build Gold layer - Create business metrics and aggregations."""
     logger.info("🥇 Building Gold Layer...")
     try:
-        from gold.gold import GoldBuilder
-
-        gold_builder = GoldBuilder()   # ✅ no conn needed
+        gold_builder = GoldBuilder()   # ✅ pass engine
         success = gold_builder.run()
 
         if success:
@@ -124,7 +136,6 @@ def build_gold() -> bool:
     except Exception as e:
         logger.exception(f"❌ Error building Gold layer: {e}")
         return False
-
 
 
 # -----------------------------------------------------------------------------
@@ -224,4 +235,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-#
