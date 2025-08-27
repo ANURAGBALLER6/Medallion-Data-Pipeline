@@ -824,10 +824,6 @@ logs/etl.log
 
 ## 📊 Dashboard Preview
 
-<p align="center">
-<img src="gold/Mobility_Dashboard.jpg">
-</p>
 
-
-
+![Mobility_Dashboard .jpg](gold/Mobility_Dashboard%20.jpg)
 
