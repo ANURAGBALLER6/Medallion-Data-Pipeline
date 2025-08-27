@@ -28,7 +28,7 @@ It organizes data into **progressive layers** — Bronze, Silver, and Gold — e
 
 - 🥇 **Gold Layer**  
   Business analytics and KPIs  
-  🚧 READY FOR DEVELOPMENT  
+  ✅ COMPLETE  
 
 ---
 
@@ -56,6 +56,7 @@ Medallion-Data-Pipeline/
 │ ├── riders.csv
 │ ├── trips.csv
 │ ├── vehicles.csv
+  |__app.txt
 │ └── logs/
 │ ├── data_loader.py # Raw data loading script
 │ └── database_setup.py # Database initialization
@@ -879,3 +880,14 @@ logs/etl.log
 - 2021 – 7.78%  
 - 2020 – 7.46%  
 
+## Scheduler (For automated runs)
+
+```bash
+   python scheduler.py
+```
+- The scheduler.py file contains the code to run the hole pipeline on a time basis.
+
+## 💡 Questions? Issues? Contributions?
+Open an issue or submit a PR - this project is actively maintained and welcomes community involvement!
+
+⭐ If this project helped you, please give it a star on GitHub!
