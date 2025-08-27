@@ -1,0 +1,5 @@
+check_name,lhs_value,rhs_value,diff,within_tolerance,created_at
+drivers_count_vs_driver_stats,True,0,49900,49900,2025-08-27 18:43:12.401612
+riders_count_vs_rider_stats,True,0,74900,74900,2025-08-27 18:43:12.401612
+tips_sum_vs_dashboard_sum,True,0.0,148122.81000000116,148122.81000000116,2025-08-27 18:43:12.401612
+trips_count_vs_dashboard_count,True,0,65496,65496,2025-08-27 18:43:12.401612
