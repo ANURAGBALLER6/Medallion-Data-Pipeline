@@ -681,3 +681,144 @@ All Gold tables were successfully pushed to **Supabase**:
 - 🔄 End-to-end reconciliation checks passed  
 - 📤 Data exported to CSV and Supabase  
 - ✅ Ready for analytics and dashboards
+
+# 🚀 Medallion Data Pipeline Orchestration
+
+This script orchestrates the **Bronze → Silver → Gold** layers of the Medallion architecture.  
+It supports **running individual layers** or the **entire pipeline** with comprehensive logging.  
+
+---
+
+## 📂 File: `etl.py`
+
+### 🔑 Features
+- ✅ Bronze Layer → Raw ingestion from source (Google Sheets → PostgreSQL)  
+- ✅ Silver Layer → Data cleaning, validation & quality checks  
+- ✅ Gold Layer → Aggregates, KPIs, dashboards & Supabase push  
+- ✅ Logging → Both console + `logs/etl.log`  
+- ✅ Command-line interface (CLI) with `--layer` and `--force` options  
+
+---
+
+## ⚙️ How to Run
+
+### Run the **entire pipeline**
+```bash
+    python etl.py --layer all
+```
+### Run only the Bronze Layer
+```aiignore
+python etl.py --layer bronze
+```
+### Run only the Silver Layer
+```aiignore
+python etl.py --layer silver
+```
+### Run only the Gold Layer
+```aiignore
+python etl.py --layer gold
+```
+## 📜 Logs
+```aiignore
+logs/etl.log
+```
+# 🚀 Medallion ETL Pipeline Run Report
+
+**Run ID:** `20250827_184152`  
+**Date:** 2025-08-27  
+**Duration:** `0:02:50`  
+**Status:** ✅ Completed Successfully  
+
+---
+
+## 🥉 Bronze Layer Summary
+
+| Table     | Rows Loaded | Status       | CSV Path                                                                 |
+|-----------|------------:|--------------|--------------------------------------------------------------------------|
+| drivers   | 50,000      | ✅ Inserted  | bronze/drivers.csv                                                       |
+| vehicles  | 50,000      | ✅ Inserted  | bronze/vehicles.csv                                                      |
+| riders    | 75,000      | ✅ Inserted  | bronze/riders.csv                                                        |
+| trips     | 75,000      | ✅ Inserted  | bronze/trips.csv                                                         |
+| payments  | 75,000      | ✅ Inserted  | bronze/payments.csv                                                      |
+
+✅ **Bronze layer built successfully**
+
+---
+
+## 🥈 Silver Layer Summary
+
+### Validation Results
+| Table     | Input Rows | Valid Rows | Rejected Rows | Main Reasons                                     |
+|-----------|-----------:|-----------:|--------------:|-------------------------------------------------|
+| drivers   | 50,000     | 49,900     | 100           | Invalid email                                   |
+| vehicles  | 49,900     | 49,701     | 199           | Invalid plate, Capacity out of range (1–8)      |
+| riders    | 75,000     | 74,900     | 100           | Invalid email                                   |
+| trips     | 75,000     | 65,496     | 9,504         | Fare mismatch, NULL critical columns            |
+| payments  | 74,800     | 63,899     | 10,901        | Unknown payment method                          |
+
+**Totals:**  
+- **Input:** 324,700  
+- **Valid:** 303,896  
+- **Rejected:** 20,804  
+
+### Data Quality (DQ) Check Results
+| Table     | Check                  | Status  | Bad Rows |
+|-----------|------------------------|---------|---------:|
+| drivers   | pk_uniqueness          | ✅ PASS | 0        |
+| drivers   | email_uniqueness       | ❌ FAIL | 40,941   |
+| vehicles  | pk_uniqueness          | ✅ PASS | 0        |
+| vehicles  | fk_driver              | ❌ FAIL | 199      |
+| riders    | pk_uniqueness          | ✅ PASS | 0        |
+| riders    | email_uniqueness       | ❌ FAIL | 65,903   |
+| trips     | pk_uniqueness          | ✅ PASS | 0        |
+| trips     | fk_rider               | ❌ FAIL | 170      |
+| trips     | fk_driver              | ❌ FAIL | 207      |
+| trips     | fk_vehicle             | ❌ FAIL | 639      |
+| payments  | pk_uniqueness          | ✅ PASS | 0        |
+| payments  | fk_trip                | ❌ FAIL | 8,118    |
+
+⚠️ **Rejected rows saved to:** `audit.rejected_rows`  
+⚠️ **DQ results saved to:** `audit.dq_results`  
+
+✅ **Silver layer built successfully (with warnings)**  
+
+---
+
+## 🥇 Gold Layer Summary
+
+| Step                    | Status        | Notes                                   |
+|--------------------------|---------------|-----------------------------------------|
+| Schema & audit setup     | ✅ Completed  | gold + audit.recon_results              |
+| Aggregates built         | ✅ Completed  | driver_stats, vehicle_stats, rider_stats, daily_kpis |
+| Dashboard table          | ✅ Completed  | gold.dashboard                          |
+| Reconciliation checks    | ✅ Passed     | No mismatches detected                  |
+| CSV Exports              | ✅ Completed  | Saved under `gold/` folder              |
+
+### Gold Exports
+| Export File              | Path                                                                 |
+|---------------------------|----------------------------------------------------------------------|
+| Driver Stats              | gold/driver_stats.csv                                                |
+| Vehicle Stats             | gold/vehicle_stats.csv                                               |
+| Rider Stats               | gold/rider_stats.csv                                                 |
+| Daily KPIs                | gold/daily_kpis.csv                                                  |
+| City KPIs                 | gold/city_kpis.csv                                                   |
+| Dashboard                 | gold/dashboard.csv                                                   |
+| Reconciliation Results    | gold/reconciliation_results.csv                                      |
+
+✅ **Gold layer built successfully**
+
+---
+
+## 📊 Final Pipeline Summary
+
+| Layer   | Status           |
+|---------|------------------|
+| Bronze  | ✅ Success        |
+| Silver  | ✅ Success (⚠️ warnings) |
+| Gold    | ✅ Success        |
+
+**Overall:** 🎉 **All 3 layers completed successfully**  
+⏱️ **Total Duration:** `0:02:50`  
+
+📂 **Project Path:** `/home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/`
+

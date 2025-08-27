@@ -120,8 +120,9 @@ def build_silver() -> bool:
 # -----------------------------------------------------------------------------
 # Gold Layer
 # -----------------------------------------------------------------------------
+from gold.gold import GoldBuilder, export_gold_to_csv, engine
+
 def build_gold() -> bool:
-    """Build Gold layer - Create business metrics and aggregations."""
     logger.info("🥇 Building Gold Layer...")
     try:
         gold_builder = GoldBuilder()
@@ -130,11 +131,12 @@ def build_gold() -> bool:
         if success:
             logger.info("✅ Gold layer built successfully")
 
-            # ✅ Export gold tables to CSV automatically
-            from gold.gold import export_gold_to_csv
             output_dir = ROOT / "gold"
             output_dir.mkdir(exist_ok=True)
-            export_gold_to_csv(local_engine, output_dir)
+
+            # ✅ Use the global engine
+            with engine.connect() as conn:
+                export_gold_to_csv(conn, output_dir)
 
             logger.info(f"📂 Gold tables exported to CSV in {output_dir}")
             return True
