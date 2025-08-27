@@ -1,0 +1,298 @@
+/**************************************
+ * Uber-like Dataset Generator
+ * Drivers: 50k
+ * Vehicles: 50k
+ * Riders: 75k
+ * Trips: 75k
+ * Payments: 75k
+ * Referential integrity guaranteed:
+ *   vehicles.driver_id → drivers.driver_id
+ *   trips.driver_id → drivers.driver_id
+ *   trips.vehicle_id → vehicles.vehicle_id (same driver)
+ *   trips.rider_id → riders.rider_id
+ *   payments.trip_id → trips.trip_id
+ **************************************/
+
+// ====== CONFIG ======
+const NUM_DRIVERS = 50000;     // drivers (fixed)
+const NUM_VEHICLES = 50000;    // vehicles (1:1 with drivers)
+const NUM_RIDERS = 75000;      // riders (expanded)
+const NUM_TRIPS = 75000;       // trips (expanded)
+const NUM_PAYMENTS = 75000;    // payments (expanded)
+
+const BATCH_SIZE = 5000;
+const START_YEAR = 2020;
+const END_YEAR = 2025;
+
+// Indian cities (50)
+const CITIES = [
+  "Delhi","Mumbai","Bengaluru","Hyderabad","Ahmedabad","Chennai","Kolkata","Pune","Jaipur","Lucknow",
+  "Kanpur","Nagpur","Indore","Bhopal","Patna","Vadodara","Ghaziabad","Ludhiana","Agra","Nashik",
+  "Faridabad","Meerut","Rajkot","Varanasi","Srinagar","Aurangabad","Dhanbad","Amritsar","Prayagraj","Ranchi",
+  "Jodhpur","Coimbatore","Chandigarh","Guwahati","Mysore","Thiruvananthapuram","Noida","Jabalpur","Kota","Salem",
+  "Bareilly","Aligarh","Moradabad","Bhiwandi","Saharanpur","Gorakhpur","Guntur","Jalandhar","Warangal","Bhubaneswar"
+];
+
+const MAKES = ["Maruti Suzuki","Hyundai","Honda","Toyota","Tata","Mahindra","Kia","Renault"];
+const MODELS = ["Swift","Dzire","i20","Creta","City","Innova","Nexon","XUV500","Seltos","Kwid"];
+
+const PAYMENT_METHODS = ["upi","card","cash","wallet","paypal","paytm","phonepe"];
+const TRIP_STATUS = ["completed","cancelled_by_rider","cancelled_by_driver","no_show"];
+const PAYMENT_STATUS = ["captured","refunded","failed","pending"];
+
+// Name pools (>=100 first, >=100 last)
+const FIRST_NAMES = [
+  "Aarav","Vivaan","Aditya","Vihaan","Arjun","Sai","Reyansh","Krishna","Ishaan","Rohan",
+  "Ananya","Aadhya","Siya","Diya","Ira","Pari","Navya","Myra","Aarohi","Anika",
+  "Kabir","Om","Atharv","Shivansh","Aryan","Rudra","Yuvraj","Kunal","Harsh","Mihir",
+  "Nikhil","Raj","Siddharth","Manish","Alok","Anil","Chetan","Deepak","Gaurav","Kiran",
+  "Meera","Ritika","Sneha","Swati","Tanvi","Neha","Kavya","Pooja","Shreya","Naina",
+  "Mansi","Radhika","Payal","Komal","Simran","Ayesha","Priya","Sakshi","Trisha","Vidya",
+  "Abhinav","Dev","Hemant","Jatin","Lakshya","Mohan","Naveen","Pranav","Rahul","Sameer",
+  "Tarun","Umesh","Vikas","Yash","Zara","Farhan","Imran","Amir","Rehan","Salman",
+  "Armaan","Faiz","Omar","Shahid","Zoya","Nida","Hina","Rubina","Sana","Fatima",
+  "Poonam","Bhavna","Geeta","Anjali","Sunita","Lata","Kusum","Seema","Rekha","Radha"
+];
+const LAST_NAMES = [
+  "Sharma","Verma","Gupta","Agarwal","Iyer","Menon","Nair","Reddy","Naidu","Rao",
+  "Patel","Desai","Shah","Joshi","Trivedi","Chopra","Kapoor","Khanna","Malhotra","Mehta",
+  "Bansal","Jain","Saxena","Dwivedi","Pandey","Mishra","Tripathi","Dubey","Chaturvedi","Tiwari",
+  "Kulkarni","Gokhale","Deshpande","Phadke","Patil","Kadam","Sawant","Salunkhe","Shinde","Pawar",
+  "Rathore","Chauhan","Yadav","Singh","Thakur","Rajput","Kaur","Gill","Sandhu","Dhillon",
+  "Rana","Sheikh","Syed","Ansari","Qureshi","Khan","Pathan","Mirza","Hussain","Ali",
+  "Das","Ghosh","Chatterjee","Mukherjee","Banerjee","Bhattacharya","Roy","Saha","Dutta","Sen",
+  "Paul","Chowdhury","Bose","Ganguly","Tagore","Nath","Deb","Chakraborty","Sarkar","Basak",
+  "Pillai","Kurup","Panicker","Warrier","Acharya","Bhat","Shenoy","Pai","Kamath","Shetty"
+];
+
+// ====== ENTRYPOINT ======
+function createUberDataset() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureCleanSheet(ss, "drivers");
+  ensureCleanSheet(ss, "vehicles");
+  ensureCleanSheet(ss, "riders");
+  ensureCleanSheet(ss, "trips");
+  ensureCleanSheet(ss, "payments");
+
+  // 1. Drivers
+  const drivers = buildDrivers(NUM_DRIVERS);
+  insertRandomNulls(drivers, 100);
+  writeSheetInBatches(ss.getSheetByName("drivers"), driverHeader(), drivers);
+
+  // 2. Vehicles (1:1 with drivers)
+  const vehicles = buildVehicles(NUM_VEHICLES, drivers);
+  insertRandomNulls(vehicles, 100);
+  writeSheetInBatches(ss.getSheetByName("vehicles"), vehicleHeader(), vehicles);
+
+  // 3. Riders (75k)
+  const riders = buildRiders(NUM_RIDERS);
+  insertRandomNulls(riders, 100);
+  writeSheetInBatches(ss.getSheetByName("riders"), riderHeader(), riders);
+
+  // Build driver->vehicle map
+  const driverToVehicle = {};
+  for (let i = 0; i < vehicles.length; i++) {
+    driverToVehicle[vehicles[i][1]] = vehicles[i][0];
+  }
+
+  // 4. Trips (75k)
+  const trips = buildTrips(NUM_TRIPS, drivers, riders, driverToVehicle);
+  insertRandomNulls(trips, 100);
+  writeSheetInBatches(ss.getSheetByName("trips"), tripHeader(), trips);
+
+  // 5. Payments (75k)
+  const payments = buildPayments(NUM_PAYMENTS, trips);
+  insertRandomNulls(payments, 100);
+  writeSheetInBatches(ss.getSheetByName("payments"), paymentHeader(), payments);
+}
+
+// ====== SHEET HELPERS ======
+function ensureCleanSheet(ss, name) {
+  const existing = ss.getSheetByName(name);
+  if (existing) ss.deleteSheet(existing);
+  ss.insertSheet(name);
+}
+
+function writeSheetInBatches(sheet, header, rows) {
+  sheet.clear();
+  sheet.getRange(1, 1, 1, header.length).setValues([header]);
+  let startRow = 2;
+  for (let i = 0; i < rows.length; i += BATCH_SIZE) {
+    const batch = rows.slice(i, i + BATCH_SIZE);
+    sheet.getRange(startRow, 1, batch.length, header.length).setValues(batch);
+    startRow += batch.length;
+    Utilities.sleep(150); // yield
+  }
+}
+
+// ====== HEADERS ======
+function driverHeader() {
+  return ["driver_id","driver_name","email","dob","signup_date","driver_rating","city","license_number","is_active"];
+}
+function vehicleHeader() {
+  return ["vehicle_id","driver_id","make","model","year","plate","capacity","color","rider_name","rider_email"];
+}
+function riderHeader() {
+  return ["rider_id","rider_name","email","signup_date","home_city","rider_rating","default_payment_method","is_verified"];
+}
+function tripHeader() {
+  return ["trip_id","rider_id","driver_id","vehicle_id","request_ts","pickup_ts","dropoff_ts",
+          "pickup_location","drop_location","distance_km","duration_min","wait_time_minutes",
+          "surge_multiplier","base_fare_usd","tax_usd","tip_usd","total_fare_usd","status"];
+}
+function paymentHeader() {
+  return ["payment_id","trip_id","payment_date","payment_method","amount_usd","tip_usd","status","auth_code"];
+}
+
+// ====== BUILDERS ======
+function buildDrivers(n) {
+  const rows = [];
+  for (let i = 1; i <= n; i++) {
+    const id = "D" + pad(i, 6);
+    const name = randomFullName();
+    const email = nameToEmail(name);
+    const dob = randomDate(1965, 1998);
+    const signup = randomDate(START_YEAR, END_YEAR);
+    const rating = round(randomInRange(3.5, 5.0), 2);
+    const city = pick(CITIES);
+    const license = "LIC-" + pad(i, 7);
+    const isActive = Math.random() > 0.08;
+    rows.push([id, name, email, dob, signup, rating, city, license, isActive]);
+  }
+  return rows;
+}
+
+function buildVehicles(n, drivers) {
+  const rows = [];
+  for (let i = 1; i <= n; i++) {
+    const vehicle_id = "V" + pad(i, 6);
+    const driver_id = drivers[i - 1][0];
+    const make = pick(MAKES);
+    const model = pick(MODELS);
+    const year = randomInt(2012, 2024);
+    const plate = "IND-" + randomInt(1000, 9999) + "-" + randomInt(10, 99);
+    const capacity = pick([4, 4, 4, 6]);
+    const color = pick(["Black","White","Silver","Gray","Blue","Red","Green"]);
+    const riderName = randomFullName();
+    const riderEmail = nameToEmail(riderName);
+    rows.push([vehicle_id, driver_id, make, model, year, plate, capacity, color, riderName, riderEmail]);
+  }
+  return rows;
+}
+
+function buildRiders(n) {
+  const rows = [];
+  for (let i = 1; i <= n; i++) {
+    const id = "R" + pad(i, 7);
+    const name = randomFullName();
+    const email = nameToEmail(name);
+    const signup = randomDate(START_YEAR, END_YEAR);
+    const city = pick(CITIES);
+    const rating = round(randomInRange(3.0, 5.0), 2);
+    const defaultPm = pick(PAYMENT_METHODS);
+    const isVerified = Math.random() > 0.15;
+    rows.push([id, name, email, signup, city, rating, defaultPm, isVerified]);
+  }
+  return rows;
+}
+
+function buildTrips(n, drivers, riders, driverToVehicle) {
+  const rows = [];
+  for (let i = 1; i <= n; i++) {
+    const trip_id = "T" + pad(i, 7);
+    const rider = riders[randomInt(0, riders.length - 1)];
+    const rider_id = rider[0];
+    const driver = drivers[randomInt(0, drivers.length - 1)];
+    const driver_id = driver[0];
+    const vehicle_id = driverToVehicle[driver_id];
+    const request = randomDateTime(START_YEAR, END_YEAR);
+    const pickupDelayMin = randomInt(1, 12);
+    const waitTime = randomInt(0, 15);
+    const durationMin = randomInt(5, 65);
+    const pickupTS = new Date(request.getTime() + (pickupDelayMin + waitTime) * 60000);
+    const dropoffTS = new Date(pickupTS.getTime() + durationMin * 60000);
+    const pickupLocation = pick(CITIES);
+    let dropLocation = pick(CITIES);
+    if (dropLocation === pickupLocation) dropLocation = pick(CITIES.filter(c => c !== pickupLocation));
+    const distanceKm = round(randomInRange(1.0, 35.0), 2);
+    const surge = round(randomSurge(), 2);
+    const baseRate = 1.3;
+    const timeRate = 0.25;
+    const baseFare = round((distanceKm * baseRate + durationMin * timeRate) * surge + 2.0, 2);
+    const tax = round(baseFare * 0.08, 2);
+    const status = weightedPick({"completed": 0.88, "cancelled_by_rider": 0.05, "cancelled_by_driver": 0.04, "no_show": 0.03});
+    const tip = (status === "completed" && Math.random() < 0.35) ? round(randomInRange(0.5, 5.0), 2) : round(randomInRange(0.0, 4.0), 2);
+    const total = status === "completed" ? round(baseFare + tax + tip, 2) : 0.00;
+    rows.push([trip_id, rider_id, driver_id, vehicle_id, request, pickupTS, dropoffTS,
+      pickupLocation, dropLocation, distanceKm, durationMin, waitTime, surge,
+      baseFare, tax, tip, total, status]);
+  }
+  return rows;
+}
+
+function buildPayments(n, trips) {
+  const rows = [];
+  for (let i = 1; i <= n; i++) {
+    const payment_id = "P" + pad(i, 7);
+    const trip = trips[randomInt(0, trips.length - 1)];
+    const trip_id = trip[0];
+    const dropoffTS = trip[6];
+    const status = (trip[17] === "completed")
+      ? weightedPick({"captured": 0.94, "refunded": 0.02, "failed": 0.02, "pending": 0.02})
+      : weightedPick({"captured": 0.02, "refunded": 0.20, "failed": 0.70, "pending": 0.08});
+    const payment_method = pick(PAYMENT_METHODS);
+    const tip = trip[15];
+    const amount = trip[16];
+    const payDate = new Date(new Date(dropoffTS).getTime() + randomInt(0, 60) * 60000);
+    const effectiveAmount = (trip[17] === "completed" && status === "captured") ? amount : 0.00;
+    const tipAmount = (trip[17] === "completed" && status === "captured") ? tip : 0.00;
+    const authCode = (status === "captured") ? "AUTH" + randomInt(100000, 999999) : "";
+    rows.push([payment_id, trip_id, payDate, payment_method, round(effectiveAmount, 2), round(tipAmount, 2), status, authCode]);
+  }
+  return rows;
+}
+
+// ====== RANDOM HELPERS ======
+function pad(num, size) { let s = String(num); while (s.length < size) s = "0" + s; return s; }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function weightedPick(dict) {
+  const entries = Object.entries(dict);
+  let r = Math.random() * entries.reduce((a, b) => a + b[1], 0);
+  for (let [k, w] of entries) if ((r -= w) <= 0) return k;
+  return entries[entries.length - 1][0];
+}
+function randomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+function round(val, dps) { const m = Math.pow(10, dps); return Math.round(val * m) / m; }
+function randomDate(startYear, endYear) { const y = randomInt(startYear, endYear); return new Date(y, randomInt(0,11), randomInt(1,28)); }
+function randomDateTime(startYear, endYear) {
+  const d = randomDate(startYear, endYear); d.setHours(randomInt(0,23), randomInt(0,59), randomInt(0,59), 0); return d;
+}
+function randomSurge() { const r = Math.random(); if (r < 0.80) return randomInRange(1.0, 1.5); if (r < 0.97) return randomInRange(1.5, 2.2); return randomInRange(2.2, 3.0); }
+function randomFullName() { return pick(FIRST_NAMES) + " " + pick(LAST_NAMES); }
+function nameToEmail(name) { return name.toLowerCase().replace(/\s+/g, ".") + "@example.com"; }
+
+// ====== NULL INJECTOR ======
+// ====== NULL INJECTOR ======
+function insertRandomNulls(rows, countPerColumn) {
+  const numRows = rows.length;
+  if (numRows === 0) return;
+  const numCols = rows[0].length;
+
+  for (let c = 0; c < numCols; c++) {
+    if (c === 0) continue; // skip primary key column
+
+    let inserted = 0;
+    const usedRows = new Set();
+
+    while (inserted < countPerColumn) {
+      const r = randomInt(0, numRows - 1);
+      if (usedRows.has(r)) continue; // ensure unique rows per column
+
+      rows[r][c] = null;
+      usedRows.add(r);
+      inserted++;
+    }
+  }
+}
+
