@@ -825,7 +825,7 @@ logs/etl.log
 ## 📊 Dashboard Preview
 
 <p align="center">
-  <img src="gold/Mobility_Dashboard.jpg" alt="Mobility Dashboard" width="700">
+  <img src="/home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/Mobility_Dashboard .jpg" alt="Mobility_Dashboard" width="700">
 </p>
 
 
