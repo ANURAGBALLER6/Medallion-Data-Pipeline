@@ -1,0 +1,231 @@
+2025-08-27 22:41:44,695 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-27 22:41:44,695 - INFO - Setting up Silver and Audit schemas...
+2025-08-27 22:41:44,731 - INFO - ✅ Schemas and audit tables ready
+2025-08-27 22:41:44,731 - INFO - Creating Silver base tables with light cleaning...
+2025-08-27 22:41:44,732 - INFO - Creating silver.drivers_base ...
+2025-08-27 22:41:45,230 - INFO -  silver.drivers_base created with 50,000 rows
+2025-08-27 22:41:45,251 - INFO - Creating silver.vehicles_base ...
+2025-08-27 22:41:45,758 - INFO -  silver.vehicles_base created with 49,900 rows
+2025-08-27 22:41:45,778 - INFO - Creating silver.riders_base ...
+2025-08-27 22:41:46,473 - INFO -  silver.riders_base created with 75,000 rows
+2025-08-27 22:41:46,490 - INFO - Creating silver.trips_base ...
+2025-08-27 22:41:47,468 - INFO -  silver.trips_base created with 75,000 rows
+2025-08-27 22:41:47,480 - INFO - Creating silver.payments_base ...
+2025-08-27 22:41:47,902 - INFO -  silver.payments_base created with 74,800 rows
+2025-08-27 22:41:47,910 - INFO - All Silver base tables created
+2025-08-27 22:41:47,910 - INFO - Performing deep validation...
+2025-08-27 22:41:47,910 - INFO - Validating drivers...
+2025-08-27 22:41:48,154 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-27 22:41:57,750 - INFO - ✅ 49,900 valid rows saved to silver.drivers
+2025-08-27 22:41:57,787 - INFO - drivers: 100 rows rejected due to Invalid email
+2025-08-27 22:41:57,788 - WARNING - ⚠️  100 invalid rows saved to audit.rejected_rows
+2025-08-27 22:41:57,806 - INFO - Validating vehicles...
+2025-08-27 22:41:57,939 - INFO - Loaded 49,900 rows for validation: silver.vehicles_base
+2025-08-27 22:42:10,447 - INFO - ✅ 49,701 valid rows saved to silver.vehicles
+2025-08-27 22:42:10,526 - INFO - vehicles: 100 rows rejected due to Invalid plate
+2025-08-27 22:42:10,526 - INFO - vehicles: 99 rows rejected due to Capacity out of range (1-8)
+2025-08-27 22:42:10,526 - WARNING - ⚠️  199 invalid rows saved to audit.rejected_rows
+2025-08-27 22:42:10,546 - INFO - Validating riders...
+2025-08-27 22:42:10,817 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-27 22:42:24,557 - INFO - ✅ 74,900 valid rows saved to silver.riders
+2025-08-27 22:42:24,595 - INFO - riders: 100 rows rejected due to Invalid email
+2025-08-27 22:42:24,595 - WARNING - ⚠️  100 invalid rows saved to audit.rejected_rows
+2025-08-27 22:42:24,614 - INFO - Validating trips...
+2025-08-27 22:42:25,746 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-27 22:42:53,592 - INFO - ✅ 65,496 valid rows saved to silver.trips
+2025-08-27 22:42:57,177 - INFO - trips: 9304 rows rejected due to total_fare_usd != base+tax+tip
+2025-08-27 22:42:57,177 - INFO - trips: 94 rows rejected due to Critical column NULL
+2025-08-27 22:42:57,177 - INFO - trips: 106 rows rejected due to Critical column NULL; total_fare_usd != base+tax+tip
+2025-08-27 22:42:57,181 - WARNING - ⚠️  9,504 invalid rows saved to audit.rejected_rows
+2025-08-27 22:42:57,217 - INFO - Validating payments...
+2025-08-27 22:42:57,578 - INFO - Loaded 74,800 rows for validation: silver.payments_base
+2025-08-27 22:43:09,768 - INFO - ✅ 63,899 valid rows saved to silver.payments
+2025-08-27 22:43:14,558 - INFO - payments: 10901 rows rejected due to Unknown payment_method
+2025-08-27 22:43:14,561 - WARNING - ⚠️  10,901 invalid rows saved to audit.rejected_rows
+2025-08-27 22:43:14,583 - INFO - All tables passed deep validation
+2025-08-27 22:43:14,584 - INFO - Running Data Quality checks...
+2025-08-27 22:43:14,584 - INFO - Running DQ checks for drivers...
+2025-08-27 22:43:14,604 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-27 22:43:14,702 - WARNING - ❌ drivers.email_uniqueness: 40941 bad rows
+2025-08-27 22:43:14,703 - INFO - Running DQ checks for vehicles...
+2025-08-27 22:43:14,826 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-27 22:43:14,850 - WARNING - ❌ vehicles.fk_driver: 199 bad rows
+2025-08-27 22:43:14,850 - INFO - Running DQ checks for riders...
+2025-08-27 22:43:15,061 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-27 22:43:15,195 - WARNING - ❌ riders.email_uniqueness: 65903 bad rows
+2025-08-27 22:43:15,196 - INFO - Running DQ checks for trips...
+2025-08-27 22:43:15,223 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-27 22:43:15,262 - WARNING - ❌ trips.fk_rider: 170 bad rows
+2025-08-27 22:43:15,293 - WARNING - ❌ trips.fk_driver: 207 bad rows
+2025-08-27 22:43:15,326 - WARNING - ❌ trips.fk_vehicle: 639 bad rows
+2025-08-27 22:43:15,326 - INFO - Running DQ checks for payments...
+2025-08-27 22:43:15,353 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-27 22:43:15,389 - WARNING - ❌ payments.fk_trip: 8118 bad rows
+2025-08-27 22:43:15,391 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-27 22:43:15,391 - INFO - ============================================================
+2025-08-27 22:43:15,391 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-27 22:43:15,391 - INFO - ============================================================
+2025-08-27 22:43:15,391 - INFO -   drivers   :   50,000 →   49,900 valid,    100 rejected
+2025-08-27 22:43:15,391 - INFO -   vehicles  :   49,900 →   49,701 valid,    199 rejected
+2025-08-27 22:43:15,391 - INFO -   riders    :   75,000 →   74,900 valid,    100 rejected
+2025-08-27 22:43:15,391 - INFO -   trips     :   75,000 →   65,496 valid,  9,504 rejected
+2025-08-27 22:43:15,391 - INFO -   payments  :   74,800 →   63,899 valid, 10,901 rejected
+2025-08-27 22:43:15,391 - INFO - ------------------------------------------------------------
+2025-08-27 22:43:15,392 - INFO -   TOTAL     :  324,700 →  303,896 valid, 20,804 rejected
+2025-08-27 22:43:15,392 - INFO -   Run ID: 20250827_224144
+2025-08-27 22:43:15,392 - INFO - ============================================================
+2025-08-27 22:43:15,392 - INFO - 🎉 Silver build completed
+2025-08-27 22:47:07,316 - INFO - 🎯 Target layer: all
+2025-08-27 22:47:07,316 - INFO - 🚀 STARTING FULL MEDALLION ETL PIPELINE
+2025-08-27 22:47:07,316 - INFO - ============================================================
+2025-08-27 22:47:07,316 - INFO - 🥉 Building Bronze Layer...
+2025-08-27 22:47:07,467 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-27 22:47:07,467 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-27 22:47:07,481 - INFO - ✅ bronze schema and tables are ensured
+2025-08-27 22:47:07,525 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:47:07,528 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:47:14,064 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-27 22:47:14,178 - INFO - 📂 Saved 50000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/drivers.csv
+2025-08-27 22:47:24,635 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-27 22:47:24,781 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:47:24,797 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:47:28,245 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-27 22:47:28,356 - INFO - 📂 Saved 50000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/vehicles.csv
+2025-08-27 22:47:37,922 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-27 22:47:37,973 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:47:37,975 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:47:42,270 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-27 22:47:42,440 - INFO - 📂 Saved 75000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/riders.csv
+2025-08-27 22:47:56,967 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-27 22:47:57,015 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:47:57,017 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:48:02,544 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-27 22:48:02,810 - INFO - 📂 Saved 75000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/trips.csv
+2025-08-27 22:48:27,498 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-27 22:48:27,577 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:48:27,581 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:48:31,895 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-27 22:48:32,031 - INFO - 📂 Saved 75000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/payments.csv
+2025-08-27 22:48:47,462 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-27 22:48:47,471 - INFO - 🎉 Bronze load completed (tables refreshed).
+2025-08-27 22:48:47,486 - INFO - ✅ Bronze layer built successfully
+2025-08-27 22:48:47,486 - INFO - 🥈 Building Silver Layer...
+2025-08-27 22:48:47,486 - INFO - Step 1: Setting up Silver and Audit schemas...
+2025-08-27 22:48:47,486 - INFO - Setting up Silver and Audit schemas...
+2025-08-27 22:48:47,503 - INFO - ✅ Schemas and audit tables ready
+2025-08-27 22:48:47,503 - INFO - Step 2: Performing light cleaning in SQL...
+2025-08-27 22:48:47,503 - INFO - Creating Silver base tables with light cleaning...
+2025-08-27 22:48:47,503 - INFO - Creating silver.drivers_base ...
+2025-08-27 22:48:47,781 - INFO -  silver.drivers_base created with 50,000 rows
+2025-08-27 22:48:47,801 - INFO - Creating silver.vehicles_base ...
+2025-08-27 22:48:48,057 - INFO -  silver.vehicles_base created with 49,900 rows
+2025-08-27 22:48:48,065 - INFO - Creating silver.riders_base ...
+2025-08-27 22:48:48,423 - INFO -  silver.riders_base created with 75,000 rows
+2025-08-27 22:48:48,431 - INFO - Creating silver.trips_base ...
+2025-08-27 22:48:49,057 - INFO -  silver.trips_base created with 75,000 rows
+2025-08-27 22:48:49,068 - INFO - Creating silver.payments_base ...
+2025-08-27 22:48:49,474 - INFO -  silver.payments_base created with 74,800 rows
+2025-08-27 22:48:49,482 - INFO - All Silver base tables created
+2025-08-27 22:48:49,482 - INFO - Step 3: Performing deep validation in Python...
+2025-08-27 22:48:49,482 - INFO - Performing deep validation...
+2025-08-27 22:48:49,482 - INFO - Validating drivers...
+2025-08-27 22:48:49,703 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-27 22:48:59,904 - INFO - ✅ 49,900 valid rows saved to silver.drivers
+2025-08-27 22:48:59,956 - INFO - drivers: 100 rows rejected due to Invalid email
+2025-08-27 22:48:59,956 - WARNING - ⚠️  100 invalid rows saved to audit.rejected_rows
+2025-08-27 22:48:59,976 - INFO - Validating vehicles...
+2025-08-27 22:49:00,163 - INFO - Loaded 49,900 rows for validation: silver.vehicles_base
+2025-08-27 22:49:11,356 - INFO - ✅ 49,701 valid rows saved to silver.vehicles
+2025-08-27 22:49:11,443 - INFO - vehicles: 100 rows rejected due to Invalid plate
+2025-08-27 22:49:11,443 - INFO - vehicles: 99 rows rejected due to Capacity out of range (1-8)
+2025-08-27 22:49:11,443 - WARNING - ⚠️  199 invalid rows saved to audit.rejected_rows
+2025-08-27 22:49:11,463 - INFO - Validating riders...
+2025-08-27 22:49:11,769 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-27 22:49:25,979 - INFO - ✅ 74,900 valid rows saved to silver.riders
+2025-08-27 22:49:26,014 - INFO - riders: 100 rows rejected due to Invalid email
+2025-08-27 22:49:26,015 - WARNING - ⚠️  100 invalid rows saved to audit.rejected_rows
+2025-08-27 22:49:26,035 - INFO - Validating trips...
+2025-08-27 22:49:27,390 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-27 22:49:59,987 - INFO - ✅ 65,496 valid rows saved to silver.trips
+2025-08-27 22:50:03,658 - INFO - trips: 9304 rows rejected due to total_fare_usd != base+tax+tip
+2025-08-27 22:50:03,658 - INFO - trips: 94 rows rejected due to Critical column NULL
+2025-08-27 22:50:03,659 - INFO - trips: 106 rows rejected due to Critical column NULL; total_fare_usd != base+tax+tip
+2025-08-27 22:50:03,663 - WARNING - ⚠️  9,504 invalid rows saved to audit.rejected_rows
+2025-08-27 22:50:03,702 - INFO - Validating payments...
+2025-08-27 22:50:04,049 - INFO - Loaded 74,800 rows for validation: silver.payments_base
+2025-08-27 22:50:15,937 - INFO - ✅ 63,899 valid rows saved to silver.payments
+2025-08-27 22:50:19,936 - INFO - payments: 10901 rows rejected due to Unknown payment_method
+2025-08-27 22:50:19,939 - WARNING - ⚠️  10,901 invalid rows saved to audit.rejected_rows
+2025-08-27 22:50:19,984 - INFO - All tables passed deep validation
+2025-08-27 22:50:19,984 - INFO - Step 4: Running Data Quality checks...
+2025-08-27 22:50:19,984 - INFO - Running Data Quality checks...
+2025-08-27 22:50:19,984 - INFO - Running DQ checks for drivers...
+2025-08-27 22:50:20,022 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-27 22:50:20,234 - WARNING - ❌ drivers.email_uniqueness: 40941 bad rows
+2025-08-27 22:50:20,235 - INFO - Running DQ checks for vehicles...
+2025-08-27 22:50:20,382 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-27 22:50:20,410 - WARNING - ❌ vehicles.fk_driver: 199 bad rows
+2025-08-27 22:50:20,410 - INFO - Running DQ checks for riders...
+2025-08-27 22:50:20,649 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-27 22:50:20,811 - WARNING - ❌ riders.email_uniqueness: 65903 bad rows
+2025-08-27 22:50:20,811 - INFO - Running DQ checks for trips...
+2025-08-27 22:50:20,845 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-27 22:50:20,896 - WARNING - ❌ trips.fk_rider: 170 bad rows
+2025-08-27 22:50:20,932 - WARNING - ❌ trips.fk_driver: 207 bad rows
+2025-08-27 22:50:20,965 - WARNING - ❌ trips.fk_vehicle: 639 bad rows
+2025-08-27 22:50:20,966 - INFO - Running DQ checks for payments...
+2025-08-27 22:50:20,994 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-27 22:50:21,031 - WARNING - ❌ payments.fk_trip: 8118 bad rows
+2025-08-27 22:50:21,033 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-27 22:50:21,033 - INFO - ============================================================
+2025-08-27 22:50:21,033 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-27 22:50:21,033 - INFO - ============================================================
+2025-08-27 22:50:21,033 - INFO -   drivers   :   50,000 →   49,900 valid,    100 rejected
+2025-08-27 22:50:21,033 - INFO -   vehicles  :   49,900 →   49,701 valid,    199 rejected
+2025-08-27 22:50:21,033 - INFO -   riders    :   75,000 →   74,900 valid,    100 rejected
+2025-08-27 22:50:21,033 - INFO -   trips     :   75,000 →   65,496 valid,  9,504 rejected
+2025-08-27 22:50:21,033 - INFO -   payments  :   74,800 →   63,899 valid, 10,901 rejected
+2025-08-27 22:50:21,033 - INFO - ------------------------------------------------------------
+2025-08-27 22:50:21,033 - INFO -   TOTAL     :  324,700 →  303,896 valid, 20,804 rejected
+2025-08-27 22:50:21,033 - INFO -   Run ID: 20250827_224847
+2025-08-27 22:50:21,033 - INFO - ============================================================
+2025-08-27 22:50:21,033 - INFO - ✅ Silver layer built successfully
+2025-08-27 22:50:21,033 - INFO - 🥇 Building Gold Layer...
+2025-08-27 22:50:21,033 - INFO - 🥇 MEDALLION GOLD LAYER - BUILDER STARTED
+2025-08-27 22:50:21,034 - INFO - Setting up Gold schema and audit tables...
+2025-08-27 22:50:21,054 - INFO - ✅ Schemas and audit tables ready (gold, audit.recon_results)
+2025-08-27 22:50:21,054 - INFO - Building Gold aggregates...
+2025-08-27 22:50:26,279 - INFO - ✅ Aggregates created (driver_stats, vehicle_stats, rider_stats, daily_kpis)
+2025-08-27 22:50:26,279 - INFO - Building Gold dashboard table...
+2025-08-27 22:50:26,706 - INFO - ✅ gold.dashboard created
+2025-08-27 22:50:26,706 - INFO - Running reconciliation checks...
+2025-08-27 22:50:26,723 - INFO - ✅ trips_count_vs_dashboard_count: OK (diff=0.000000)
+2025-08-27 22:50:26,753 - INFO - ✅ tips_sum_vs_dashboard_sum: OK (diff=0.000000)
+2025-08-27 22:50:26,915 - INFO - ✅ drivers_count_vs_driver_stats: OK (diff=0.000000)
+2025-08-27 22:50:27,184 - INFO - ✅ riders_count_vs_rider_stats: OK (diff=0.000000)
+2025-08-27 22:50:27,186 - INFO - 📊 Reconciliation Summary:
+2025-08-27 22:50:27,186 - INFO -  - drivers_count_vs_driver_stats: OK (diff=0)
+2025-08-27 22:50:27,187 - INFO -  - riders_count_vs_rider_stats: OK (diff=0)
+2025-08-27 22:50:27,187 - INFO -  - tips_sum_vs_dashboard_sum: OK (diff=0.0)
+2025-08-27 22:50:27,187 - INFO -  - trips_count_vs_dashboard_count: OK (diff=0)
+2025-08-27 22:50:27,187 - INFO - 📄 Reconciliation results exported to /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/reconciliation_results.csv
+2025-08-27 22:50:27,187 - INFO - 🎉 Gold build completed successfully
+2025-08-27 22:50:27,187 - INFO - ✅ Gold layer built successfully
+2025-08-27 22:50:27,835 - INFO - ✅ Exported driver_stats → /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/driver_stats.csv
+2025-08-27 22:50:28,157 - INFO - ✅ Exported vehicle_stats → /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/vehicle_stats.csv
+2025-08-27 22:50:28,634 - INFO - ✅ Exported rider_stats → /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/rider_stats.csv
+2025-08-27 22:50:28,662 - INFO - ✅ Exported daily_kpis → /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/daily_kpis.csv
+2025-08-27 22:50:28,666 - INFO - ✅ Exported city_kpis → /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/city_kpis.csv
+2025-08-27 22:50:31,469 - INFO - ✅ Exported dashboard → /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/dashboard.csv
+2025-08-27 22:50:31,503 - INFO - 📂 Gold tables exported to CSV in /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold
+2025-08-27 22:50:31,503 - INFO - ============================================================
+2025-08-27 22:50:31,504 - INFO - 📊 ETL PIPELINE SUMMARY
+2025-08-27 22:50:31,504 - INFO - ============================================================
+2025-08-27 22:50:31,504 - INFO -   BRONZE  : ✅ SUCCESS
+2025-08-27 22:50:31,504 - INFO -   SILVER  : ✅ SUCCESS
+2025-08-27 22:50:31,504 - INFO -   GOLD    : ✅ SUCCESS
+2025-08-27 22:50:31,504 - INFO - 
+📈 Overall: 3/3 layers completed successfully
+2025-08-27 22:50:31,504 - INFO - ⏱️  Total duration: 0:03:24.187499
+2025-08-27 22:50:31,504 - INFO - 🎉 Full pipeline completed successfully!
+2025-08-27 22:50:31,504 - INFO - ✅ ETL process completed successfully

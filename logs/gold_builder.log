@@ -1,0 +1,38 @@
+2025-08-27 22:43:13,194 - INFO - 🥇 MEDALLION GOLD LAYER - BUILDER STARTED
+2025-08-27 22:43:13,194 - INFO - Setting up Gold schema and audit tables...
+2025-08-27 22:43:13,220 - INFO - ✅ Schemas and audit tables ready (gold, audit.recon_results)
+2025-08-27 22:43:13,220 - INFO - Building Gold aggregates...
+2025-08-27 22:43:19,524 - INFO - ✅ Aggregates created (driver_stats, vehicle_stats, rider_stats, daily_kpis)
+2025-08-27 22:43:19,524 - INFO - Building Gold dashboard table...
+2025-08-27 22:43:19,878 - INFO - ✅ gold.dashboard created
+2025-08-27 22:43:19,878 - INFO - Running reconciliation checks...
+2025-08-27 22:43:19,899 - INFO - ✅ trips_count_vs_dashboard_count: OK (diff=0.000000)
+2025-08-27 22:43:19,927 - INFO - ✅ tips_sum_vs_dashboard_sum: OK (diff=0.000000)
+2025-08-27 22:43:20,083 - INFO - ✅ drivers_count_vs_driver_stats: OK (diff=0.000000)
+2025-08-27 22:43:20,326 - INFO - ✅ riders_count_vs_rider_stats: OK (diff=0.000000)
+2025-08-27 22:43:20,334 - INFO - 📊 Reconciliation Summary:
+2025-08-27 22:43:20,334 - INFO -  - drivers_count_vs_driver_stats: OK (diff=0)
+2025-08-27 22:43:20,334 - INFO -  - riders_count_vs_rider_stats: OK (diff=0)
+2025-08-27 22:43:20,334 - INFO -  - tips_sum_vs_dashboard_sum: OK (diff=0.0)
+2025-08-27 22:43:20,334 - INFO -  - trips_count_vs_dashboard_count: OK (diff=0)
+2025-08-27 22:43:20,335 - INFO - 📄 Reconciliation results exported to /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/reconciliation_results.csv
+2025-08-27 22:43:20,335 - INFO - 🎉 Gold build completed successfully
+2025-08-27 22:43:21,065 - INFO - ✅ Exported driver_stats → gold/driver_stats.csv
+2025-08-27 22:43:21,396 - INFO - ✅ Exported vehicle_stats → gold/vehicle_stats.csv
+2025-08-27 22:43:21,916 - INFO - ✅ Exported rider_stats → gold/rider_stats.csv
+2025-08-27 22:43:21,946 - INFO - ✅ Exported daily_kpis → gold/daily_kpis.csv
+2025-08-27 22:43:21,951 - INFO - ✅ Exported city_kpis → gold/city_kpis.csv
+2025-08-27 22:43:23,989 - INFO - ✅ Exported dashboard → gold/dashboard.csv
+2025-08-27 22:43:24,022 - INFO - 📤 Pushing gold.driver_stats → Supabase...
+2025-08-27 22:43:34,830 - INFO - ✅ driver_stats pushed to Supabase
+2025-08-27 22:43:34,830 - INFO - 📤 Pushing gold.vehicle_stats → Supabase...
+2025-08-27 22:43:41,682 - INFO - ✅ vehicle_stats pushed to Supabase
+2025-08-27 22:43:41,682 - INFO - 📤 Pushing gold.rider_stats → Supabase...
+2025-08-27 22:43:55,976 - INFO - ✅ rider_stats pushed to Supabase
+2025-08-27 22:43:55,976 - INFO - 📤 Pushing gold.city_kpis → Supabase...
+2025-08-27 22:43:56,991 - INFO - ✅ city_kpis pushed to Supabase
+2025-08-27 22:43:56,991 - INFO - 📤 Pushing gold.daily_kpis → Supabase...
+2025-08-27 22:43:58,245 - INFO - ✅ daily_kpis pushed to Supabase
+2025-08-27 22:43:58,245 - INFO - 📤 Pushing gold.dashboard → Supabase...
+2025-08-27 22:44:20,171 - INFO - ✅ dashboard pushed to Supabase
+2025-08-27 22:44:20,201 - INFO - 🎉 Gold data successfully pushed to Supabase

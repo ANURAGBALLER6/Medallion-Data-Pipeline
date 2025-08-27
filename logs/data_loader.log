@@ -1,0 +1,29 @@
+2025-08-27 22:37:33,351 - INFO - 🥉 MEDALLION BRONZE LAYER - DATA LOADER
+2025-08-27 22:37:33,351 - INFO - 🚀 Starting Bronze Data Pipeline
+2025-08-27 22:37:33,364 - INFO - ✅ bronze schema and tables are ensured
+2025-08-27 22:37:33,405 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:37:33,410 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:37:45,577 - INFO - ✓ Loaded 50000 rows from drivers!A:I
+2025-08-27 22:37:45,692 - INFO - 📂 Saved 50000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/drivers.csv
+2025-08-27 22:37:55,212 - INFO - ✓ Inserted 50000 rows into bronze.drivers
+2025-08-27 22:37:55,257 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:37:55,259 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:37:58,532 - INFO - ✓ Loaded 50000 rows from vehicles!A:J
+2025-08-27 22:37:58,647 - INFO - 📂 Saved 50000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/vehicles.csv
+2025-08-27 22:38:08,356 - INFO - ✓ Inserted 50000 rows into bronze.vehicles
+2025-08-27 22:38:08,484 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:38:08,605 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:38:12,900 - INFO - ✓ Loaded 75000 rows from riders!A:H
+2025-08-27 22:38:13,052 - INFO - 📂 Saved 75000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/riders.csv
+2025-08-27 22:38:26,445 - INFO - ✓ Inserted 75000 rows into bronze.riders
+2025-08-27 22:38:26,496 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:38:26,498 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:38:33,481 - INFO - ✓ Loaded 75000 rows from trips!A:R
+2025-08-27 22:38:33,722 - INFO - 📂 Saved 75000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/trips.csv
+2025-08-27 22:38:56,684 - INFO - ✓ Inserted 75000 rows into bronze.trips
+2025-08-27 22:38:56,743 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-08-27 22:38:56,745 - INFO - ✅ Google Sheets service created successfully
+2025-08-27 22:39:00,894 - INFO - ✓ Loaded 75000 rows from payments!A:H
+2025-08-27 22:39:01,036 - INFO - 📂 Saved 75000 rows into /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/bronze/payments.csv
+2025-08-27 22:39:14,952 - INFO - ✓ Inserted 75000 rows into bronze.payments
+2025-08-27 22:39:14,965 - INFO - 🎉 Bronze load completed (tables refreshed).
