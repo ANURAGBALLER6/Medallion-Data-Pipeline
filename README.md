@@ -827,3 +827,37 @@ logs/etl.log
 
 ![Mobility_Dashboard .jpg](gold/Mobility_Dashboard%20.jpg)
 
+### 📈 Key Highlights
+- **Average Fare (USD):** 52.7  
+- **Total Pickups:** 65,289  
+- **Total Revenue (USD):** 3.6B  
+- **Total Trips:** 65.5K  
+
+### 🚖 Revenue by City (Top 5)
+- Warangal – ~80K USD  
+- Moradabad – ~78K USD  
+- Delhi – ~78K USD  
+- Dhanbad – ~79K USD  
+- Aligarh – ~76K USD  
+
+### 🚕 Total Pickups by City (Top 5)
+- Lucknow – 7.1K  
+- Dhanbad – 5.7K  
+- Moradabad – 4.4K  
+- Delhi – 2.9K  
+- Warangal – 1.5K  
+
+### 💳 Payment Mode by Total Revenue
+- OTHER – 42.6%  
+- Wallet – 34.7%  
+- UPI – 8.7%  
+- Cash – 7.4%  
+- Card – 6.6%  
+
+### 📅 Total Revenue by Year (Last 5)
+- 2024 – 7.67%  
+- 2023 – 7.73%  
+- 2022 – 7.25%  
+- 2021 – 7.78%  
+- 2020 – 7.46%  
+
