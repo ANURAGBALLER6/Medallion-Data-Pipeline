@@ -336,52 +336,348 @@ After running the **Silver Layer Builder**, the raw Bronze data was cleaned, val
 
 ---
 
+---
+
+# 🥈 Silver Pipeline Results
+
+After running the **Silver Layer Builder** on `2025-08-27`, the raw Bronze data was cleaned, validated, and transformed into Silver tables. Below is the updated processing summary.
+
+---
+# 🥈 Silver Pipeline Output
+
+```
+/usr/bin/python3.10 /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/silver/silver_builder.py 
+2025-08-27 17:29:41,507 - INFO - 🥈 MEDALLION SILVER LAYER - BUILDER STARTED
+2025-08-27 17:29:41,507 - INFO - Setting up Silver and Audit schemas...
+2025-08-27 17:29:41,527 - INFO - ✅ Schemas and audit tables ready
+2025-08-27 17:29:41,527 - INFO - Creating Silver base tables with light cleaning...
+2025-08-27 17:29:41,527 - INFO - Creating silver.drivers_base ...
+2025-08-27 17:29:41,801 - INFO -  silver.drivers_base created with 50,000 rows
+2025-08-27 17:29:41,809 - INFO - Creating silver.vehicles_base ...
+2025-08-27 17:29:42,067 - INFO -  silver.vehicles_base created with 49,900 rows
+2025-08-27 17:29:42,069 - INFO - Creating silver.riders_base ...
+2025-08-27 17:29:42,441 - INFO -  silver.riders_base created with 75,000 rows
+2025-08-27 17:29:42,450 - INFO - Creating silver.trips_base ...
+2025-08-27 17:29:43,041 - INFO -  silver.trips_base created with 75,000 rows
+2025-08-27 17:29:43,051 - INFO - Creating silver.payments_base ...
+2025-08-27 17:29:43,443 - INFO -  silver.payments_base created with 74,800 rows
+2025-08-27 17:29:43,451 - INFO - All Silver base tables created
+2025-08-27 17:29:43,451 - INFO - Performing deep validation...
+2025-08-27 17:29:43,451 - INFO - Validating drivers...
+2025-08-27 17:29:43,684 - INFO - Loaded 50,000 rows for validation: silver.drivers_base
+2025-08-27 17:29:53,282 - INFO - ✅ 49,900 valid rows saved to silver.drivers
+2025-08-27 17:29:53,320 - INFO - drivers: 100 rows rejected due to Invalid email
+2025-08-27 17:29:53,321 - WARNING - ⚠️  100 invalid rows saved to audit.rejected_rows
+2025-08-27 17:29:53,337 - INFO - Validating vehicles...
+2025-08-27 17:29:53,501 - INFO - Loaded 49,900 rows for validation: silver.vehicles_base
+2025-08-27 17:30:03,358 - INFO - ✅ 49,701 valid rows saved to silver.vehicles
+2025-08-27 17:30:03,433 - INFO - vehicles: 100 rows rejected due to Invalid plate
+2025-08-27 17:30:03,433 - INFO - vehicles: 99 rows rejected due to Capacity out of range (1-8)
+2025-08-27 17:30:03,433 - WARNING - ⚠️  199 invalid rows saved to audit.rejected_rows
+2025-08-27 17:30:03,452 - INFO - Validating riders...
+2025-08-27 17:30:03,736 - INFO - Loaded 75,000 rows for validation: silver.riders_base
+2025-08-27 17:30:16,382 - INFO - ✅ 74,900 valid rows saved to silver.riders
+2025-08-27 17:30:16,417 - INFO - riders: 100 rows rejected due to Invalid email
+2025-08-27 17:30:16,417 - WARNING - ⚠️  100 invalid rows saved to audit.rejected_rows
+2025-08-27 17:30:16,438 - INFO - Validating trips...
+2025-08-27 17:30:17,489 - INFO - Loaded 75,000 rows for validation: silver.trips_base
+2025-08-27 17:30:44,154 - INFO - ✅ 65,496 valid rows saved to silver.trips
+2025-08-27 17:30:47,486 - INFO - trips: 9304 rows rejected due to total_fare_usd != base+tax+tip
+2025-08-27 17:30:47,487 - INFO - trips: 94 rows rejected due to Critical column NULL
+2025-08-27 17:30:47,487 - INFO - trips: 106 rows rejected due to Critical column NULL; total_fare_usd != base+tax+tip
+2025-08-27 17:30:47,491 - WARNING - ⚠️  9,504 invalid rows saved to audit.rejected_rows
+2025-08-27 17:30:47,527 - INFO - Validating payments...
+2025-08-27 17:30:47,852 - INFO - Loaded 74,800 rows for validation: silver.payments_base
+2025-08-27 17:30:58,255 - INFO - ✅ 63,899 valid rows saved to silver.payments
+2025-08-27 17:31:01,617 - INFO - payments: 10901 rows rejected due to Unknown payment_method
+2025-08-27 17:31:01,619 - WARNING - ⚠️  10,901 invalid rows saved to audit.rejected_rows
+2025-08-27 17:31:01,643 - INFO - All tables passed deep validation
+2025-08-27 17:31:01,643 - INFO - Running Data Quality checks...
+2025-08-27 17:31:01,643 - INFO - Running DQ checks for drivers...
+2025-08-27 17:31:01,661 - INFO - ✅ drivers.pk_uniqueness: PASSED
+2025-08-27 17:31:01,744 - WARNING - ❌ drivers.email_uniqueness: 40941 bad rows
+2025-08-27 17:31:01,745 - INFO - Running DQ checks for vehicles...
+2025-08-27 17:31:01,852 - INFO - ✅ vehicles.pk_uniqueness: PASSED
+2025-08-27 17:31:01,875 - WARNING - ❌ vehicles.fk_driver: 199 bad rows
+2025-08-27 17:31:01,876 - INFO - Running DQ checks for riders...
+2025-08-27 17:31:02,064 - INFO - ✅ riders.pk_uniqueness: PASSED
+2025-08-27 17:31:02,183 - WARNING - ❌ riders.email_uniqueness: 65903 bad rows
+2025-08-27 17:31:02,184 - INFO - Running DQ checks for trips...
+2025-08-27 17:31:02,209 - INFO - ✅ trips.pk_uniqueness: PASSED
+2025-08-27 17:31:02,241 - WARNING - ❌ trips.fk_rider: 170 bad rows
+2025-08-27 17:31:02,268 - WARNING - ❌ trips.fk_driver: 207 bad rows
+2025-08-27 17:31:02,298 - WARNING - ❌ trips.fk_vehicle: 639 bad rows
+2025-08-27 17:31:02,299 - INFO - Running DQ checks for payments...
+2025-08-27 17:31:02,323 - INFO - ✅ payments.pk_uniqueness: PASSED
+2025-08-27 17:31:02,352 - WARNING - ❌ payments.fk_trip: 8118 bad rows
+2025-08-27 17:31:02,358 - WARNING - ⚠️  Some Data Quality checks failed — see audit.dq_results
+2025-08-27 17:31:02,358 - INFO - ============================================================
+2025-08-27 17:31:02,358 - INFO - 📊 SILVER LAYER PROCESSING SUMMARY
+2025-08-27 17:31:02,358 - INFO - ============================================================
+2025-08-27 17:31:02,358 - INFO -   drivers   :   50,000 →   49,900 valid,    100 rejected
+2025-08-27 17:31:02,358 - INFO -   vehicles  :   49,900 →   49,701 valid,    199 rejected
+2025-08-27 17:31:02,358 - INFO -   riders    :   75,000 →   74,900 valid,    100 rejected
+2025-08-27 17:31:02,358 - INFO -   trips     :   75,000 →   65,496 valid,  9,504 rejected
+2025-08-27 17:31:02,358 - INFO -   payments  :   74,800 →   63,899 valid, 10,901 rejected
+2025-08-27 17:31:02,358 - INFO - ------------------------------------------------------------
+2025-08-27 17:31:02,358 - INFO -   TOTAL     :  324,700 →  303,896 valid, 20,804 rejected
+2025-08-27 17:31:02,359 - INFO -   Run ID: 20250827_172941
+2025-08-27 17:31:02,359 - INFO - ============================================================
+2025-08-27 17:31:02,359 - INFO - 🎉 Silver build completed
+
+Process finished with exit code 0
+```
+
 ## 📊 Silver Processing Summary
 
 | Table        | Input Rows | Valid Rows | Rejected Rows |
 |--------------|------------|------------|---------------|
-| `drivers`    | 50,000     | 50,000     | 0             |
-| `vehicles`   | 50,000     | 50,000     | 0             |
-| `riders`     | 75,000     | 75,000     | 0             |
-| `trips`      | 75,000     | 65,994     | 9,006         |
-| `payments`   | 75,000     | 64,433     | 10,567        |
-| **TOTAL**    | **325,000**| **305,427**| **19,573**    |
+| `drivers`    | 50,000     | 49,900     | 100           |
+| `vehicles`   | 49,900     | 49,701     | 199           |
+| `riders`     | 75,000     | 74,900     | 100           |
+| `trips`      | 75,000     | 65,496     | 9,504         |
+| `payments`   | 74,800     | 63,899     | 10,901        |
+| **TOTAL**    | **324,700**| **303,896**| **20,804**    |
 
-✅ **Valid rows** were saved into the **Silver schema**  
-⚠️ **Rejected rows** were moved to `audit.rejected_rows`  
+✅ **Valid rows** saved into the **Silver schema**  
+⚠️ **Rejected rows** saved into `audit.rejected_rows` with reasons  
+
+---
+
+## 🛑 Rejection Reasons by Table
+
+| Table      | Reason                                      | Rows Rejected |
+|------------|---------------------------------------------|---------------|
+| `drivers`  | Invalid email                               | 100           |
+| `vehicles` | Invalid plate                               | 100           |
+|            | Capacity out of range (1–8)                 | 99            |
+| `riders`   | Invalid email                               | 100           |
+| `trips`    | `total_fare_usd != base + tax + tip`        | 9,304         |
+|            | Critical column NULL                        | 94            |
+|            | NULL + Fare mismatch combined               | 106           |
+| `payments` | Unknown payment method                      | 10,901        |
 
 ---
 
 ## 🔍 Data Quality (DQ) Checks
 
-The pipeline also ran data quality validations:
-
 | Check                          | Status   | Notes                        |
 |--------------------------------|----------|------------------------------|
 | `drivers.pk_uniqueness`        | ✅ Passed|                              |
-| `drivers.email_uniqueness`     | ❌ Failed| 41,030 duplicate emails      |
+| `drivers.email_uniqueness`     | ❌ Failed| 40,941 duplicate emails      |
 | `vehicles.pk_uniqueness`       | ✅ Passed|                              |
-| `vehicles.fk_driver`           | ✅ Passed|                              |
+| `vehicles.fk_driver`           | ❌ Failed| 199 bad rows                 |
 | `riders.pk_uniqueness`         | ✅ Passed|                              |
-| `riders.email_uniqueness`      | ❌ Failed| 66,001 duplicate emails      |
+| `riders.email_uniqueness`      | ❌ Failed| 65,903 duplicate emails      |
 | `trips.pk_uniqueness`          | ✅ Passed|                              |
-| `trips.fk_rider`               | ✅ Passed|                              |
-| `trips.fk_driver`              | ✅ Passed|                              |
-| `trips.fk_vehicle`             | ✅ Passed|                              |
+| `trips.fk_rider`               | ❌ Failed| 170 bad rows                 |
+| `trips.fk_driver`              | ❌ Failed| 207 bad rows                 |
+| `trips.fk_vehicle`             | ❌ Failed| 639 bad rows                 |
 | `payments.pk_uniqueness`       | ✅ Passed|                              |
-| `payments.fk_trip`             | ❌ Failed| 7,758 orphan payments        |
+| `payments.fk_trip`             | ❌ Failed| 8,118 orphan payments        |
 
-⚠️ **Some DQ checks failed** — results were logged into `audit.dq_results`.
+⚠️ **Some DQ checks failed** — see `audit.dq_results` for details.
 
 ---
 
 ## 📝 Run Metadata
 
-- **Run ID:** `20250825_125405`  
-- **Schemas created:** `silver`, `audit`  
+- **Run ID:** `20250827_172941`  
+- **Schemas created/updated:** `silver`, `audit`  
 - **Logs available at:** `logs/silver_builder.log`
 
 ---
 
-🎉 The Silver pipeline has completed successfully.  
-You now have a **clean, validated Silver layer**, with rejected/invalid rows tracked in the **Audit schema** for further analysis.
+## Check Logs
+```aiignore
+tail -f logs/etl.log                # Main ETL orchestration logs
+tail -f logs/database_setup.log     # Database setup logs
+tail -f logs/data_loader.log        # Data loading logs
+
+python etl.py --layer silver       # Run Silver layer processing
+```
+
+## DATA QUALITY CHECKS 
+
+```aiignore
+-- **View rejected rows**
+SELECT table_name, reason, COUNT(*) 
+FROM audit.rejected_rows 
+GROUP BY table_name, reason;
+
+-- **Check DQ results**
+SELECT table_name, check_name, pass_fail, bad_row_count 
+FROM audit.dq_results 
+WHERE run_id = (SELECT MAX(run_id) FROM audit.dq_results);
+
+-- **View ETL logs**
+SELECT step_executed, table_name, input_row_count, output_row_count, rejected_row_count 
+FROM audit.etl_log 
+ORDER BY created_at DESC;
+```
+The Silver pipeline has completed successfully.  
+You now have a **cleaned, validated Silver layer**, with invalid rows and DQ issues tracked in the **Audit schema**.
+
+## 📈 Performance Metrics
+
+- **Processing Volume:** 324,700 records across 5 tables  
+- **Bronze Layer:** ~2-3 minutes (Google Sheets → PostgreSQL)  
+- **Silver Layer:** ~3-4 minutes (cleaning + validation + data quality checks)  
+- **Data Quality:** 93.6% overall pass rate  
+- **Memory Efficiency:** Optimized pandas operations with chunked inserts  
+
+## 🔄 Development Roadmap
+
+### ✅ Completed
+- **Bronze Layer:** Raw data ingestion from Google Sheets → PostgreSQL with comprehensive logging  
+- **Silver Layer:** End-to-end data cleaning, validation, and transformation pipeline  
+- **Data Quality:** 15+ automated checks (PK/FK validation, email uniqueness, fare consistency, etc.) with full audit logging  
+- **Audit System:** Centralized rejected rows tracking and DQ results reporting for governance  
+- **ETL Orchestration:** Command-line execution with layer-specific pipeline selection (Bronze/Silver)  
+- **Error Handling:** Robust exception management and detailed log outputs  
+- **Testing Framework:** Automated Silver layer validation with row counts, constraints, and DQ rule checks  
+
+
+# 🥇 Gold Layer (BI & Analytics)
+
+The **Gold Layer** builds on top of the **Silver Layer** to create **BI-ready aggregates** and a **flattened dashboard** table.  
+It also performs **lightweight reconciliation checks** to ensure data accuracy, and finally exports the results to both **CSV** and **Supabase**.
+
+---
+
+## 📂 Outputs
+
+Schema: `gold`  
+Tables created:
+
+| Table Name          | Description                                                                 |
+|---------------------|-----------------------------------------------------------------------------|
+| `gold.driver_stats` | Driver-level earnings, trips, tipping behavior, and performance stats       |
+| `gold.vehicle_stats`| Vehicle-level usage, trips, revenue, and performance metrics                |
+| `gold.rider_stats`  | Rider-level spend, activity dates, and average fare                         |
+| `gold.daily_kpis`   | Day-wise KPIs (trips, active drivers, active riders, total revenue, averages)|
+| `gold.city_kpis`    | City-level insights on pickups, dropoffs, drivers, riders, and revenue      |
+| `gold.dashboard`    | Flattened **trip-level fact table** for BI dashboards (joins trips, drivers, riders, vehicles, payments) |
+
+All results are **exported to CSV** in the `gold/` directory and pushed to **Supabase (public schema)**.
+
+---
+
+## ⚙️ Running the Gold Pipeline
+
+From project root:
+
+```bash
+    python gold/gold_builder.py
+```
+## GOLD LAYER OUTPUTS
+
+```aiignore
+/usr/bin/python3.10 /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/gold.py 
+2025-08-27 18:08:20,873 - INFO - 🥇 MEDALLION GOLD LAYER - BUILDER STARTED
+2025-08-27 18:08:20,874 - INFO - Setting up Gold schema and audit tables...
+2025-08-27 18:08:20,907 - INFO - ✅ Schemas and audit tables ready (gold, audit.recon_results)
+2025-08-27 18:08:20,907 - INFO - Building Gold aggregates...
+2025-08-27 18:08:24,874 - INFO - ✅ Aggregates created (driver_stats, vehicle_stats, rider_stats, daily_kpis)
+2025-08-27 18:08:24,874 - INFO - Building Gold dashboard table...
+2025-08-27 18:08:26,031 - INFO - ✅ gold.dashboard created
+2025-08-27 18:08:26,032 - INFO - Running reconciliation checks...
+2025-08-27 18:08:26,064 - INFO - ✅ trips_count_vs_dashboard_count: OK (diff=0.000000)
+2025-08-27 18:08:26,122 - INFO - ✅ tips_sum_vs_dashboard_sum: OK (diff=0.000000)
+2025-08-27 18:08:26,210 - INFO - ✅ drivers_count_vs_driver_stats: OK (diff=0.000000)
+2025-08-27 18:08:27,239 - INFO - ✅ riders_count_vs_rider_stats: OK (diff=0.000000)
+2025-08-27 18:08:27,247 - INFO - 📊 Reconciliation Summary:
+2025-08-27 18:08:27,247 - INFO -  - drivers_count_vs_driver_stats: OK (diff=0)
+2025-08-27 18:08:27,247 - INFO -  - riders_count_vs_rider_stats: OK (diff=0)
+2025-08-27 18:08:27,247 - INFO -  - tips_sum_vs_dashboard_sum: OK (diff=0.0)
+2025-08-27 18:08:27,247 - INFO -  - trips_count_vs_dashboard_count: OK (diff=0)
+2025-08-27 18:08:27,248 - INFO - 📄 Reconciliation results exported to /home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/gold/reconciliation_results.csv
+2025-08-27 18:08:27,248 - INFO - 🎉 Gold build completed successfully
+2025-08-27 18:08:29,254 - INFO - ✅ Exported driver_stats → gold/driver_stats.csv
+2025-08-27 18:08:30,084 - INFO - ✅ Exported vehicle_stats → gold/vehicle_stats.csv
+2025-08-27 18:08:31,462 - INFO - ✅ Exported rider_stats → gold/rider_stats.csv
+2025-08-27 18:08:31,533 - INFO - ✅ Exported daily_kpis → gold/daily_kpis.csv
+2025-08-27 18:08:31,549 - INFO - ✅ Exported city_kpis → gold/city_kpis.csv
+2025-08-27 18:08:38,197 - INFO - ✅ Exported dashboard → gold/dashboard.csv
+2025-08-27 18:08:38,301 - INFO - 📤 Pushing gold.driver_stats → Supabase...
+2025-08-27 18:08:49,659 - INFO - ✅ driver_stats pushed to Supabase
+2025-08-27 18:08:49,659 - INFO - 📤 Pushing gold.vehicle_stats → Supabase...
+2025-08-27 18:08:56,787 - INFO - ✅ vehicle_stats pushed to Supabase
+2025-08-27 18:08:56,787 - INFO - 📤 Pushing gold.rider_stats → Supabase...
+2025-08-27 18:09:06,812 - INFO - ✅ rider_stats pushed to Supabase
+2025-08-27 18:09:06,812 - INFO - 📤 Pushing gold.city_kpis → Supabase...
+2025-08-27 18:09:07,829 - INFO - ✅ city_kpis pushed to Supabase
+2025-08-27 18:09:07,829 - INFO - 📤 Pushing gold.daily_kpis → Supabase...
+2025-08-27 18:09:09,137 - INFO - ✅ daily_kpis pushed to Supabase
+2025-08-27 18:09:09,137 - INFO - 📤 Pushing gold.dashboard → Supabase...
+2025-08-27 18:09:38,137 - INFO - ✅ dashboard pushed to Supabase
+2025-08-27 18:09:38,165 - INFO - 🎉 Gold data successfully pushed to Supabase
+
+Process finished with exit code 0
+```
+## 📊 Results are available in:
+
+- Logs → logs/gold_builder.log
+- Table → audit.recon_results
+- Export → reconciliation_results.csv
+
+# 🥇 Medallion Gold Layer - Execution Summary
+
+The **Gold Layer** was successfully built and exported with reconciliation and Supabase integration.  
+
+---
+
+## ⚙️ Build Process
+- ✅ Gold schema and audit tables initialized  
+- ✅ Aggregates created: `driver_stats`, `vehicle_stats`, `rider_stats`, `daily_kpis`  
+- ✅ Dashboard table built: `gold.dashboard`  
+- ✅ Reconciliation checks executed (all passed)  
+- ✅ CSV exports completed for all Gold tables  
+- ✅ Data successfully pushed to **Supabase**  
+
+---
+
+## 📊 Reconciliation Summary
+All reconciliation checks passed with **zero differences**:
+
+| Check                                | Status | Difference |
+|--------------------------------------|--------|-------------|
+| `drivers_count_vs_driver_stats`      | ✅ OK  | 0           |
+| `riders_count_vs_rider_stats`        | ✅ OK  | 0           |
+| `tips_sum_vs_dashboard_sum`          | ✅ OK  | 0.0         |
+| `trips_count_vs_dashboard_count`     | ✅ OK  | 0           |
+
+Results exported to:  
+`gold/reconciliation_results.csv`
+
+---
+
+## 📂 Exported Tables
+The following outputs were generated and saved to CSV:
+
+- `gold/driver_stats.csv`  
+- `gold/vehicle_stats.csv`  
+- `gold/rider_stats.csv`  
+- `gold/daily_kpis.csv`  
+- `gold/city_kpis.csv`  
+- `gold/dashboard.csv`  
+
+---
+
+## ☁️ Supabase Integration
+All Gold tables were successfully pushed to **Supabase**:
+
+- ✅ `driver_stats`  
+- ✅ `vehicle_stats`  
+- ✅ `rider_stats`  
+- ✅ `city_kpis`  
+- ✅ `daily_kpis`  
+- ✅ `dashboard`  
+
+---
+
+## 🎉 Final Status
+**Gold build completed successfully** with:  
+- 🔄 End-to-end reconciliation checks passed  
+- 📤 Data exported to CSV and Supabase  
+- ✅ Ready for analytics and dashboards

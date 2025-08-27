@@ -344,7 +344,7 @@ FULL OUTER JOIN dropoffs d ON p.city = d.city;
                     t.tax_usd,
                     t.tip_usd,
                     t.total_fare_usd,
-                    p.payment_method,
+                    COALESCE(p.payment_method, 'OTHER') AS payment_method,
                     p.fare_usd,
                     p.tip_usd_payment,
                     p.payment_status,
@@ -353,7 +353,7 @@ FULL OUTER JOIN dropoffs d ON p.city = d.city;
                 FROM silver.trips t
                 LEFT JOIN pay_agg p ON p.trip_id = t.trip_id
                 LEFT JOIN silver.vehicles v ON v.vehicle_id = t.vehicle_id
-                LEFT JOIN silver.drivers d  ON d.driver_id  = t.driver_id;
+                LEFT JOIN silver.drivers d  ON d.driver_id  = t.driver_id
                 """
             )
             logger.info("✅ gold.dashboard created")

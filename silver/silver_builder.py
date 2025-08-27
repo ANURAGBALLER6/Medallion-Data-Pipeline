@@ -317,9 +317,9 @@ class SilverBuilder:
                 run_sql(sql)
                 with engine.connect() as conn:
                     cnt = conn.execute(text(f"SELECT COUNT(*) FROM silver.{t}_base")).scalar_one()
-                logger.info(f"✅ silver.{t}_base created with {cnt:,} rows")
+                logger.info(f" silver.{t}_base created with {cnt:,} rows")
                 self.log_etl_step(f"create_base_{t}", t, None, cnt, 0)
-            logger.info("✅ All Silver base tables created")
+            logger.info("All Silver base tables created")
             return True
         except Exception as e:
             logger.error(f"❌ Error creating Silver base tables: {e}")
@@ -336,7 +336,7 @@ class SilverBuilder:
             if not self._validate_table(t):
                 ok = False
         if ok:
-            logger.info("✅ All tables passed deep validation")
+            logger.info("All tables passed deep validation")
         else:
             logger.warning("⚠️  Some tables had validation issues")
         return ok
@@ -515,7 +515,7 @@ class SilverBuilder:
             # 🔎 Log breakdown of rejection reasons
             reason_counts = Counter([p["reason"] for p in params])
             for reason, count in reason_counts.items():
-                logger.info(f"🚫 {table_name}: {count} rows rejected due to {reason}")
+                logger.info(f"{table_name}: {count} rows rejected due to {reason}")
 
         except Exception as e:
             logger.error(f"Error saving rejected rows for {table_name}: {e}")
