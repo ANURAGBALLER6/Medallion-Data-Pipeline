@@ -1,6 +1,6 @@
 # Medallion Data Pipeline
 
-A comprehensive **ETL pipeline** implementing the **Medallion Architecture** (Bronze, Silver, Gold layers).  
+A comprehensive **ETL pipeline** implementing the **Medallion Architecture for a mobility_dataset** (Bronze, Silver, Gold layers).  
 The pipeline processes mobility_dataset from **Google Sheets** into **PostgreSQL**, with robust data validation, quality checks, and audit logging.
 
 ---
@@ -50,32 +50,50 @@ flowchart TD
 ```aiignore
 Medallion-Data-Pipeline/
 │
-├── bronze/                     # Raw data ingestion layer
-│   └── logs/
-│       ├── data_loader.py      # Raw data loading scripts
-│       └── database_setup.py   # Database initialization
+├── bronze/ # Raw data ingestion layer
+│ ├── drivers.csv
+│ ├── payments.csv
+│ ├── riders.csv
+│ ├── trips.csv
+│ ├── vehicles.csv
+│ └── logs/
+│ ├── data_loader.py # Raw data loading script
+│ └── database_setup.py # Database initialization
 │
-├── gold/                       # Business-ready data layer
-│   └── README.md               # Gold layer documentation
+├── gold/ # Business-ready data layer
+│ ├── city_kpis.csv
+│ ├── daily_kpis.csv
+│ ├── dashboard.csv
+│ ├── driver_stats.csv
+│ ├── rider_stats.csv
+│ ├── vehicle_stats.csv
+│ ├── reconciliation_results.csv
+│ ├── gold.py # Gold pipeline script
+│ ├── Gold_eda.ipynb # Exploratory analysis notebook
+│ ├── Mobility_Dashboard.jpg # Dashboard preview
+│ └── README.md # Gold layer documentation
 │
-├── logs/                       # Application logging
-│   ├── data_loader.log         # Data loading logs
-│   ├── database_setup.log      # Database setup logs
-│   ├── etl.log                 # ETL process logs
-│   ├── silver.log              # Silver layer logs
-│   └── silver_builder.log      # Silver builder logs
+├── logs/ # Application logging
+│ ├── data_loader.log
+│ ├── etl.log
+│ ├── gold_builder.log
+│ └── silver_builder.log
 │
-├── silver/                     # Cleaned and transformed data layer
-│   ├── logs/
-│   │   └── silver_builder.py   # Silver layer processing
-│   ├── config.py               # Configuration settings
-│   ├── etl.py                  # ETL operations
-│   └── README.md               # Silver layer documentation
+├── silver/ # Cleaned and transformed data layer
+│ ├── config.py # Configuration settings
+│ ├── etl.py # ETL orchestration
+│ ├── scheduler.py # Scheduling script
+│ ├── silver_builder.py # Silver transformation logic
+│ ├── Data_Dictionary.md # Data dictionary for Silver schema
+│ ├── README.md # Silver layer documentation
+│ └── logs/
+│ ├── silver.log
+│ └── silver_builder.log
 │
-├── External Libraries/         # Third-party dependencies
-├── Scratches and Consoles      # Development workspace
-└── requirements.txt            # Project dependencies
-
+├── .env # Environment variables
+├── .gitignore # Git ignore rules
+├── requirements.txt # Project dependencies
+└── test_supabase_connection.py # Supabase connection test
 ```
 ---
 
