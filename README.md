@@ -811,14 +811,23 @@ logs/etl.log
 
 ## 📊 Final Pipeline Summary
 
-| Layer   | Status           |
-|---------|------------------|
-| Bronze  | ✅ Success        |
-| Silver  | ✅ Success (⚠️ warnings) |
-| Gold    | ✅ Success        |
+| Layer   | Status     |
+|---------|------------|
+| Bronze  | ✅ Success  |
+| Silver  | ✅ Success  |
+| Gold    | ✅ Success  |
 
 **Overall:** 🎉 **All 3 layers completed successfully**  
 ⏱️ **Total Duration:** `0:02:50`  
 
 📂 **Project Path:** `/home/nineleaps/PycharmProjects/Medallion-Data-Pipeline/`
+
+## 📊 Dashboard Preview
+
+<p align="center">
+  <img src="gold/Mobility_Dashboard.jpg" alt="Mobility Dashboard" width="700">
+</p>
+
+
+
 
