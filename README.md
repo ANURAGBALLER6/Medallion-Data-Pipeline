@@ -824,9 +824,8 @@ logs/etl.log
 
 ## 📊 Dashboard Preview
 
-<p align="center">
-<img src="gold/Mobility_Dashboard.jpg">
-</p>
+![Mobility_Dashboard ](https://github.com/user-attachments/assets/ac901345-a84c-488e-99b7-283910462412)
+
 
 
 
