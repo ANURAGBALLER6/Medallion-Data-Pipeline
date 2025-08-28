@@ -81,18 +81,16 @@ Medallion-Data-Pipeline/
 │ └── silver_builder.log
 │
 ├── silver/ # Cleaned and transformed data layer
-│ ├── config.py # Configuration settings
-│ ├── etl.py # ETL orchestration
-│ ├── scheduler.py # Scheduling script
 │ ├── silver_builder.py # Silver transformation logic
 │ ├── Data_Dictionary.md # Data dictionary for Silver schema
-│ ├── README.md # Silver layer documentation
 │ └── logs/
 │ ├── silver.log
 │ └── silver_builder.log
-│
-├── .env # Environment variables
-├── .gitignore # Git ignore rules
+
+├── README.md 
+├── etl.py # ETL orchestration
+├── config.py # Configuration settings
+├── scheduler.py # Scheduling script
 ├── requirements.txt # Project dependencies
 └── test_supabase_connection.py # Supabase connection test
 ```
